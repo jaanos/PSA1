@@ -1,6 +1,6 @@
 # Poročilo
 
-*Ime Priimek*
+*Sara Korat*
 
 Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
 
