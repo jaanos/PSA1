@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-from .slowmatrix import SlowMatrix
+try:
+    from .slowmatrix import SlowMatrix
+except(SystemError):
+    from slowmatrix import SlowMatrix
 
 class CheapMatrix(SlowMatrix):
     """
