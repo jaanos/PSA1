@@ -16,4 +16,13 @@ class SlowMatrix(AbstractMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
-        raise NotImplementedError("Naredi sam!")
+        #raise NotImplementedError("Naredi sam!")
+        n = left.nrow()
+        m = right.ncol()
+        l = left.ncol()
+        for i in range(n):
+            for j in range(m):
+                temp = 0
+                for k in range(l):
+                    temp += left[i,k] * right[k,j]
+                self[i,j] = temp
