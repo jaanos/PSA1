@@ -16,19 +16,19 @@ class SlowMatrix(AbstractMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
-        res = AbstractMatrix()
         levaStol = left.ncol()
         levaVrst = left.nrow()
         desnaStol = right.ncol()
-        desnaVrst = right.nrow() #ta mora bit enaka k levaStolpci, kar ce ni itak vrnemo v prvi vrstici tko da je nepotrebo
-        res._init_empty(levaVrst,desnaStol) #neznam uporabit prazne matrike
+        #desnaVrst = right.nrow() #ta mora bit enaka k levaStolpci, kar ce ni itak vrnemo v prvi vrstici tko da je nepotrebo
         for i in range(levaVrst):
+            trenvrst = []
             for j in range(desnaStol):
                 tren = 0
                 for k in range(levaStol):
                     tren += (left[i,k]*right[k,j])
-                res[i,j] = tren #zracuna uredu vrednost sam ne napise je prav
-                print(tren)
-        return res
+                self[i,j] = tren
+        return self
 
+# fillrows dela na tem c._fill_rows([[0,[1,2]],[1,[2,2]],[2,[3,2]]],2)
+# problem je da se nic ne zgodi
 
