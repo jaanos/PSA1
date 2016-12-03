@@ -43,37 +43,43 @@ class FastMatrix(SlowMatrix):
 
         #                                                       # SUM = 11*const = const
 
-        # From CLRS
+        # Winograd's algorithm (15 additions)
 
-        S1 = B12 - B22                                          # cost: m*k
-        S2 = A11 + A12                                          # cost: n*m
-        S3 = A21 + A22  # = S1'                                 # cost: n*m
-        S4 = B21 - B11                                          # cost: m*k
-        S5 = A11 + A22                                          # cost: n*m
-        S6 = B11 + B22                                          # cost: m*k
-        S7 = A12 - A22                                          # cost: n*m
-        S8 = B21 + B22                                          # cost: m*k
-        S9 = A11 - A21                                          # cost: n*m
-        S10 = B11 + B12                                         # cost: m*k
+        S1 = A21 + A22                                          # cost: n*m
+        S2 = S1 - A11                                           # cost: n*m
+        S3 = A11 - A21                                          # cost: n*m
+        T1 = B12 - B11                                          # cost: m*k
+        T2 = B22 - T1                                           # cost: m*k
+        T3 = B22 - B12                                          # cost: m*k
+        S4 = A12 - S2                                           # cost: n*m
+        T4 = T2 - B21                                           # cost: m*k
 
-        #                                                       # SUM = 5*m*(n+k) = 10*n**2 = n**2
+        #                                                       # SUM = 4*m*(n+k) = 8*n**2 = n**2
 
-        P1 = A11 * S1                                           # cost: recurse
-        P2 = S2 * B22                                           # cost: recurse
-        P3 = S3 * B11                                           # cost: recurse
-        P4 = A22 * S4                                           # cost: recurse
-        P5 = S5 * S6                                            # cost: recurse
-        P6 = S7 * S8                                            # cost: recurse
-        P7 = S9 * S10                                           # cost: recurse
+        P1 = A11 * B11                                          # cost: recurse
+        P2 = A12 * B21                                          # cost: recurse
+        P3 = S4 * B22                                           # cost: recurse
+        P4 = A22 * T4                                           # cost: recurse
+        P5 = S1 * T1                                            # cost: recurse
+        P6 = S2 * T2                                            # cost: recurse
+        P7 = S3 * T3                                            # cost: recurse
 
         #                                                       # SUM = 7*recurse = 7*MasterTheorem(n/2)
 
-        C11 = P5 + P4 - P2 + P6                                 # cost: 4*n*k
-        C12 = P1 + P2                                           # cost: 2*n*k
-        C21 = P3 + P4                                           # cost: 2*n*k
-        C22 = P5 + P1 - P3 - P7                                 # cost: 4*n*k
+        U1 = P1 + P2
+        U2 = P1 + P6
+        U3 = U2 + P7
+        U4 = U2 + P5
+        U5 = U4 + P3
+        U6 = U3 - P4
+        U7 = U3 + P5
 
-        #                                                       # SUM = 12*n*k = n*k = n**2
+        #                                                       # SUM = 7*n**2 = n**2
+
+        C11 = U1                                                # cost: const
+        C12 = U5                                                # cost: const
+        C21 = U6                                                # cost: const
+        C22 = U7                                                # cost: const
 
         # Additional rows/columns
 
