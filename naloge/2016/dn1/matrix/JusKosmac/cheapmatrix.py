@@ -139,15 +139,19 @@ class CheapMatrix(SlowMatrix):
                     a1 = work[m-1, 0:n1]
                     b1 = work[m-1, n1:n2]
                     self[m-1, 0:n1].multiply(a, E, a1)
-                    a1.multiply(b, G, a2)
+                    a1.multiply(b, G, b1)
                     self[m-1, 0:n1] += a1
-                    a1.multiply(alfa, u, b1)
-                    self[m-1, 0:n1] += a1
+                    for i in range(n1):
+                        self[m-1, i] += alfa * u[0, i]
+##                    a1.multiply(alfa, u, b1)
+##                    self[m-1, 0:n1] += a1
                     self[m-1, n1:n2].multiply(a, F, a1)
                     a1.multiply(b, H, b1)
                     self[m-1, n1:n2] += a1
-                    a1.multiply(alfa, w, b1)
-                    self[m-1, n1:n2] += a1
+                    for i in range(n1):
+                        self[m-1, i + n1] += alfa * w[0, i]
+##                    a1.multiply(alfa, w, b1)
+##                    self[m-1, n1:n2] += a1
                 if n2 != n: #lih
                     c = right[0:k1, n-1]
                     d = right[k1:k2, n-1]
@@ -157,13 +161,17 @@ class CheapMatrix(SlowMatrix):
                     self[0:m1, n-1].multiply(A, c, c1)
                     c1.multiply(B, d, d1)
                     self[0:m1, n-1] += c1
-                    c1.multiply(x, beta, d1)
-                    self[0:m1, n-1] += c1
+                    for i in range(m1):
+                        self[i, n-1] += beta * x[i, 0]
+##                    c1.multiply(x, beta, d1)
+##                    self[0:m1, n-1] += c1
                     self[m1:m2, n-1].multiply(C, c, c1)
                     c1.multiply(D, d, d1)
                     self[m1:m2, n-1] += c1
-                    c1.multiply(y, beta, d1)
-                    self[m1:m2, n-1] += c1
+                    for i in range(m1):
+                        self[i + m1, n-1] += beta * y[i, 0]
+##                    c1.multiply(y, beta, d1)
+##                    self[m1:m2, n-1] += c1
                 if n2 != n and m2 != m: #oba liha
                     self[m-1, n-1] += a * c #ustvari se nova matrika velikosti 1x1
                     self[m-1, n-1] += b * d
