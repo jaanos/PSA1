@@ -22,7 +22,7 @@ class FastMatrix(SlowMatrix):
             "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
 
         if left.nrow() == 1 or right.ncol() == 1:  # Corner case
-            super(FastMatrix, self).multiply(left, right)  # Keep it explicit for sure
+            super().multiply(left, right)
             return self
 
         n = left.nrow() // 2                                    # cost: const
@@ -138,13 +138,12 @@ class FastMatrix(SlowMatrix):
         self[0:n, k:2 * k] = C12
         self[n:2 * n, 0:k] = C21
         self[n:2 * n, k:2 * k] = C22
-        #                                                       # SUM = 4*const = const
+        #                                                       # SUM = 4*n**2 = n**2
 
-        #                                                       # SUM =
+        #                                                            Without non even matrix fixing
+        #                             # SUM = 7*MasterTheorem(n/2) + 19*n**2 + 15*const = 7*MasterTheorem(n/2) + O(n**2)
 
-        #                             # SUM = 7*MasterTheorem(n/2) + 22*n**2 + 15*const = 7*MasterTheorem(n/2) + O(n**2)
-
-        # N = max(n/2,n/2,n/2)
+        # N = max(n,m,k)
         # T(N) = 7 * T(N/2) + O(N^2)
         # MasterTheorem -> T(N) = O(N^(log_2(7))) => T(N) =~ O(N^2.8074)
 
