@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+
+# Združljivost s Python 2
+try:
+    long
+except NameError:
+    long = int
+
 class AbstractMatrix:
     """
     Razred z osnovnimi funkcionalnostmi za matrike.
@@ -455,7 +462,7 @@ class AbstractMatrix:
         Če imata matriki skupno nadmatriko,
         se pred računanjem ustvari kopija podane matrike.
         """
-        if isinstance(other, (int, float)):
+        if isinstance(other, (int, long, float)):
             for r in self._data[self._rslice]:
                 sj = self._cslice.start
                 for j in range(self._ncol):
@@ -484,7 +491,7 @@ class AbstractMatrix:
         Če imata matriki skupno nadmatriko,
         se pred računanjem ustvari kopija podane matrike.
         """
-        if isinstance(other, (int, float)):
+        if isinstance(other, (int, long, float)):
             res = self.__class__(self, copy = True)
             res *= other
         else:
@@ -508,7 +515,7 @@ class AbstractMatrix:
         Če imata matriki skupno nadmatriko,
         se pred računanjem ustvari kopija podane matrike.
         """
-        if isinstance(other, (int, float)):
+        if isinstance(other, (int, long, float)):
             res = self.__class__(self, copy = True)
             res *= other
         else:
