@@ -88,4 +88,16 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# LaTeX
+*.aux
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.synctex.gz
+*.toc
+
+# Miscellaneous
+.DS_Store
 .idea
