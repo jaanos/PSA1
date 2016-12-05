@@ -1,5 +1,5 @@
 import unittest
-from matrix.LukaAvbreht import FastMatrix
+from ..matrix.LukaAvbreht import FastMatrix
 class TestMatrix(unittest.TestCase):
     def test_multiply(self):
         # a = FastMatrix([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16], [17, 18, 19, 20]])
@@ -14,3 +14,6 @@ class TestMatrix(unittest.TestCase):
         h =FastMatrix([[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]])
         i = g*h
         self.assertEqual(i, FastMatrix([[4, 4, 4, 4], [4, 4, 4, 4], [4, 4, 4, 4], [4, 4, 4, 4]]))
+
+if __name__ == "__main__":
+    unittest.main()
