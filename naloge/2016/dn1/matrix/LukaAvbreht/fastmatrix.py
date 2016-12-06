@@ -49,10 +49,10 @@ class FastMatrix(SlowMatrix):
             # for j in [P1,P2,P3,P4,P5,P6,P7]:
             #     print(j)
             #     print("jji")
-            self[0:levaStol//2,0:desnaVrst//2] = (P4 + P5 + P6 - P2)
-            self[levaStol//2:levaStol,0:desnaVrst//2] = (P3 + P4)
-            self[0:levaStol//2,desnaVrst//2:desnaVrst] = (P1 + P2)
-            self[levaStol//2:levaStol,desnaVrst//2:desnaVrst] = (P1 + P5 - P3 - P7)
+            self[0:levaVrst//2,0:desnaStol//2] = (P4 + P5 + P6 - P2)
+            self[levaVrst//2:levaVrst,0:desnaStol//2] = (P3 + P4)
+            self[0:levaVrst//2,desnaStol//2:desnaStol] = (P1 + P2)
+            self[levaVrst//2:levaVrst,desnaStol//2:desnaStol] = (P1 + P5 - P3 - P7)
             return self
         if AA == 0 and BB == 1:
             #primer ko je leva matrika sodo visokam desna pa liho siroka (Ma en stolpec vec desna)
