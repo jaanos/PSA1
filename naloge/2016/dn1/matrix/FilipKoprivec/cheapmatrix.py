@@ -79,7 +79,6 @@ class CheapMatrix(SlowMatrix):
         B12 += B22  # clean                                     # cost: n**2
 
         A11 += A12  # change                                    # cost: n**2
-        D12 *= 0  # Init D12                                    # cost: n**2
         D12.multiply(A11, B22, D22)  # P2 = (A+B)H              # cost: recurse
         A11 -= A12  # clean                                     # cost: n**2
 
@@ -88,13 +87,11 @@ class CheapMatrix(SlowMatrix):
         A21 -= A22  # clean                                     # cost: n**2
 
         B21 -= B11  # change                                    # cost: n**2
-        D21 *= 0  # Init D12                                    # cost: n**2
         D21.multiply(A22, B21, D22)  # P4 = D(G-E)              # cost: recurse
         B21 += B11  # clean                                     # cost: n**2
 
         A11 += A22  # change                                    # cost: n**2
         B11 += B22  # change                                    # cost: n**2
-        D11 *= 0  # Init D12                                    # cost: n**2
         D11.multiply(A11, B11, D22)  # P5 = (A+D)(E+H)          # cost: recurse
         A11 -= A22  # clean                                     # cost: n**2
         B11 -= B22  # clean                                     # cost: n**2
@@ -139,22 +136,18 @@ class CheapMatrix(SlowMatrix):
             B31 = right[2 * m, 0:k]
             B32 = right[2 * m, k:2 * k]                         # SUM = 4*constant = constant
 
-            D12 *= 0  # Init D12
             D12.multiply(A13, B31, D22)
             C11 += D12
 
-            D12 *= 0
             D12.multiply(A13, B32, D22)
             C12 += D12
 
-            D12 *= 0
             D12.multiply(A23, B31, D22)
             C21 += D12
 
-            D12 *= 0
             D12.multiply(A23, B32, D22)
             C22 += D12
-            #                                                   # SUM = 4*3*n*k = n*k = n**2
+            #                                                   # SUM = 4*2*n*k = n*k = n**2
 
         add_right_right = False
         if right.ncol() % 2:  # right column in right matrix
@@ -163,27 +156,26 @@ class CheapMatrix(SlowMatrix):
             B23 = right[m:2*m, 2*k]                             # SUM = 2*constant = constant
 
             C13 = self[0:n, 2*k]
+            C13 *= 0
             C23 = self[n:2*n, 2*k]
+            C23 *= 0
 
             D13 = work[0:n, 2*k]
             D23 = work[n:2 * n, 2 * k]
 
-            D13 *= 0
             D13.multiply(A11, B13, D23)
             C13 += D13
 
-            D13 *= 0
             D13.multiply(A12, B23, D23)
             C13 += D13
 
-            D13 *= 0
             D13.multiply(A21, B13, D23)
             C23 += D13
-            D13 *= 0
+
             D13.multiply(A22, B23, D23)
             C23 += D13
 
-            #                                                   # SUM = 2*(n*k + n*k + n*k) = 6*n*k = n**2
+            #                                                   # SUM = 2*(n*k + n*k + n*k) + 2*n*k= 6*n*k = n**2
 
             if add_right_left:  # 2*m+1, full additional
                 B33 = CheapMatrix([[right[2*m, 2*k]]])
@@ -201,24 +193,22 @@ class CheapMatrix(SlowMatrix):
             A32 = left[2 * n, m:2 * m]                          # SUM = 2*constant = constant
 
             C31 = self[2 * n, 0:k]
+            C31 *= 0
             C32 = self[2 * n, k:2 * k]
+            C32 *= 0
 
             D31 = work[2 * n, 0:k]
             D32 = work[2 * n, k:2 * k]
 
-            D31 *= 0
             D31.multiply(A31, B11, D32)
             C31 += D31
 
-            D31 *= 0
             D31.multiply(A32, B21, D32)
             C31 += D31
 
-            D32 *= 0
             D32.multiply(A31, B12, D31)
             C32 += D32
 
-            D32 *= 0
             D32.multiply(A32, B22, D31)
             C32 += D32
 
