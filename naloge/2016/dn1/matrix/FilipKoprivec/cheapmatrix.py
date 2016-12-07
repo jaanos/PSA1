@@ -215,8 +215,11 @@ class CheapMatrix(SlowMatrix):
             #                                                   # SUM  = n**2
             if add_right_left:
                 A33 = CheapMatrix([[left[2 * n, 2 * m]]])  # Should be 1*1 matrix, no memory overhead
-                C31 += A33 * B31
-                C32 += A33 * B32                                # SUM = 2*2*m = n
+                D31.multiply(A33, B31)
+                C31 += D31
+                D32.multiply(A33, B32)
+                C32 += D32
+                #                                               # SUM = 2*2*m = n
 
             if add_right_right:
                 C33 = A31 * B13 + A32 * B23                     # SUM = 2*m*k = n**2, memory: O(1)
