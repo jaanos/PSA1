@@ -76,40 +76,40 @@ class CheapMatrix(SlowMatrix):
 
         B12 -= B22  # change                                    # cost: n**2
         C12.multiply(A11, B12, D22)  # P1 = A(F-H)              # cost: recurse
-        B12.unsafe_iadd(B22)  # clean                                     # cost: n**2
+        B12 += B22  # clean                                     # cost: n**2
 
-        A11.unsafe_iadd(A12)  # change                                    # cost: n**2
+        A11 += A12  # change                                    # cost: n**2
         D12 *= 0  # Init D12                                    # cost: n**2
         D12.multiply(A11, B22, D22)  # P2 = (A+B)H              # cost: recurse
-        A11.unsafe_isub(A12)  # clean                                     # cost: n**2
+        A11 -= A12  # clean                                     # cost: n**2
 
-        A21.unsafe_iadd(A22)  # change                                    # cost: n**2
+        A21 += A22  # change                                    # cost: n**2
         C21.multiply(A21, B11, D22)  # P3 = (C+D)E              # cost: recurse
-        A21.unsafe_isub(A22)  # clean                                     # cost: n**2
+        A21 -= A22  # clean                                     # cost: n**2
 
-        B21.unsafe_isub(B11)  # change                                    # cost: n**2
+        B21 -= B11  # change                                    # cost: n**2
         D21 *= 0  # Init D12                                    # cost: n**2
         D21.multiply(A22, B21, D22)  # P4 = D(G-E)              # cost: recurse
-        B21.unsafe_iadd(B11)  # clean                                     # cost: n**2
+        B21 += B11  # clean                                     # cost: n**2
 
-        A11.unsafe_iadd(A22)  # change                                    # cost: n**2
-        B11.unsafe_iadd(B22)  # change                                    # cost: n**2
+        A11 += A22  # change                                    # cost: n**2
+        B11 += B22  # change                                    # cost: n**2
         D11 *= 0  # Init D12                                    # cost: n**2
         D11.multiply(A11, B11, D22)  # P5 = (A+D)(E+H)          # cost: recurse
-        A11.unsafe_isub(A22)  # clean                                     # cost: n**2
-        B11.unsafe_isub(B22)  # clean                                     # cost: n**2
+        A11 -= A22  # clean                                     # cost: n**2
+        B11 -= B22  # clean                                     # cost: n**2
 
-        A12.unsafe_isub(A22)  # change                                    # cost: n**2
-        B21.unsafe_iadd(B22)  # change                                    # cost: n**2
+        A12 -= A22  # change                                    # cost: n**2
+        B21 += B22  # change                                    # cost: n**2
         C11.multiply(A12, B21, D22)  # P6 = (B-D)(G+H)          # cost: recurse
-        A12.unsafe_iadd(A22)  # clean                                     # cost: n**2
-        B21.unsafe_isub(B22)  # clean                                     # cost: n**2
+        A12 += A22  # clean                                     # cost: n**2
+        B21 -= B22  # clean                                     # cost: n**2
 
-        A11.unsafe_isub(A21)  # change                                    # cost: n**2
-        B11.unsafe_iadd(B12)  # change                                    # cost: n**2
+        A11 -= A21  # change                                    # cost: n**2
+        B11 += B12  # change                                    # cost: n**2
         C22.multiply(A11, B11, D22)  # P7 = (A-C)(E+F)          # cost: recurse
-        A11.unsafe_iadd(A21)  # clean                                     # cost: n**2
-        B11.unsafe_isub(B12)  # clean                                     # cost: n**2
+        A11 += A21  # clean                                     # cost: n**2
+        B11 -= B12  # clean                                     # cost: n**2
 
         C22 *= -1  # -P7                                        # cost: n**2
 
@@ -117,17 +117,17 @@ class CheapMatrix(SlowMatrix):
 
         # Recalculate self
 
-        C22.unsafe_isub(C21)  # P3                                        # cost: n**2
-        C22.unsafe_iadd(D11)  # P5                                        # cost: n**2
-        C22.unsafe_iadd(C12)  # P1                                        # cost: n**2
+        C22 -= C21  # P3                                        # cost: n**2
+        C22 += D11  # P5                                        # cost: n**2
+        C22 += C12  # P1                                        # cost: n**2
 
-        C12.unsafe_iadd(D12)  # P2                                        # cost: n**2
+        C12 += D12  # P2                                        # cost: n**2
 
-        C21.unsafe_iadd(D21)  # P4                                        # cost: n**2
+        C21 += D21  # P4                                        # cost: n**2
 
-        C11.unsafe_iadd(D11)  # P5                                        # cost: n**2
-        C11.unsafe_iadd(D21)  # P4                                        # cost: n**2
-        C11.unsafe_isub(D12)  # P2                                        # cost: n**2
+        C11 += D11  # P5                                        # cost: n**2
+        C11 += D21  # P4                                        # cost: n**2
+        C11 -= D12  # P2                                        # cost: n**2
 
         # Fix non even matrix
 
@@ -141,19 +141,19 @@ class CheapMatrix(SlowMatrix):
 
             D12 *= 0  # Init D12
             D12.multiply(A13, B31, D22)
-            C11.unsafe_iadd(D12)
+            C11 += D12
 
             D12 *= 0
             D12.multiply(A13, B32, D22)
-            C12.unsafe_iadd(D12)
+            C12 += D12
 
             D12 *= 0
             D12.multiply(A23, B31, D22)
-            C21.unsafe_iadd(D12)
+            C21 += D12
 
             D12 *= 0
             D12.multiply(A23, B32, D22)
-            C22.unsafe_iadd(D12)
+            C22 += D12
             #                                                   # SUM = 4*3*n*k = n*k = n**2
 
         add_right_right = False
@@ -170,18 +170,18 @@ class CheapMatrix(SlowMatrix):
 
             D13 *= 0
             D13.multiply(A11, B13, D23)
-            C13.unsafe_iadd(D13)
+            C13 += D13
 
             D13 *= 0
             D13.multiply(A12, B23, D23)
-            C13.unsafe_iadd(D13)
+            C13 += D13
 
             D13 *= 0
             D13.multiply(A21, B13, D23)
-            C23.unsafe_iadd(D13)
+            C23 += D13
             D13 *= 0
             D13.multiply(A22, B23, D23)
-            C23.unsafe_iadd(D13)
+            C23 += D13
 
             #                                                   # SUM = 2*(n*k + n*k + n*k) = 6*n*k = n**2
 
@@ -190,11 +190,11 @@ class CheapMatrix(SlowMatrix):
 
                 D13 *= 0
                 D13.multiply(A13, B33, D23)
-                C13.unsafe_iadd(D13)
+                C13 += D13
 
                 D13 *= 0
                 D13.multiply(A23, B33, D23)
-                C23.unsafe_iadd(D13)                                      # SUM = 2*(3*n*k) = n*k = n**2
+                C23 += D13                                      # SUM = 2*(3*n*k) = n*k = n**2
 
         if left.nrow() % 2:  # bottom row in left matrix, will need to add row to self
             A31 = left[2 * n, 0:m]
@@ -208,30 +208,30 @@ class CheapMatrix(SlowMatrix):
 
             D31 *= 0
             D31.multiply(A31, B11, D32)
-            C31.unsafe_iadd(D31)
+            C31 += D31
 
             D31 *= 0
             D31.multiply(A32, B21, D32)
-            C31.unsafe_iadd(D31)
+            C31 += D31
 
             D32 *= 0
             D32.multiply(A31, B12, D31)
-            C32.unsafe_iadd(D32)
+            C32 += D32
 
             D32 *= 0
             D32.multiply(A32, B22, D31)
-            C32.unsafe_iadd(D32)
+            C32 += D32
 
             #                                                   # SUM  = n**2
             if add_right_left:
                 A33 = CheapMatrix([[left[2 * n, 2 * m]]])  # Should be 1*1 matrix, no memory overhead
-                C31.unsafe_iadd(A33 * B31)
-                C32.unsafe_iadd(A33 * B32)                                # SUM = 2*2*m = n
+                C31 += A33 * B31
+                C32 += A33 * B32                                # SUM = 2*2*m = n
 
             if add_right_right:
                 C33 = A31 * B13 + A32 * B23                     # SUM = 2*m*k = n**2, memory: O(1)
                 if add_right_left:
-                    C33.unsafe_iadd(A33 * B33)                            # memory: O(1)
+                    C33 += A33 * B33                            # memory: O(1)
                 self[2*n, 2*k] = C33
 
         # END
@@ -244,55 +244,3 @@ class CheapMatrix(SlowMatrix):
         # MasterTheorem -> T(N) = O(N^(log_2(7))) => T(N) =~ O(N^2.8074)
         return self
 
-    def unsafe_iadd(self, other: "CheapMatrix") -> "CheapMatrix":
-        """
-        Ker:
-
-        `M += N` in `M -= N` matriki `M` prišteje oziroma odšteje matriko `N` (ne ustvari se nova matrika). Mogoče je tudi kombinirati s podmatrikami.
-
-        ampak:
-
-        __iadd__:
-
-        Prištevanje k matriki.
-
-        K trenutni matriki prišteje istoležne vrednosti podane matrike.
-        Če imata matriki skupno nadmatriko,
-        se pred računanjem ustvari kopija podane matrike.
-
-
-
-        :param other: other matrix
-        :return: self + other
-        """
-
-
-        oi = other._rslice.start
-        for r in self._data[self._rslice]:
-            sj = self._cslice.start
-            oj = other._cslice.start
-            for j in range(self._ncol):
-                r[sj] += other._data[oi][oj]
-                sj += self._cslice.step
-                oj += other._cslice.step
-            oi += other._rslice.step
-        return self
-
-    def unsafe_isub(self, other: "CheapMatrix") -> "CheapMatrix":
-        """
-        Enak argument kot zgoraj...
-
-        :param other:
-        :return:
-        """
-
-        oi = other._rslice.start
-        for r in self._data[self._rslice]:
-            sj = self._cslice.start
-            oj = other._cslice.start
-            for j in range(self._ncol):
-                r[sj] -= other._data[oi][oj]
-                sj += self._cslice.step
-                oj += other._cslice.step
-            oi += other._rslice.step
-        return self
