@@ -17,8 +17,8 @@ class FastMatrix(SlowMatrix):
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
         levaStol = left.ncol()
-        levaVrst = left.nrow()
-        desnaStol = right.ncol()
+        levaVrst = left.nrow()  # = self.nrow()
+        desnaStol = right.ncol()  # = self.ncol()
         desnaVrst = right.nrow() ##to je enako kot levaStol
         #Predstavlajmo si da je matrika veliosti 2*n x 2*k
         AA = levaVrst % 2
@@ -54,20 +54,15 @@ class FastMatrix(SlowMatrix):
             self[0:levaVrst//2,desnaStol//2:desnaStol] = (P1 + P2)
             self[levaVrst//2:levaVrst,desnaStol//2:desnaStol] = (P1 + P5 - P3 - P7)
             return self
-        if AA == 0 and BB == 1:
+        if BB == 1:
             #primer ko je leva matrika sodo visokam desna pa liho siroka (Ma en stolpec vec desna)
-
-
-
+            self[0:levaVrst,0:(desnaStol-1)] = left * right[0:desnaVrst,0:(desnaStol-1)]
+            self[0:levaVrst,(desnaStol-1):desnaStol] = left * right[0:desnaVrst,(desnaStol-1):desnaStol]
             return self
-        if AA == 1 and BB == 0:
+        if AA == 1:
             #Pol je leva matrika eno vrstico vec spodi
-
-
-            return self
-        if AA == 1 and BB == 1:
-            #Pol je pa pr obeh ena vrstica Oz en stolpec vec
-
+            self[0:(levaVrst-1),0:desnaStol] = left[0:(levaVrst-1),0:levaStol] * right
+            self[(levaVrst-1):levaVrst,0:desnaStol] = left[(levaVrst-1):levaVrst,0:levaStol] * right
             return self
 
         #mogoce bi lahk sam pgledu dva primera pa popravu sam k je kej prevec in cee je oboje prevec sam naredu oboje, ce je to razumlivo
