@@ -18,4 +18,6 @@ class FastMatrix(SlowMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
-        raise NotImplementedError("Naredi sam!")
+        #raise NotImplementedError("Naredi sam!")
+
+        
