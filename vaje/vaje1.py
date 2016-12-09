@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Algoritmi s prvih vaj
 
 def fib1(n):
