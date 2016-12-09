@@ -61,16 +61,38 @@ class TestMatrixMultiply(unittest.TestCase):
                                    [0,0,0,1,0],
                                    [0,0,0,0,1]])
 
+        self.A3 = AbstractMatrix([[1,1,1,1],
+                                  [1,1,1,1],
+                                  [1,1,1,1],
+                                  [1,1,1,1]])
+
+        self.B3 = AbstractMatrix([[1,1,1,1],
+                                  [1,1,1,1],
+                                  [1,1,1,1],
+                                  [1,1,1,1]])
+
+        self.AB3 = AbstractMatrix([[4,4,4,4],
+                                   [4,4,4,4],
+                                   [4,4,4,4],
+                                   [4,4,4,4]])
+
 
 
 
         self.testi = [(self.A1,self.B1,self.AB1),(self.B1,self.A1,self.BA1),(self.C1,self.I44,self.C1),
-                      (self.I44,self.C1,self.C1),(self.A2,self.B2,self.AB2),(self.B2,self.I55,self.B2)]
+                      (self.I44,self.C1,self.C1),(self.A2,self.B2,self.AB2),(self.B2,self.I55,self.B2),
+                      (self.A3,self.B3,self.AB3)]
 
     def testSlowMatrix(self):
 
         for matrike in self.testi:
             with self.subTest(matrike = matrike):
                 self.assertEqual(SlowMatrix(matrike[0])*SlowMatrix(matrike[1]),SlowMatrix(matrike[2]))
+
+    def testFastMatrix(self):
+
+        for matrike in self.testi:
+            with self.subTest(matrike = matrike):
+                self.assertEqual(FastMatrix(matrike[0])*FastMatrix(matrike[1]),FastMatrix(matrike[2]))
 
 
