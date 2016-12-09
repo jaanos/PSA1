@@ -106,4 +106,4 @@ class FastMatrix(SlowMatrix):
                         
                
 
-            # Ne dela: Error: dimenzije se ne ujemajo!       
+            # Ne dela: Error: dimenzije se ne ujemajo!

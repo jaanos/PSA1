@@ -27,9 +27,3 @@ class SlowMatrix(AbstractMatrix):
                 for j in range(right.nrow()):       # Gremo po vseh elementih prve vrstice matrike left in vseh stolpcih matrike right.
                     l += left[i,j]*right[j, k]      # Vsak zmnožek prištejemo številu l, da dobimo [i, k]-ti element.
                 self[i, k] = l                      # Novi matriki dodamo na novo izračunan element.
-
-
-        
-
-
-        
