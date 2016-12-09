@@ -211,13 +211,13 @@ class AbstractMatrix:
                 nrow = slicemax(sr)
             else:
                 sr = normalize_slice(sr, nrow)
-                assert sr.end >= nrow, "Število vrstic se ne ujema!"
+                assert sr.stop >= nrow, "Število vrstic se ne ujema!"
             if ncol is None:
                 sc = normalize_slice(sc, steps = n)
                 ncol = slicemax(sc)
             else:
                 sc = normalize_slice(sc, ncol)
-                assert sc.end >= ncol, "Število stolpcev se ne ujema!"
+                assert sc.stop >= ncol, "Število stolpcev se ne ujema!"
             if copy:
                 self._init_empty(slicelen(nrow), slicelen(ncol), val = val)
             else:
@@ -276,6 +276,41 @@ class AbstractMatrix:
         else:
             assert ncol == self._ncol, "Napačno število stolpcev!"
         return (nrow, ncol)
+
+    def _check_intersection(self, other):
+        """
+        Preveri, ali obstaja prekrivanje z drugo matriko.
+
+        Matriki se prekrivata, če imata skupno nadmatriko
+        ter se prekrivata intervala indeksov njunih vrstic in stolpcev.
+        Če je korak pri vrsticah oziroma stolpcih obeh matrik enak,
+        se preveri še, ali imata prva indeksa v intervalu
+        enak ostanek pri deljenju s korakom.
+
+        Če koraka nista enaka, lahko funkcija vrne True tudi,
+        če do dejanskega prekrivanja ne pride
+        (potrebno bi bilo rešiti diofantsko enačbo,
+        a bo to za naše potrebe zadostovalo).
+
+        Če druga matrika ni tipa AbstractMatrix,
+        funkcija vrne True, saj bo treba v tem primeru ustvariti novo matriko.
+        """
+        return not isinstance(other, AbstractMatrix) or \
+            (self._data is other._data and \
+             ((self._rslice.start <= other._rslice.start
+               and other._rslice.start < self._rslice.stop) or
+              (other._rslice.start <= self._rslice.start
+               and self._rslice.start < other._rslice.stop)) and \
+             ((self._cslice.start <= other._cslice.start
+               and other._cslice.start < self._cslice.stop) or
+              (other._cslice.start <= self._cslice.start
+               and self._cslice.start < other._cslice.stop)) and \
+             (self._rslice.step != other._rslice.step or
+              (self._rslice.start - other._rslice.start)
+                 % self._rslice.step == 0) and \
+             (self._cslice.step != other._cslice.step or
+              (self._cslice.start - other._cslice.start)
+                 % self._cslice.step == 0))
 
     def __repr__(self):
         """
@@ -344,6 +379,10 @@ class AbstractMatrix:
 
         Na izbrana mesta zapiše vrednosti iz matrike ustreznih dimenzij.
         Indeksi so podani na isti način kot pri __getitem__.
+
+        Če je kateri od indeksov rezina in je za vrednost podana matrika,
+        ki se prekriva s ciljno matriko,
+        se pred zapisovanjem ustvari kopija podane matrike.
         """
         sr, sc = key
         if not (isinstance(sr, slice) or isinstance(sc, slice)):
@@ -355,12 +394,15 @@ class AbstractMatrix:
                       [self._cslice.start + self._cslice.step * sc] = value
             return
         M = self[key]
-        if not isinstance(value, AbstractMatrix) or self._data is value._data:
+        if isinstance(value, AbstractMatrix) and M._data is value._data \
+                and M._rslice == value._rslice and M._cslice == value._cslice:
+            return
+        if self._check_intersection(value):
             value = self.__class__(value, nrow = M._nrow, ncol = M._ncol,
                                    copy = True)
-        if M._data is value._data and M._rslice == value._rslice \
-                and M._cslice == value._cslice:
-            return
+        else:
+            assert self._nrow == value._nrow and self._ncol == value._ncol, \
+                    "Dimenzije se ne ujemajo!"
         si = M._rslice.start
         vi = value._rslice.start
         for i in range(M._nrow):
@@ -373,10 +415,10 @@ class AbstractMatrix:
         Prištevanje k matriki.
 
         K trenutni matriki prišteje istoležne vrednosti podane matrike.
-        Če imata matriki skupno nadmatriko,
+        Če se matriki prekrivata,
         se pred računanjem ustvari kopija podane matrike.
         """
-        if not isinstance(other, AbstractMatrix) or self._data is other._data:
+        if self._check_intersection(other):
             other = self.__class__(other, nrow = self._nrow, ncol = self._ncol,
                                    copy = True)
         oi = other._rslice.start
@@ -396,11 +438,8 @@ class AbstractMatrix:
 
         Vrne novo matriko, katerih vrednosti so vsote istoležnih vrednosti
         trenutne in podane matrike.
-        Če imata matriki skupno nadmatriko,
-        se pred računanjem ustvari kopija podane matrike.
         """
-        res = self.__class__(self, nrow = self._nrow, ncol = self._ncol,
-                             copy = True)
+        res = self.copy()
         res += other
         return res
 
@@ -409,10 +448,10 @@ class AbstractMatrix:
         Odštevanje od matrike.
 
         Od trenutne matrike odšteje istoležne vrednosti podane matrike.
-        Če imata matriki skupno nadmatriko,
+        Če se matriki prekrivata,
         se pred računanjem ustvari kopija podane matrike.
         """
-        if not isinstance(other, AbstractMatrix) or self._data is other._data:
+        if self._check_intersection(other):
             other = self.__class__(other, nrow = self._nrow, ncol = self._ncol,
                                    copy = True)
         oi = other._rslice.start
@@ -431,10 +470,9 @@ class AbstractMatrix:
         Odštevanje matrik.
 
         Vrne novo matriko, katerih vrednosti so razlike istoležnih vrednosti
-        trenutne in podane matrike. Če imata matriki skupno nadmatriko,
-        se pred računanjem ustvari kopija podane matrike.
+        trenutne in podane matrike.
         """
-        res = self.__class__(self, copy = True)
+        res = self.copy()
         res -= other
         return res
 
@@ -443,8 +481,7 @@ class AbstractMatrix:
         Odštevanje matrik.
 
         Vrne novo matriko, katerih vrednosti so razlike istoležnih vrednosti
-        podane in trenutne matrike. Če imata matriki skupno nadmatriko,
-        se pred računanjem ustvari kopija podane matrike.
+        podane in trenutne matrike.
         """
         res = self.__class__(other, nrow = self._nrow, ncol = self._ncol,
                              copy = True)
@@ -459,7 +496,7 @@ class AbstractMatrix:
         Pri množenju matrik se uporabi metoda multiply,
         ki rezultat najprej zapiše v novo matriko,
         nato pa trenutno matriko prepiše z izračunanimi vrednostmi.
-        Če imata matriki skupno nadmatriko,
+        Če se matriki prekrivata,
         se pred računanjem ustvari kopija podane matrike.
         """
         if isinstance(other, (int, long, float)):
@@ -469,8 +506,7 @@ class AbstractMatrix:
                     r[sj] *= other
                     sj += self._cslice.step
         else:
-            if not isinstance(other, AbstractMatrix) \
-                or self._data is other._data:
+            if self._check_intersection(other):
                 other = self.__class__(other, nrow = self._ncol,
                                        ncol = self._ncol, copy = True)
             else:
@@ -488,15 +524,14 @@ class AbstractMatrix:
         Vrne novo matriko, ki je enaka produktu trenutne matrike
         in podane matrike oziroma skalarja.
         Pri množenju matrik se uporabi metoda multiply.
-        Če imata matriki skupno nadmatriko,
+        Če se matriki prekrivata,
         se pred računanjem ustvari kopija podane matrike.
         """
         if isinstance(other, (int, long, float)):
-            res = self.__class__(self, copy = True)
+            res = self.copy()
             res *= other
         else:
-            if not isinstance(other, AbstractMatrix) \
-                    or self._data is other._data:
+            if self._check_intersection(other):
                 other = self.__class__(other, nrow = self._ncol, copy = True)
             else:
                 assert self._ncol == other._nrow, \
@@ -512,15 +547,14 @@ class AbstractMatrix:
         Vrne novo matriko, ki je enaka produktu podane matrike
         oziroma skalarja s trenutno matriko.
         Pri množenju matrik se uporabi metoda multiply.
-        Če imata matriki skupno nadmatriko,
+        Če se matriki prekrivata,
         se pred računanjem ustvari kopija podane matrike.
         """
         if isinstance(other, (int, long, float)):
-            res = self.__class__(self, copy = True)
+            res = self.copy()
             res *= other
         else:
-            if not isinstance(other, AbstractMatrix) \
-                    or self._data is other._data:
+            if self._check_intersection(other):
                 other = self.__class__(other, ncol = self._nrow, copy = True)
             else:
                 assert other._ncol == self._nrow, \
