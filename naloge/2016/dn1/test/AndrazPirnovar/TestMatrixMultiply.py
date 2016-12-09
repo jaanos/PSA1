@@ -1,9 +1,9 @@
 import unittest   #za testiranje delovanja mnozenja matrik
 
 from matrix import AbstractMatrix
-from matrix.AndrazPirnovar.slowmatrix import SlowMatrix
-from matrix.AndrazPirnovar.fastmatrix import FastMatrix
-from matrix.AndrazPirnovar.cheapmatrix import CheapMatrix
+from matrix.AndrazPirnovar import SlowMatrix
+from matrix.AndrazPirnovar import FastMatrix
+from matrix.AndrazPirnovar import CheapMatrix
 
 class TestMatrixMultiply(unittest.TestCase):
 

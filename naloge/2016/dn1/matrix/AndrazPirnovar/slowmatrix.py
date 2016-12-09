@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-try:
-    from ..matrix import AbstractMatrix     #Spremenil zaradi SystemError na mojemu racunalniku
-except SystemError:
-    from matrix import AbstractMatrix
+#try:
+#    from ..matrix import AbstractMatrix     #Spremenil zaradi SystemError na mojemu racunalniku
+#except SystemError:
+#    from matrix import AbstractMatrix
+
+from ..matrix import AbstractMatrix
 
 class SlowMatrix(AbstractMatrix):
     """

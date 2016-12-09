@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-try:
-    from .slowmatrix import SlowMatrix
-except(SystemError):
-    from slowmatrix import SlowMatrix
+#try:
+#    from .slowmatrix import SlowMatrix
+#except(SystemError):
+#    from slowmatrix import SlowMatrix
+
+from .slowmatrix import SlowMatrix
 
 class FastMatrix(SlowMatrix):
     """
