@@ -20,4 +20,12 @@ class CheapMatrix(SlowMatrix):
         else:
             assert self.nrow() == work.nrow() and self.ncol() == work.ncol(), \
                "Dimenzije delovne matrike ne ustrezajo dimenzijam produkta!"
-        raise NotImplementedError("Naredi sam!")
+        levaVrst = left.nrow()
+        Ujemanje = left.ncol()
+        desnaStol = right.ncol()
+        AA = levaVrst % 2
+        BB = desnaStol % 2
+        if levaVrst == 1 or desnaStol == 1:
+            super().multiply(left,right)
+            return self
+

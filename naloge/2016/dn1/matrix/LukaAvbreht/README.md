@@ -12,3 +12,9 @@ Gre za običajno množenje matrik, kot ga ponavadi izvajamo na roke.
 
 `O(n^3)`
 
+## FastMatrix
+
+
+### Časovna zahtevnost
+
+Po izreku *** Lahko dokazemo da ...
