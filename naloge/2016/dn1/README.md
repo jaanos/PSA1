@@ -26,7 +26,7 @@ Vaša naloga bo implementacija Strassenovega algoritma v programskem jeziku *Pyt
 
 ## Orodja
 
-Za izdelavo naloge boste uporabili git repozitorij, ki bo kopija (*fork*) repozitorija predmeta na [GitHub](https://github.com/jaanos/PSA1)u oziroma [Bitbucket](https://bitbucket.org/jaanos/psa1)u. Toplo priporočam, da si naredite novo vejo (*branch*) ter vse delo v zvezi z nalogo poteka v tej veji (seveda lahko po potrebi naredite še več vej). Vse vaše spremembe naj bodo v mapi `naloge/2016/dn1/matrix/ImePriimek`, kjer `ImePriimek` nadomestite s svojim imenom in priimkom. Ko boste z nalogo zaključili, boste naredili *pull request* svoje veje na originalni repozitorij, potem pa bom vaše spremembe potegnil vanj.
+Za izdelavo naloge boste uporabili git repozitorij, ki bo kopija (*fork*) repozitorija predmeta na [GitHub](https://github.com/jaanos/PSA1)u oziroma [Bitbucket](https://bitbucket.org/jaanos/psa1)u. Toplo priporočam, da si naredite novo vejo (*branch*) ter vse delo v zvezi z nalogo poteka v tej veji (seveda lahko po potrebi naredite še več vej). Vse vaše spremembe naj bodo v mapi `naloge/2016/dn1/matrix/ImePriimek`, kjer `ImePriimek` nadomestite s svojim imenom in priimkom. Po potrebi lahko vključite tudi teste, ki naj bodo v mapi `naloge/2016/dn1/test/ImePriimek`. Ko boste z nalogo zaključili, boste naredili *pull request* svoje veje na originalni repozitorij, potem pa bom vaše spremembe potegnil vanj.
 
 Morebitnih drugih predlogov in izboljšav, ki se ne tičejo naloge, prosim ne vključujte v vejo z nalogo. So pa seveda takšni predlogi dobrodošli, le v svoji veji naj bodo. Izboljšav implementacije matrik (glej spodaj) trenutno sicer ne bom sprejemal.
 
