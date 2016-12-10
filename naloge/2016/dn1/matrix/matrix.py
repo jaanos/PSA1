@@ -401,7 +401,7 @@ class AbstractMatrix:
             value = self.__class__(value, nrow = M._nrow, ncol = M._ncol,
                                    copy = True)
         else:
-            assert self._nrow == value._nrow and self._ncol == value._ncol, \
+            assert M._nrow == value._nrow and M._ncol == value._ncol, \
                     "Dimenzije se ne ujemajo!"
         si = M._rslice.start
         vi = value._rslice.start
