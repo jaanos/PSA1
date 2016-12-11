@@ -9,6 +9,7 @@ Pri tem predpostavljamo, da velja n = O(m)
 """
 
 from kopica import BinaryHeap
+from vaje6 import toporder
 
 def dijkstra(G, s, t = None, PriorityQueue = BinaryHeap):
     """
@@ -58,3 +59,35 @@ def shortestPath(G, s, t, PriorityQueue = BinaryHeap):
         pot.append(t)
         t = p[t]
     return (d, list(reversed(pot)))
+
+def najkrajsePoti(G, T, s):
+    n = len(G)
+    top = toporder(T)
+    razdalje = [None] * n
+    razdalje[s] = 0
+    for v in top:
+        for u in T[v]:
+            razdalje[u] = razdalje[v] + G[v][u]
+    for v in range(n):
+        for u in G[v]:
+            if G[v][u] < razdalje[u] - razdalje[v]:
+                return False
+    return True
+
+def enolicneNajkrajsePoti(G, s, PriorityQueue = BinaryHeap):
+    inf = float('inf')
+    n = len(G)
+    Q = PriorityQueue({v: 0 if v == s else inf for v in range(n)})
+    sez = [True] * n
+    while len(Q) > 0:
+        v, d = Q.pop()
+        for u, l in G[v].items():
+            if u not in Q:
+                continue
+            r = d + l
+            if r < Q[u]:
+                Q[u] = r
+                sez[u] = sez[v]
+            elif r == Q[u]:
+                sez[u] = False
+    return sez
