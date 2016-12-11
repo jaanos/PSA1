@@ -46,9 +46,6 @@ class FastMatrix(SlowMatrix):
             F = right[0:ujemanje//2,desnaStol//2:desnaStol]
             G = right[ujemanje//2:ujemanje,0:desnaStol//2]
             H = right[ujemanje//2:ujemanje,desnaStol//2:desnaStol]
-            # for i,j in [(A,"A"),(B,"B"),(C,"C"),(D,"D"),(E,"E"),(F,"F"),(G,"G"),(H,"H")]:
-            #     print(i,j)
-            #     print("nova matrika")
             P1 = A * (F - H)     #Rekurzivni klic
             P2 = (A + B) * H     #Rekurzivni klic
             P3 = (C + D) * E     #Rekurzivni klic
@@ -56,9 +53,6 @@ class FastMatrix(SlowMatrix):
             P5 = (A+D) * (E+H)   #Rekurzivni klic
             P6 = (B-D) * (G+H)   #Rekurzivni klic
             P7 = (A-C) * (E+F)   #Rekurzivni klic
-            # for j in [P1,P2,P3,P4,P5,P6,P7]:
-            #     print(j)
-            #     print("jji")
             self[0:levaVrst//2,0:desnaStol//2] = (P4 + P5 + P6 - P2)
             self[levaVrst//2:levaVrst,0:desnaStol//2] = (P3 + P4)
             self[0:levaVrst//2,desnaStol//2:desnaStol] = (P1 + P2)
