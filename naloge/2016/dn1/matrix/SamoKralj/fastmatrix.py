@@ -16,6 +16,13 @@ class FastMatrix(SlowMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
+
+        """
+        Če je število vrstic leve matrike enako 1 oziroma število stolpcev
+        desne matrike enako 1, potem ne moremo matrike več deliti in samo
+        zmnožimo matriki.
+        """
+
         if left.nrow() == 1:
             for k in range(right.ncol()):
                 self[0,k] = skalarni_produkt(left[0,:], right[:, k])
@@ -60,7 +67,7 @@ class FastMatrix(SlowMatrix):
                     | G H |
                     | z w |
 
-                Kjer so x,y in z,w podmatrike, ki imajo širino iz višino 1.
+                Kjer so x,y in z,w podmatrike, ki imajo širino oz. višino 1.
 
                 V produktu X*Y bo v zgornjem levem kotu člen:
 
@@ -83,7 +90,8 @@ class FastMatrix(SlowMatrix):
             
             if left.nrow() % 2 == 1:
                 """
-                Ročno primnožimo še najnižjo vrstico.
+                Ročno primnožimo še najnižjo vrstico, ki je smo jo pri
+                delitvi na podmatrike izpustili.
                 """
                 for k in range(right.ncol()):
                     self[LR, k] = skalarni_produkt(left[LR, :], right[:, k])
@@ -108,7 +116,7 @@ def skalarni_produkt(u, v):
         
 def razdeli_matriko(M):
     """
-    Razdeli matriko na 4 podmatrike in sicer tako, da ignorira
+    Razdeli matriko na 4 podmatrike enake velikosti in sicer tako, da ignorira
     liho število vrstic oziroma stolpcev. Tako bo matriko
     velikosti (2*n + 1) * (2*m + 1) razdelil na 4 podmatrike
     velikosti n*m.
