@@ -19,9 +19,11 @@ class SlowMatrix(AbstractMatrix):
         dolzina_vrstice = left.ncol()
         for vrstica in range(left.nrow()):
             for stolpec in range(right.ncol()):
-                skalarni = 0
-                for k in range(dolzina_vrstice):
-                    skalarni += left[vrstica, k]*right[k, stolpec]
-                self[vrstica, stolpec] = skalarni
+                self[vrstica, stolpec] = skalarni_produkt(left[vrstica, :], right[:,stolpec])
                 
-                
+def skalarni_produkt(u, v):
+    produkt = 0
+    for i in range(u.ncol()):
+        produkt += u[0, i] * v[i, 0]
+    return produkt
+    
