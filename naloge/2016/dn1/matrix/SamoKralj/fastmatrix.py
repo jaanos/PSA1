@@ -23,8 +23,8 @@ class FastMatrix(SlowMatrix):
             for k in range(left.nrow()):
                 self[k, 0] = skalarni_produkt(left[k,:], right[:, 0])
         else:
-            A, B, C, D = razdeli_levo_matriko(left)
-            E, F, G, H = razdeli_desno_matriko(right)
+            A, B, C, D = razdeli_matriko(left)
+            E, F, G, H = razdeli_matriko(right)
             P1 = A*(F-H)
             P2 = (A+B)*H
             P3 = (C+D)*E
@@ -32,93 +32,93 @@ class FastMatrix(SlowMatrix):
             P5 = (A+D)*(E+H)
             P6 = (B-D)*(G+H)
             P7 = (A-C)*(E+F)
-            """
-            print(P1, "\n #######")
-            print(P2, "\n #######")
-            print(P3, "\n #######")
-            print(P4, "\n #######")
-            print(P5, "\n #######")
-            print(P6, "\n #######")
-            print(P7, "\n #######")
-            """
+
             zgornji_levi = P4 + P5 + P6 - P2
             zgornji_desni = P1 + P2
             spodnji_levi = P3 + P4
             spodnji_desni = P1 + P5 - P3 - P7
+
+            #Oznaka dolžin za bolj pregledno kodo.
+            LR2 = left.nrow()//2
+            LC2 = left.ncol()//2
+            LC = left.ncol() - 1
+            LR = left.nrow() - 1
+            RR2 = right.nrow()//2
+            RC2 = right.ncol()//2
+            RR = right.nrow() - 1
+            RC = right.ncol() - 1
+            
             if left.ncol() % 2 == 1:
-                lr2 = left.nrow()//2
-                lc2 = left.ncol()//2
-                lc = left.ncol() - 1
-                rr2 = right.nrow()//2
-                rc2 = right.ncol()//2
-                rr = right.nrow() - 1
-                zgornji_levi += left[:lr2, lc]*right[rr, :rc2]
-                zgornji_desni += left[:lr2, lc] * right[rr, rc2:2*rc2]
-                spodnji_levi += left[lr2:2*lr2, lc] * right[rr, :rc2]
-                spodnji_desni += left[lr2:2*lr2, lc] * right[rr, rc2:2*rc2]
-            """
-            print(zgornji_levi, "\n #######%%%%%%")
-            print(zgornji_desni, "\n #######%%%%%")
-            print(spodnji_levi, "\n #######%%%%%%")
-            print(spodnji_desni, "\n #######%%%%%")
-            """
-            self[:zgornji_levi.nrow(), :zgornji_levi.ncol()] = zgornji_levi
-            self[:zgornji_desni.nrow(), zgornji_levi.ncol():zgornji_levi.ncol() + zgornji_desni.ncol()] = zgornji_desni
-            self[zgornji_levi.nrow():zgornji_levi.nrow() + spodnji_levi.nrow(), :spodnji_levi.ncol()] = spodnji_levi
-            self[zgornji_desni.nrow():zgornji_levi.nrow() + spodnji_desni.nrow(), spodnji_levi.ncol(): spodnji_levi.ncol() + spodnji_desni.ncol()] = spodnji_desni
+                """
+                V primeru, da ima leva matrika liho število stolpcev moramo
+                vsaki podmatriki dodati še nek člen, kar je vidno iz izpeljave.
+
+                X = | A B x | 
+                    | C D y |
+                    
+                Y = | E F |
+                    | G H |
+                    | z w |
+
+                Kjer so x,y in z,w podmatrike, ki imajo širino iz višino 1.
+
+                V produktu X*Y bo v zgornjem levem kotu člen:
+
+                A*E + B*G + x * z
+
+                A*E + B*G dobimo z strassenovim algoritmom za sodo število stolpcev.
+                Člen x*z pa moramo dodati sami.
+
+                Podoben razmislek tudi za ostale 3 podmatrike.
+                """
+                zgornji_levi += left[:LR2, LC]*right[RR, :RC2]
+                zgornji_desni += left[:LR2, LC] * right[RR, RC2:2*RC2]
+                spodnji_levi += left[LR2:2*LR2, LC] * right[RR, :RC2]
+                spodnji_desni += left[LR2:2*LR2, LC] * right[RR, RC2:2*RC2]
+
+            self[:LR2, :RC2] = zgornji_levi
+            self[:LR2, RC2:2*RC2] = zgornji_desni
+            self[LR2:2*LR2, :RC2] = spodnji_levi
+            self[LR2:2*LR2, RC2:2*RC2] = spodnji_desni
+            
             if left.nrow() % 2 == 1:
+                """
+                Ročno primnožimo še najnižjo vrstico.
+                """
                 for k in range(right.ncol()):
-                    self[left.nrow() - 1, k] = skalarni_produkt(left[left.nrow() - 1, :], right[:, k])
+                    self[LR, k] = skalarni_produkt(left[LR, :], right[:, k])
             if right.ncol() % 2 == 1:
+                """
+                Primnožimo še zadnji stolpec.
+                """
                 for k in range(left.nrow()):
-                    self[k, right.ncol() - 1] = skalarni_produkt(left[k, :], right[:, right.ncol() - 1])
+                    self[k, RC] = skalarni_produkt(left[k, :], right[:, RC])
             
             
 
 def skalarni_produkt(u, v):
+    """
+    Izračuna skalarni produkt dveh vektorjev. Pri tem je u podan kot
+    vrstica in v podan kot stolpec.
+    """
     produkt = 0
     for i in range(u.ncol()):
         produkt += u[0, i] * v[i, 0]
     return produkt
         
-def razdeli_levo_matriko(M):
+def razdeli_matriko(M):
+    """
+    Razdeli matriko na 4 podmatrike in sicer tako, da ignorira
+    liho število vrstic oziroma stolpcev. Tako bo matriko
+    velikosti (2*n + 1) * (2*m + 1) razdelil na 4 podmatrike
+    velikosti n*m.
+    """
     row = M.nrow()//2
     col = M.ncol()//2
     A = M[:row, :col]
     B = M[:row, col:2*col]
     C = M[row:2*row, :col]
     D = M[row:2*row, col:2*col]
-    """
-    print("####")
-    print(A)
-    print("###")
-    print(B)
-    print("####")
-    print(C)
-    print("####")
-    print(D)
-    print("$$$$")
-    """
-    return A, B, C, D
-
-def razdeli_desno_matriko(M):
-    row = M.nrow()//2
-    col = M.ncol()//2
-    A = M[:row, :col]
-    B = M[:row, col:2*col]
-    C = M[row:2*row, :col]
-    D = M[row:2*row, col:2*col]
-    """
-    print("####")
-    print(A)
-    print("###")
-    print(B)
-    print("####")
-    print(C)
-    print("####")
-    print(D)
-    print("$$$$")
-    """
     return A, B, C, D
 
     
