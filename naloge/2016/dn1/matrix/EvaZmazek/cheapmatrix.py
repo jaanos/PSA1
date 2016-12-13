@@ -21,3 +21,4 @@ class CheapMatrix(SlowMatrix):
             assert self.nrow() == work.nrow() and self.ncol() == work.ncol(), \
                "Dimenzije delovne matrike ne ustrezajo dimenzijam produkta!"
         raise NotImplementedError("Naredi sam!")
+
