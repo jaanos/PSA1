@@ -26,6 +26,7 @@ class SlowMatrix(AbstractMatrix):
             "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
             "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
+
         for row in range(self.nrow()):
             for col in range(self.ncol()):
                 self[row, col] = self.dot_product(left[row, 0:left.ncol()], right[0:right.nrow(), col])

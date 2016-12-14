@@ -21,7 +21,7 @@ class FastMatrix(SlowMatrix):
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
             "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
 
-        if left.nrow() == 1 or right.ncol() == 1:  # Corner case
+        if left.nrow() == 1 or self.ncol() == 1 or right.ncol() == 1:  # Corner case
             super().multiply(left, right)
             return self
 
@@ -66,20 +66,15 @@ class FastMatrix(SlowMatrix):
 
         #                                                       # SUM = 7*recurse = 7*MasterTheorem(n/2)
 
-        U1 = P1 + P2
+        C11 = P1 + P2
         U2 = P1 + P6
         U3 = U2 + P7
         U4 = U2 + P5
-        U5 = U4 + P3
-        U6 = U3 - P4
-        U7 = U3 + P5
+        C12 = U4 + P3
+        C21 = U3 - P4
+        C22 = U3 + P5
 
         #                                                       # SUM = 7*n**2 = n**2
-
-        C11 = U1                                                # cost: const
-        C12 = U5                                                # cost: const
-        C21 = U6                                                # cost: const
-        C22 = U7                                                # cost: const
 
         # Additional rows/columns
 

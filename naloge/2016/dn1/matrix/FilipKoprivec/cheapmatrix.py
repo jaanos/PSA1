@@ -29,7 +29,7 @@ class CheapMatrix(SlowMatrix):
             assert self.nrow() == work.nrow() and self.ncol() == work.ncol(), \
                "Dimenzije delovne matrike ne ustrezajo dimenzijam produkta!"
 
-        if left.nrow() == 1 or right.ncol() == 1:  # Corner case
+        if left.nrow() == 1 or self.ncol() == 1 or right.ncol() == 1:  # Corner case
             super().multiply(left, right)  # no memory overhead (except for recursion)
             return self
 
@@ -39,7 +39,7 @@ class CheapMatrix(SlowMatrix):
         """
 
         Idea: firstly make all seven multiplications (take care of additions for those), then assemble self back with
-        help of work matrix (7 + 1 = 8 <= 2*(2*2)
+        the help of work matrix (7 + 1 = 8 <= 2*(2*2))
 
         :param left: matrix A
         :param right: matrix B
@@ -180,11 +180,9 @@ class CheapMatrix(SlowMatrix):
             if add_right_left:  # 2*m+1, full additional
                 B33 = CheapMatrix([[right[2*m, 2*k]]])
 
-                D13 *= 0
                 D13.multiply(A13, B33, D23)
                 C13 += D13
 
-                D13 *= 0
                 D13.multiply(A23, B33, D23)
                 C23 += D13                                      # SUM = 2*(3*n*k) = n*k = n**2
 
