@@ -16,15 +16,20 @@ class SlowMatrix(AbstractMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
-        levaStol = left.ncol()
-        levaVrst = left.nrow()
-        desnaStol = right.ncol()
-        # desnaVrst = right.nrow() #ta mora bit enaka k levaStolpci, kar ce ni itak vrnemo v prvi vrstici tko da je nepotrebo
-        for i in range(levaVrst):
-            trenvrst = []
-            for j in range(desnaStol):
-                tren = 0
-                for k in range(levaStol):
-                    tren += (left[i, k] * right[k, j])
-                self[i, j] = tren
+
+        stStolpcevLevaMatrika = left.ncol() #izračunamo šrevilo stolpcev leve matrike, ki mora biti enako številu vrstic desne matike, da je množenje sploh definirano
+        stVrsticLevaMatrika = left.nrow() #izračunamo število vrstic leve matrike, ki je enako številu vrstic v novi matiki, ki je produkt prve in druge matrike
+        stStolpcevDesnaMatrika = right.ncol()
+
+        for i in range(stVrsticLevaMatrika):
+            #pomnozi i-to vrstico prve (leve) matrike) z i-tim stolpcem druge (desne) matrike
+            for j in range (stStolpcevDesnaMatrika):
+                #zdaj smo izbrali vrstico in stolpec, napisati moramo skalarni produkt teh dveh
+                #izracunamo skalarni produkt
+                vrednost = 0
+                for k in range(stStolpcevLevaMatrika):
+                    vrednost += (left[i,k]*right[k,j])
+                self[i,j] = vrednost
         return self
+
+
