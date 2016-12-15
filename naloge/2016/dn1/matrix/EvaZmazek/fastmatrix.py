@@ -79,9 +79,9 @@ class FastMatrix(SlowMatrix):
 
         if stStolpcevDesneMatrike % 2 == 1:
             prilagojenaDesnaMatrika = right[:, 0:stStolpcevDesneMatrike-1]
-            zadnjiDesniStolpec = right[:, stStolpcevDesneMatrike]
+            zadnjiDesniStolpec = right[:, stStolpcevDesneMatrike-1]
             self[:, 0:stStolpcevDesneMatrike-1]=left * prilagojenaDesnaMatrika
-            self[:, stStolpcevDesneMatrike] = left * zadnjiDesniStolpec
+            self[:, stStolpcevDesneMatrike-1] = left * zadnjiDesniStolpec
             return self
 
         else:
@@ -91,15 +91,5 @@ class FastMatrix(SlowMatrix):
             zadnjaVrsticaDesneMatrike = right[stStolpcevLeveMatrike-1, :]
             self[:,:] = prilagojenaLevaMatrika * prilagojenaDesnaMatrika + zadnjiStolpecLeveMatrike * zadnjaVrsticaDesneMatrike
             return self
-
- #       else:
- #           for i in range(stVrsticLeveMatrike):
- #               for j in range(stStolpcevDesneMatrike):
- #                   vrednost = 0
- #                   for k in range(stStolpcevLeveMatrike):
- #                       vrednost += (left[i, k] * right[k, j])
- #                   self[i, j] = vrednost
- #           return self
-
 
 
