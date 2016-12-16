@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from ..matrix import AbstractMatrix
 
+
 class SlowMatrix(AbstractMatrix):
     """
     Matrika z naivnim množenjem.
@@ -13,10 +14,12 @@ class SlowMatrix(AbstractMatrix):
         vrstic prve in stolpcev druge matrike.
         """
         assert left.ncol() == right.nrow(), \
-               "Dimenzije matrik ne dopuščajo množenja!"
+            "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
-               "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
+            "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
         for i in range(left.nrow()):
             for j in range(right.ncol()):
+                temp = 0
                 for k in range(right.nrow()):
-                    self[i, j] += left[i, k]*right[k, j]
+                    temp += left[i, k]*right[k, j]
+                self[i, j] = temp
