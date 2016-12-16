@@ -25,10 +25,8 @@ class FastMatrix(SlowMatrix):
 
         # Ce imamo v kateri od matrik le en stolpec ali vrstico, potem le zmnozimo, saj ne moremo razdeliti
         if n == 1 or m == 1 or p == 1:
-            for i in range(n):
-                for j in range(p):
-                    for k in range(m):
-                        self[i, j] += left[i, k]*right[k, j]
+            super().multiply(left, right)
+
         else:
             A = left[0:n//2, 0:m//2]
             B = left[0:n//2, m//2:ms]
