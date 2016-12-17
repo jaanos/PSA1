@@ -34,17 +34,15 @@ class CheapMatrix(SlowMatrix):
                 #primer ko je leva matrika sodo visokam desna pa liho siroka (Ma en stolpec vec desna)
                 work*=0
                 self[0:levaVrst,0:(desnaStol-1)].multiply(left,right[0:ujemanje,0:(desnaStol-1)],work[0:levaVrst,0:(desnaStol-1)])  #tuki sam locis primer in je sam vazn da je work zravn da dela
-                work*=0
                 self[0:levaVrst,(desnaStol-1):desnaStol].multiply(left,right[0:ujemanje,(desnaStol-1):desnaStol],work[0:levaVrst,(desnaStol-1):desnaStol])
                 return self
             if AA == 1:
                 #Pol je leva matrika eno vrstico vec spodi
                 work*=0
                 self[0:(levaVrst-1),0:desnaStol].multiply(left[0:(levaVrst-1),0:ujemanje],right,work[0:(levaVrst-1),0:desnaStol])
-                work*=0
                 self[(levaVrst-1):levaVrst,0:desnaStol].multiply(left[(levaVrst-1):levaVrst,0:ujemanje],right,work[(levaVrst-1):levaVrst,0:desnaStol])
                 return self
-            #Priprava matrik (sekanje)
+            # Priprava matrik (sekanje)
             A = left[0:levaVrst//2,0:ujemanje//2]
             B = left[0:levaVrst//2,ujemanje//2:ujemanje]
             C = left[levaVrst//2:levaVrst,0:ujemanje//2]
@@ -53,11 +51,11 @@ class CheapMatrix(SlowMatrix):
             F = right[0:ujemanje//2,desnaStol//2:desnaStol]
             G = right[ujemanje//2:ujemanje,0:desnaStol//2]
             H = right[ujemanje//2:ujemanje,desnaStol//2:desnaStol]
-            #Priprava matrik na P1,P2,...,P7
-            #dodatno delovno matriko bomo v zgornjem levem kotu uporabljali za rekurzijo ostale kvadrate pa zapolnili z
-            #zvito izbranimi matrikami P1 do P7
-            #Podmatrike med seboj odstevamo in pristevamo na mestu, da ne generiramo novih
-            #V vsakem koraku poklicemo rekurzivni klic na manjših matrikah
+            # Priprava matrik na P1,P2,...,P7
+            # dodatno delovno matriko bomo v zgornjem levem kotu uporabljali za rekurzijo ostale kvadrate pa zapolnili z
+            # zvito izbranimi matrikami P1 do P7
+            # Podmatrike med seboj odstevamo in pristevamo na mestu, da ne generiramo novih
+            # V vsakem koraku poklicemo rekurzivni klic na manjših matrikah
             REKURZIVNA = work[0:(levaVrst//2),0:(desnaStol//2)]
             G-=E
             P4 = self[0:(levaVrst//2),0:(desnaStol//2)]
@@ -100,7 +98,7 @@ class CheapMatrix(SlowMatrix):
             A+=C
             E-=F
 
-            #Po izracunanih matrikah pripravimo resitev
+            # Po izracunanih matrikah pripravimo resitev
             REKURZIVNA*=0
             REKURZIVNA+=P1
             P3+=P4
@@ -112,4 +110,25 @@ class CheapMatrix(SlowMatrix):
             P4+=P6
             P1-=P7
             P1+=P5
+            return self
+        if CC == 1:
+            if BB == 1:
+                self[0:levaVrst,0:(desnaStol-1)].multiply(left[0:levaVrst,0:(ujemanje-1)],right[0:(ujemanje-1),0:(desnaStol-1)],work[0:levaVrst,0:(desnaStol-1)])
+                #To lahk nardimo ker mamo stolpec dolzine ena in je useen kako pomnozimo ker ne zasedemo nobenega dodatnega prostora
+                work*=0
+                work[0:levaVrst,0:(desnaStol-1)].multiply(left[0:levaVrst,(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:(desnaStol-1)],self[0:levaVrst,0:(desnaStol-1)])
+                self[0:levaVrst,0:(desnaStol-1)]+=work[0:levaVrst,0:(desnaStol-1)]
+                self[0:levaVrst,(desnaStol-1):desnaStol].multiply(left,right[0:(ujemanje),(desnaStol-1):desnaStol],work[0:levaVrst,(desnaStol-1):desnaStol])
+                return self
+            if AA == 1:
+                self[0:(levaVrst-1),0:desnaStol].multiply(left[0:(levaVrst-1),0:(ujemanje-1)],right[0:(ujemanje-1),0:desnaStol],work[0:(levaVrst-1),0:desnaStol])
+                work*=0
+                #to nesmem narest morm klicat mnozenje iz super classa na podmatriki
+                work[0:(levaVrst-1),0:desnaStol].multiply(left[0:(levaVrst-1),(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:desnaStol],self[0:(levaVrst-1),0:desnaStol])
+                self[0:(levaVrst-1),0:desnaStol]+=work[0:(levaVrst-1),0:desnaStol]
+                self[(levaVrst-1):levaVrst,0:desnaStol].multiply(left[(levaVrst-1):levaVrst,0:ujemanje],right,work[(levaVrst-1):levaVrst,0:desnaStol])
+                return self
+            self.multiply(left[0:levaVrst,0:(ujemanje-1)],right[0:(ujemanje-1),0:desnaStol],work)
+            work.multiply(left[0:levaVrst,(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:desnaStol],self)
+            self+=work
             return self

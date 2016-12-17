@@ -69,10 +69,9 @@ class FastMatrix(SlowMatrix):
                                                    left[0:(levaVrst-1),(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:desnaStol]
                 self[(levaVrst-1):levaVrst,0:desnaStol] = left[(levaVrst-1):levaVrst,0:ujemanje] * right
                 return self
-            else:
-                AAA = left[0:levaVrst,0:(ujemanje-1)] * right[0:(ujemanje-1),0:desnaStol]
-                BBB = left[0:levaVrst,(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:desnaStol]
-                CCC = AAA + BBB
-                self *= 0
-                self += CCC
-                return self
+            AAA = left[0:levaVrst,0:(ujemanje-1)] * right[0:(ujemanje-1),0:desnaStol]
+            BBB = left[0:levaVrst,(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:desnaStol]
+            CCC = AAA + BBB
+            self *= 0
+            self += CCC
+            return self
