@@ -20,14 +20,10 @@ class SlowMatrix(AbstractMatrix):
         levaVrst = left.nrow()
         desnaStol = right.ncol()
         self *= 0
-        #desnaVrst = right.nrow() #ta mora bit enaka k levaStolpci, kar ce ni itak vrnemo v prvi vrstici tko da je nepotrebo
         for i in range(levaVrst):
-            trenvrst = []
             for j in range(desnaStol):
                 for k in range(levaStol):
                     self[i,j] += (left[i,k]*right[k,j])
         return self
 
-# fillrows dela na tem c._fill_rows([[0,[1,2]],[1,[2,2]],[2,[3,2]]],2)
-# problem je da se nic ne zgodi
 
