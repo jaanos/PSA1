@@ -6,7 +6,9 @@
 
 1. Naivno množenje
 
-    V razredu `Slowmatrix` je implementirano naivno množenje matrik, ki matrike zmnoži po šolsko, torej *j*-ti element ciljne matrike v *i*-t i vrstici je skalarni produkt *i*-te vrstice prve in *j*-tega stolpca druge matrike. V ta namen si v razredu SlowMatrix definiramo pomožno statično metodo dot_product, ki sprejme dva vektorja (matriko z eno samo vrstico in matriko z enim samim stolpcem), ter vrne vrednost njunega skalarnega produkta.
+    V razredu `Slowmatrix` je implementirano naivno množenje matrik, ki matrike zmnoži po šolsko, torej *j*-ti element 
+    ciljne matrike v *i*-t i vrstici je skalarni produkt *i*-te vrstice prve in *j*-tega stolpca druge matrike. 
+    ~~V ta namen si v razredu SlowMatrix definiramo pomožno statično metodo dot_product, ki sprejme dva vektorja (matriko z eno samo vrstico in matriko z enim samim stolpcem), ter vrne vrednost njunega skalarnega produkta.~~ Ker ta način vsebuje dodatno kopiranje podmatrik je veliko počasnejši, zato skaralno množenje izpeljemo kar v še eni zanki.
 
 2. Strassenovo množenje
 
@@ -54,7 +56,7 @@
 
     Metoda `dot_product` sešteje `a` produktov (opravi `2*a` osnovnih operacij), torej je njena časovna zahtevnost `O(a)`, ker jo uporabljamo za skalarnih produt dveh vektorjev je to kar enako dolžini enega izmed njih, v primeru naše matrike pa kar številu stolpcev v `A` in številu vrstic v `B` torej `O(M)`.
 
-    Metoda `multiply` vsebuje dve gnezdeni `for` zanki, ki se izvedeta do konca, zunanja se izvede `N`-krat, notranja `K` krat, v notranji pa `dot_product` na vektorju dolžine `M`. Torej je časovna zahtevnost metode `multiply` v razredu `SlowMatrix` `O(NMK)` oziroma `O(L³)`.
+    Metoda `multiply` vsebuje dve gnezdeni `for` zanki, ki se izvedeta do konca, zunanja se izvede `N`-krat, notranja `K` krat, v notranji ~~pa `dot_product` na vektorju dolžine `M`.~~ zanki pa `M` produktov, `M` seštevanj in zapis v matriko. Torej je časovna zahtevnost metode `multiply` v razredu `SlowMatrix` `O(NMK)` oziroma `O(L³)`.
 
 
 2. Strassenovo množenje
