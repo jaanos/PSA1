@@ -35,7 +35,9 @@ S T(*m,k,n*) označimo časovno zahtevnost množenja matrik. V najslabšem prime
 V datoteki z algoritmom so opisane časovne zahtevnosti posameznih korakov. Če seštejemo zahtevnosti vseh korakov, dobimo rekurzivno formulo  
 T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 9\*O(*m/2*\**k/2*) + 9\*O(*k/2*\**n/2*) + 20\*O(*m/2*\**n/2*) + 8\*O(*m/2*) + 8\*O(*n/2*) + 2\*O(*k/2*).  
 Če upoštevamo, da zadnje 3 člene linearne zahtevnosti lahko zanemarimo, in uvedemo *N* = max(*m,k,n*), se nam formula poenostavi v
-T(*N*) = 7\*T(*N/2*) + 38\*O(*N^2*). Krovni izrek nam pove, da je skupna časovna zahtevnost T(*N*) = O(*N*^(log_2(7))).
+T(*N*) = 7\*T(*N/2*) + 38\*O(*N^2*). Krovni izrek nam pove, da je skupna časovna zahtevnost T(*N*) = O(*N*^(log_2(7))). Če želimo bolj natančno časovno zahtevnost, pa jo izračunamo ročno iz poenostavljene enačbe T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*). Ker je enačba simetrična glede na vse spremenljivke, lahko brez škode za splošnost predpostavimo *m* >= *k* >= *n*. Računamo:  
+T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*) = 49\*T(*m/4,k/4,n/4*) + 7\*(O(*m/2*\**k/2*) + O(*k/2*\**n/2*) + O(*m/2*\**n/2*)) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*) = ... = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\*(1 + 7/4 + (7/4)^2 + ... + (7/4)^(log_2(*n*)-1)) + 7^log_2(*n*)\*T(*m*/*n*,*k*/*n*,1) = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\*((7/4)^log_2(*n*) - 1)\*4/3 + *n*^log_2(7)\*O(*m*/*n*\**k*/*n*) = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\*((7/4)^log_2(*n*) + *n*^log_2(7)\*O(*m*/*n*\**k*/*n*) = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\**n*^log_2(7)/*n*^2 + *n*^log_2(7)\*O(*m*/*n*\**k*/*n*) = O((*m*/*n*\**k*/*n* + *k*/*n* + *m*/*n*)\**n*^log_2(7)) = O(*m*/*n*\**k*/*n*\**n*^log_2(7)) =  O((*mnk*/*n*^3)\**n*^log_2(7))  
+Če označimo z *M* = min(*m,k,n*), se rezultat prepiše v T(*m,k,n*) = O((*mnk*/*M*^3)\**M*^log_2(7)). Poglejmo si še robne primere: če je *m*=*k*=*n*, dobimo enako kot prej T(*m,k,n*) = O(*M*^(log_2(7))) = O(*N*^(log_2(7))), če pa je *M* = 1, dobimo enako kot pri SlowMatrix T(*m,k,n*) = O(*mnk*).
 
 *Prostorska zahtevnost*  
 S S(*m,k,n*) označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo le najslabši primer.
@@ -51,7 +53,7 @@ Podrobnejši komentarji so v datoteki z algoritmom.
 S T(*m,k,n*) spet označimo časovno zahtevnost množenja matrik.
 Velja  
 T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 13\*O(*m/2*\**k/2*) + 13\*O(*k/2*\**n/2*) + 16\*O(*m/2*\**n/2*) + 4\*O(*m/2*) + 4\*O(*n/2*) + 2\*O(*k/2*)   
-oziroma T(*N*) = 7\*T(*N/2*) + 42\*O(*N^2*), kar nam spet da časovna zahtevnost T(*N*) = O(*N*^(log_2(7))). Torej je rezultat enak kot pri FastMatrix, razlikuje se le v konstanti. 
+oziroma T(*N*) = 7\*T(*N/2*) + 42\*O(*N^2*), kar nam spet da časovno zahtevnost T(*N*) = O(*N*^(log_2(7))). Torej je rezultat enak kot pri FastMatrix, razlikuje se le v konstanti. 
 Pri CheapMatrix smo opravljali precej več seštevanj, saj smo morali vhodni matriki ves čas popravljati nazaj na prvotno stanje. Nekaj dela pa smo si prihranili, 
 ko smo rezultate množenj zapisovali direktno v ciljno matriko in nam jih ni bilo potrebno naknadno prepisovati.
 
@@ -73,5 +75,5 @@ Vidimo lahko, da med Fast in CheapMatrix ni skoraj nobene razlike, SlowMatrix pa
 
 ![graf1](https://cloud.githubusercontent.com/assets/13056585/21294588/753710be-c540-11e6-9de7-9f9494fbd323.png)
 
-Z modro in rdečo krivuljo, smo poskusili točke najbolje aproksimirati po metodi najmanjših kvadratov. Rdeča krivulja se zelo dobro prilega točkam, pri modri pa ena točka precej odstopa (leži pod krivuljo). To je ravno točka pri velikosti 500, ki je zelo blizu 512 = 2^9, kjer bi se zgodil občuten skok (kot smo razložili prej). Za rdečo krivuljo smo izbrali najbolj prilegajoč polinom tretje stopnje (2.2311e-005\*x^3 - 3.2437e-003\*x^2 + 2.3498e-002\*x + 6.5569e+000). Modre točke nismo mogli aproksimirati s polinomom, saj je časovna zahtevnost O(*m*^(log_2(7))). Lahko bi jih aproksimirali z racionalno funkcijo, pri kateri se razmerje stopenj polinomov v števcu in imenovalcu čimbolj približa log_2(7) = 2,81. Z razlogom poenostavitve pa smo jih aproksimirali kar s funkcijo oblike *a*\*x^2,81 (a = 1.2169e-004). S tem lahko ocenimo približno velikost matrike, pri kateri bi FastMatrix množil hitreje kot SlowMatrix. Izkaže se, da se to zgodi pri približno *m*=*k*=*n*=8300. 
+Z modro in rdečo krivuljo, smo poskusili točke najbolje aproksimirati po metodi najmanjših kvadratov. Rdeča krivulja se zelo dobro prilega točkam, pri modri pa ena točka precej odstopa (leži pod krivuljo). To je ravno točka pri velikosti 500, ki je zelo blizu 512 = 2^9, kjer bi se zgodil občuten skok (kot smo razložili prej). Za rdečo krivuljo smo izbrali najbolj prilegajoč polinom tretje stopnje (2.2311e-005\*x^3 - 3.2437e-003\*x^2 + 2.3498e-002\*x + 6.5569e+000). Modrih točk nismo mogli aproksimirati s polinomom, saj je časovna zahtevnost O(*m*^(log_2(7))). Lahko bi jih aproksimirali z racionalno funkcijo, pri kateri se razmerje stopenj polinomov v števcu in imenovalcu čimbolj približa log_2(7) = 2,81. Z razlogom poenostavitve pa smo jih aproksimirali kar s funkcijo oblike *a*\*x^2,81 (*a* = 1.2169e-004). S tem lahko ocenimo približno velikost matrike, pri kateri bi FastMatrix množil hitreje kot SlowMatrix. Izkaže se, da se to zgodi pri približno *m*=*k*=*n*=8300. 
 
