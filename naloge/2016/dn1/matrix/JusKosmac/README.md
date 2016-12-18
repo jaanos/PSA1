@@ -21,7 +21,14 @@ Prostorska zahtevnost je torej O(1).
 __FastMatrix__  
 Matrike množimo z uporabo Strassenovega algoritma. Algoritem razpolovi stranici obeh matrik (če sta večji kot 1) in s tem vsako razdeli na 4 podmatrike.
 Podmatrike rekurzivno zmnožimo s 7 množenji in nato s seštevanjem/odštevanjem skonstruiramo ustrezne podmatrike v ciljni matriki.
-Če matriki nimata stranic sodih dolžin, zadnji stolpec oz. zadnjo vrstico obravnavamo posebej. 
+Če matriki nimata stranic sodih dolžin, zadnji stolpec oz. zadnjo vrstico obravnavamo posebej.
+
+Skica deljenja matrik (zadnji stolpec in zadnja vrstica nastopita samo, če so dimenzije lihe:
+```
+[ A B x]    [ E F c]
+[ C D y]    [ G H d]
+[ a b alfa] [ u w beta]
+```
 
 *Časovna zahtevnost*  
 S T(*m,k,n*) označimo časovno zahtevnost množenja matrik. V najslabšem primeru so vsi *m, k* in *n* lihi, torej moramo opravljati dodatno delo.
