@@ -28,39 +28,39 @@ Ta algoritem torej prostorsko ni zahtevem, medtem ko pa je časovno zelo zahteve
 
 ###Primerjava dejanskih časov izvajanja algoritmov pri vhodih različne velikost:
 velikosti vhodnih matrik (gledala sem pridukt dveh kvadratnih matrik, keterih vsi elementi so bili enaki 1)
-1x1 * 1x1 : 0.000s
-5x5 * 5x5 : 0.001s
-10x10 * 10x10 : 0.005s
-15x15 * 15x15 : 0.012s
-20x20 * 20x20 : 0.024s
-25x25 * 25x25 : 0.052s
-30x30 * 30x30 : 0.087s
-35x35 * 35x35 : 0.152s
-40x40 * 40x40 : 0.259s
-45x45 * 45x45 : 0.429s
-50x50 * 50x50 : 0.510s
-55x55 * 55x55 : 0.611s
-60x60 * 60x60 : 0.948s
-65x65 * 65x65 : 1.176s
-70x70 * 70x70 : 1.405s
-75x75 * 75x75 : 1.759s
-80x80 * 80x80 : 2.257s
-85x85 * 85x85 : 2.600s
-90x90 * 90x90 : 3.295s
-95x95 * 95x95 : 4.185s
-100x100 * 100x100 : 4.411s
-125x125 * 125x125 : 9.514s
-150x150 * 150x150 : 16.268s
-175x175 * 175x175 : 28.596s
-200x200 * 200x200 : 46.541s
-225x225 * 225x225 : 71.574s
-250x250 * 250x250 : 105.487s
-275x275 * 275x275 : 149.519s
-300x300 * 300x300 : 207.473s
-350x350 * 350x350 : 359.316s
-400x400 * 400x400 : 596.140s
-450x450 * 450x450 : 944.968s
-500x500 * 500x500 : 1392.869s
+-1x1 * 1x1 : 0.000s
+-5x5 * 5x5 : 0.001s
+-10x10 * 10x10 : 0.005s
+-15x15 * 15x15 : 0.012s
+-20x20 * 20x20 : 0.024s
+-25x25 * 25x25 : 0.052s
+-30x30 * 30x30 : 0.087s
+-35x35 * 35x35 : 0.152s
+-40x40 * 40x40 : 0.259s
+-45x45 * 45x45 : 0.429s
+-50x50 * 50x50 : 0.510s
+-55x55 * 55x55 : 0.611s
+-60x60 * 60x60 : 0.948s
+-65x65 * 65x65 : 1.176s
+-70x70 * 70x70 : 1.405s
+-75x75 * 75x75 : 1.759s
+-80x80 * 80x80 : 2.257s
+-85x85 * 85x85 : 2.600s
+-90x90 * 90x90 : 3.295s
+-95x95 * 95x95 : 4.185s
+-100x100 * 100x100 : 4.411s
+-125x125 * 125x125 : 9.514s
+-150x150 * 150x150 : 16.268s
+-175x175 * 175x175 : 28.596s
+-200x200 * 200x200 : 46.541s
+-225x225 * 225x225 : 71.574s
+-250x250 * 250x250 : 105.487s
+-275x275 * 275x275 : 149.519s
+-300x300 * 300x300 : 207.473s
+-350x350 * 350x350 : 359.316s
+-400x400 * 400x400 : 596.140s
+-450x450 * 450x450 : 944.968s
+-500x500 * 500x500 : 1392.869s
 
 
 
@@ -90,11 +90,14 @@ T(n,k,m) = O(1) + O(k*m) + O(n*k) + O(m*n) + o(1) + O(max(n,m)*k) + 7*T(n//2,k//
          = O(k*m+n*k+m*n) + O(max(n,m)*k) + 7*T(n//2,k//2, m//2)=...
 V naslednjem koraku definiramo novo oznako M=max(n,k,m).
 S to oznako dobimo sedaj, da je časovna zahtevnost metode FastMatrix enaka:
+```
 T(M) = O(3*M^2) + O(M^2) + 7*T(M//2) =
      = 3*O(M^2) + O(M^2) + 7*T(M//2) =
      = O(M^2) + 7*T(M//2) =
      = 7*T(M//2) + O(M^2)
-Za nadaljno izpeljavo potrebujemo Krovni izrek, ki pravi:
+```
+Za nadaljno izpeljavo potrebujemo Krovni izrek, ki pravi:`
+```
     n...velikost vhoda
     a...število enako velikih podproblemov, na katere delimo problem
     b...velikost posameznega podproblema je n/b
@@ -102,10 +105,11 @@ Za nadaljno izpeljavo potrebujemo Krovni izrek, ki pravi:
     Če je T(n) = a*T(n/b) + O(n^d), potem je T(n) enak:
         1. O(n^d), če d>log_{b}(a)
         2. O(n^d*log_{b}(n)), če d=log_{b}(a)
-        3. O(n^(log_{b}(a))), če d<log_{b}(a)
+        3. O(n^(log_{b}(a))), če d<log_{b}(a)`
+```
 v našem primeru je n=M, a=7, b=2, d=2 (torej d<log_{b}(a))
 Iz tega lahko do konca izpeljemo našo formulo:
-T(M) = O(M^(log_{2}(7)))
+**T(M) = O(M^(log_{2}(7)))**
 (natančnejša izpeljava v komentarjih v kodi)
 
 ###Podatkovna zahtevnost algoritma:
@@ -114,48 +118,52 @@ porabimo konstantno dodatno prostora. Tudi za shranjevanje dimenzij porabimo kon
 O(n//2*k//2+k//2*m//2)=O(n*k+m*k)=O(k*(m+n)) dodatnega prostora. Matrike P1,P2,P3,P4,P5,P6,P7 so velikosti n//2*m//2, za zapis vsake od njih porabimo O(n/2*m/2)=O(n*m)
 dodatnega prostora, zaradi rekurzivnega klica pa v tem koraku porabimo še 7*P(n//2,k//2,m//2).
 Skupna podatkovna zahtevnost je torej:
+```
 P(n,k,m) = O(1) + O(1) + O(k*(n+m)) + O(n*m) + 7*P(n//2,k//2,m//2)=
          = O(1) + O(k*n + k*m + n*m) + 7*P(n//2,k//2,m//2)=
          = O(k*n + k*m + n*m) + 7*P(n//2, k//2, m//2)=...
+```
 (natančnejša izpeljava v komentarjih v kodi)
 Spet si definiramo oznako M=max(n,k,m).
 S to oznako dobimo sedaj, da je prostorska zahtevnost metode FastMatrix enaka:
+```
 P(M) = O(3*M^2) + 7*P(M//2) =
      = 3*O(M^2) + 7*P(M//2) =
      = O(M^2) + 7*P(M//2) =
      = 7*P(M//2) + O(M^2)
+```
 Po krovnem izreku je to torej spet enako:
-P(M) = O(M^(log_{2}(7)))
+**P(M) = O(M^(log_{2}(7)))**
 
 ###Primerjava dejanskih časov izvajanja algoritmov pri vhodih različne velikost:
 velikosti vhodnih matrik:
-1x1 * 1x1 : 0.000s
-5x5 * 5x5 : 0.005s
-10x10 * 10x10 : 0.036s
-15x15 * 15x15 : 0.059s
-20x20 * 20x20 : 0.276s
-25x25 * 25x25 : 0.375s
-30x30 * 30x30 : 0.439s
-35x35 * 35x35 : 1.610s
-40x40 * 40x40 : 1.732s
-45x45 * 45x45 : 2.209s
-50x50 * 50x50 : 2.597s
-55x55 * 55x55 : 2.552s
-60x60 * 60x60 : 2.832s
-65x65 * 65x65 : 10.459s
-70x70 * 70x70 : 10.772s
-75x75 * 75x75 : 10.876s
-80x80 * 80x80 : 12.187s
-85x85 * 85x85 : 13.665s
-90x90 * 90x90 : 14.492s
-95x95 * 95x95 : 14.624s
-100x100 * 100x100 : 17.824s
-125x125 * 125x125 : 23.127s
-150x150 * 150x150 : 81.869s
-175x175 * 175x175 : 84.372s
-200x200 * 200x200 : 119.964s
-225x225 * 225x225 : 71.574s
-250x250 * 250x250 : 105.487s
+-1x1 * 1x1 : 0.000s
+-5x5 * 5x5 : 0.005s
+-10x10 * 10x10 : 0.036s
+-15x15 * 15x15 : 0.059s
+-20x20 * 20x20 : 0.276s
+-25x25 * 25x25 : 0.375s
+-30x30 * 30x30 : 0.439s
+-35x35 * 35x35 : 1.610s
+-40x40 * 40x40 : 1.732s
+-45x45 * 45x45 : 2.209s
+-50x50 * 50x50 : 2.597s
+-55x55 * 55x55 : 2.552s
+-60x60 * 60x60 : 2.832s
+-65x65 * 65x65 : 10.459s
+-70x70 * 70x70 : 10.772s
+-75x75 * 75x75 : 10.876s
+-80x80 * 80x80 : 12.187s
+-85x85 * 85x85 : 13.665s
+-90x90 * 90x90 : 14.492s
+-95x95 * 95x95 : 14.624s
+-100x100 * 100x100 : 17.824s
+-125x125 * 125x125 : 23.127s
+-150x150 * 150x150 : 81.869s
+-175x175 * 175x175 : 84.372s
+-200x200 * 200x200 : 119.964s
+-225x225 * 225x225 : 140.859s
+-250x250 * 250x250 : 147.558s
 275x275 * 275x275 : 149.519s
 300x300 * 300x300 : 207.473s
 350x350 * 350x350 : 359.316s
