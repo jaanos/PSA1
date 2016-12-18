@@ -25,9 +25,9 @@ Podmatrike rekurzivno zmnožimo s 7 množenji in nato s seštevanjem/odštevanje
 
 Skica deljenja matrik (zadnji stolpec in zadnja vrstica nastopita samo, če so dimenzije lihe):
 ```
-[ A B x]    [ E F c]
-[ C D y]    [ G H d]
-[ a b alfa] [ u w beta]
+[ A B   x ]    [ E F   c ]
+[ C D   y ]    [ G H   d ]
+[ a b alfa]    [ u w beta]
 ```
 
 *Časovna zahtevnost*  
