@@ -43,7 +43,7 @@ T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*) = 49\
 S S(*m,k,n*) označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo le najslabši primer.
 Velja  
 S(*m,k,n*) = 7\*S(*m/2,k/2,n/2*) + 23\*O(*m/2*\**n/2*) + 5\*O(*m/2*\**k/2*) + 5\*O(*k/2*\**n/2*) + 10\*O(*m/2*) + 10\*O(*n/2*).  
-Spet lahko enačbo poenostavimo v S(*N*) = 7\*S(*N/2*) + 33\*O(*N^2*), torej je S(*N*) = O(*N*^(log_2(7))).
+Spet lahko enačbo poenostavimo v S(*N*) = 7\*S(*N/2*) + 33\*O(*N^2*), torej je S(*N*) = O(*N*^(log_2(7))) oz. bolj natančno v S(*m,k,n*) = O((*mnk*/*M*^3)\**M*^log_2(7)).
 
 __CheapMatrix__  
 Algoritem za množenje je enak kot pri FastMatrix, le da varčuje s prostorom. Pomagamo si z dodatno delovno matriko, v katero shranjujemo vmesne rezultate množenja.
