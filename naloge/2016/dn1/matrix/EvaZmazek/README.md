@@ -28,8 +28,11 @@ Ta algoritem torej prostorsko ni zahtevem, medtem ko pa je časovno zelo zahteve
 
 ###Primerjava dejanskih časov izvajanja algoritmov pri vhodih različne velikost:
 velikosti vhodnih matrik (gledala sem pridukt dveh kvadratnih matrik, keterih vsi elementi so bili enaki 1)
-    *1x1 * 1x1 : 0.000s
-    *5x5 * 5x5 : 0.001s
+
+Velikost kvadratnih matrik A in B | čas izračuna
+----------------------------------|--------------
+ 1 | 0.000s
+ 5 | 0.001s
     *10x10 * 10x10 : 0.005s
     *15x15 * 15x15 : 0.012s
     *20x20 * 20x20 : 0.024s
@@ -70,6 +73,7 @@ V metodi FastMatrix si najprej sharnimo velikosti matrik A in B, ki jih dobimo s
 Če je, matriki A in B pomnožimo med seboj tako kot pri metodi *SlowMatrix* (torej po naivni metodi), sicer se pa osredotočimo na primer, ko so
 vse tri dimenzije sode. Takrat lahko namreč na matrikah A in B uporabimo Strassenov algoritem, kjer vsako od matrik A in b razdelimo na štiri dele,
 nato pa s pomočjo matrik P1,P2,P3,P4,P5,P6,P7 rekurzivno izračunamo produkt. Posebnost tega algoritma je, da namesto osem množenj uporabimo sedem.
+
 V primeru, ko število vrstic matrike A ni sodo, torej je liho, zadnjo vrstico obravnavamo posebaj. Torej matriko A brez zadnje vrstice pomnožimo z matriko B,
 njen prosukt pa shranimo v končni matriki v del matrike brez zadnje vrstice. Zadnjo vrstico končne matrike pa dobimo tako, da zadnjo vrstico matrike A pomnožimo
 z matriko B. V primeru, ko je število stolpcev v matriki B liho, zadnji stolpec matrike B obravnavamo posebej. Torej matriko A pomnožimo najprej z matriko B brez
