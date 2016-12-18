@@ -32,7 +32,7 @@ class CheapMatrix(SlowMatrix):
         #uporabimo navadno mnozenje matrik
         #casovna zahtevnost: O(mn) ali O(mk) ali O(nk) (odvisno katera dimanzija je enaka 1)
         #prostorska zahtevnost: O(1)
-        if m == 1 or n == 1 or k == 1: #navadno množenje O(n^2)
+        if m == 1 or n == 1 or k == 1:
             super().multiply(left, right)
         else:
             #dimenzije matrik celostevilsko razpolovimo
