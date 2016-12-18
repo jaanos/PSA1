@@ -22,6 +22,7 @@ class CheapMatrix(SlowMatrix):
                "Dimenzije delovne matrike ne ustrezajo dimenzijam produkta!"
 
         clear(work)
+        clear(self)
             
         if left.nrow() == 1:
             for k in range(right.ncol()):
@@ -66,27 +67,15 @@ class CheapMatrix(SlowMatrix):
             S3 = self[visina_l:2*visina_l, :sirina_r]
             S4 = self[visina_l:2*visina_l, sirina_r:2*sirina_r]
 
-            #print(A,B,C,D,E,F,G,H)
-            #print("#####")
-            #print(WORK_1, WORK_2, WORK_3, WORK_4)
-            #print(self)
-
             WORK_1.multiply(A,F,WORK_4) #A*F
             WORK_2.multiply(A,H,WORK_3) #A*H
             WORK_1 -= WORK_2 # P1 = A*F - A*H
-            clear(WORK_3)
             WORK_3.multiply(B, H, WORK_4) #B*H
             WORK_3 += WORK_2 #P2
-
-            #print(S1, S2, S3, S4, WORK_1, WORK_2, WORK_3, WORK_4)
-            #print(self)
 
             S2[:,:] = WORK_1 #P1
             S2 += WORK_3 #P1 + P2
 
-            #print(S1, S2, S3, S4, WORK_1, WORK_2, WORK_3, WORK_4)
-            #print(self)
-            clear(WORK_4)
             WORK_4.multiply(A, E, S1) #A*E
             S3.multiply(D, E, S1) #D*E
             S4.multiply(D, H, S1) #D*H
@@ -94,13 +83,8 @@ class CheapMatrix(SlowMatrix):
             WORK_2 += WORK_4
             WORK_2 += S3
             WORK_2 += S4 #WORK_2 = A*E + A*H + D*E + D*H = P5
-            clear(S4)
-            S4[:,:] = WORK_1 #To je zadnjic ko bomo uporabili P1
+            S4[:,:] = WORK_1 #To je zadnjic ko bomo uporabili P1           
 
-            #print(S1, S2, S3, S4, WORK_1, WORK_2, WORK_3, WORK_4)
-            #print(self)            
-
-            clear(WORK_4)
             WORK_4.multiply(C, E, S1) # C*E
             S3 += WORK_4 #S3 = D*E + C*E = P3
 
@@ -108,15 +92,12 @@ class CheapMatrix(SlowMatrix):
             S4 -= S3
             S4 += WORK_4 # S4 = P1 + P5 - P3 + C*E (manjka še - A*E - A*F + C*F)
 
-            clear(WORK_4)
             WORK_4.multiply(A, E, S1)
             S4 -= WORK_4
 
-            clear(WORK_4)
             WORK_4.multiply(A,F, S1)
             S4 -= WORK_4
 
-            clear(WORK_4)
             WORK_4.multiply(C, F, S1)
             S4 += WORK_4 #S4 = P1 + P5 - P3 - P7
 
@@ -132,11 +113,9 @@ class CheapMatrix(SlowMatrix):
             WORK_4 = C*F
             """
 
-            clear(WORK_1)
             WORK_1.multiply(D, G, S1)
             S3 += WORK_1
 
-            clear(WORK_4)
             WORK_4.multiply(D, E, S1)
             S3 -= WORK_4
 
@@ -152,22 +131,18 @@ class CheapMatrix(SlowMatrix):
             WORK_4 = D*E
             """
 
-            clear(S1)
             S1[:,:] = WORK_1
             S1 -= WORK_4 #S1 = P4
             S1 += WORK_2 #S1 = P4 + P5
             S1 -= WORK_3 #S1 = P4 + P5 - P2
             S1 -= WORK_1 #S1 = P4 + P5 - P2 - D*G
 
-            clear(WORK_2)
             WORK_2.multiply(B,G, WORK_4)
             S1 += WORK_2
 
-            clear(WORK_2)
             WORK_2.multiply(B,H, WORK_4)
             S1 += WORK_2
 
-            clear(WORK_2)
             WORK_2.multiply(D, H, WORK_4)
             S1 -= WORK_2
 
@@ -194,22 +169,19 @@ class CheapMatrix(SlowMatrix):
 
                 Podoben razmislek tudi za ostale 3 podmatrike.
                 """
+                
                 RR = right.nrow() - 1
                 LC = left.ncol() - 1
 
-                clear(WORK_1)
                 WORK_1.multiply(left[:visina_l,LC], right[RR, :sirina_r])
                 S1 += WORK_1
 
-                clear(WORK_1)
                 WORK_1.multiply(left[:visina_l, LC], right[RR, sirina_r:2*sirina_r])
                 S2 += WORK_1
 
-                clear(WORK_1)
                 WORK_1.multiply(left[visina_l:2*visina_l, LC], right[RR, :sirina_r])
                 S3 += WORK_1
 
-                clear(WORK_1)
                 WORK_1.multiply(left[visina_l:2*visina_l, LC], right[RR, sirina_r:2*sirina_r])
                 S4 += WORK_1
             
@@ -230,8 +202,6 @@ class CheapMatrix(SlowMatrix):
                 for k in range(left.nrow()):
                     self[k, RC] = skalarni_produkt(left[k, :], right[:, RC])
 
-            
-
 def skalarni_produkt(u, v):
     """
     Izračuna skalarni produkt dveh vektorjev. Pri tem je u podan kot
@@ -243,6 +213,11 @@ def skalarni_produkt(u, v):
     return produkt
 
 def clear(matrix):
+    """
+    Funkcija, ki nam počisti matriko.
+
+    Kot argument bo prejela matriko in jo nastavila na 0.
+    """
     for i in range(matrix.nrow()):
         for j in range(matrix.ncol()):
             matrix[i,j] = 0
