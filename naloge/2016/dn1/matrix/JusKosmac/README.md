@@ -26,13 +26,13 @@ Podmatrike rekurzivno zmnožimo s 7 množenji in nato s seštevanjem/odštevanje
 *Časovna zahtevnost*  
 S T(*m,k,n*) označimo časovno zahtevnost množenja matrik. V najslabšem primeru so vsi *m, k* in *n* lihi, torej moramo opravljati dodatno delo.
 V datoteki z algoritmom so opisane časovne zahtevnosti posameznih korakov. Če seštejemo zahtevnosti vseh korakov, dobimo rekurzivno formulo
-T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 9\*O(*m/2\*k/2*) + 9\*O(*k/2\*n/2*) + 20\*O(*m/2\*n/2*) + 8\*O(*m/2*) + 8*O(*n/2*) + 2*O(*k/2*).
+T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 9\*O(*m/2*\**k/2*) + 9\*O(*k/2*\**n/2*) + 20\*O(*m/2*\**n/2*) + 8\*O(*m/2*) + 8\*O(*n/2*) + 2\*O(*k/2*).
 Če upoštevamo, da zadnje 3 člene linearne zahtevnosti lahko zanemarimo, in uvedemo *N* = max(*m,k,n*), se nam formula poenostavi v
 T(*N*) = 7\*T(*N/2*) + 38\*O(*N^2*). Krovni izrek nam pove, da je skupna časovna zahtevnost T(*N*) = *N*^(log_2(7)).
 
 *Prostorska zahtevnost*  
 S S(*m,k,n*) označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo je najslabši primer.
-Velja S(*m,k,n*) = 7\*S(*m/2,k/2,n/2*) + 23\*O(*m/2\*n/2*) + 5\*O(*m/2\*k/2*) + 5\*O(*k/2\*n/2*) + 10\*O(*m/2*) + 10\*O(*n/2*).
+Velja S(*m,k,n*) = 7\*S(*m/2,k/2,n/2*) + 23\*O(*m/2*\**n/2*) + 5\*O(*m/2*\**k/2*) + 5\*O(*k/2*\**n/2*) + 10\*O(*m/2*) + 10\*O(*n/2*).
 Spet lahko enačbo poenostavimo v S(*N*) = 7*S(*N/2*) + 33*O(*N^2*), torej je S(*N*) = *N*^(log_2(7)).
 
 __CheapMatrix__  
@@ -41,7 +41,7 @@ Podrobnejši komentarji so v datoteki z algoritmom.
 
 *Časovna zahtevnost*  
 S T(*m,k,n*) spet označimo časovno zahtevnost množenja matrik.
-Velja T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 13\*O(*m/2\*k/2*) + 13\*O(*k/2\*n/2*) + 16\*O(*m/2\*n/2*) + 4\*O(*m/2*) + 4\*O(*n/2*) + 2\*O(*k/2*) 
+Velja T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 13\*O(*m/2*\**k/2*) + 13\*O(*k/2*\**n/2*) + 16\*O(*m/2*\**n/2*) + 4\*O(*m/2*) + 4\*O(*n/2*) + 2\*O(*k/2*) 
 oziroma T(*N*) = 7\*T(*N/2*) + 42\*O(*N^2*), kar nam spet da časovna zahtevnost T(*N*) = *N*^(log_2(7)). Torej je rezultat enak kot pri FastMatrix, razlikuje se le v konstanti. 
 Pri CheapMatrix smo opravljali precej več seštevanj, saj smo morali vhodni matriki ves čas popravljati nazaj na prvotno stanje. Nekaj dela pa smo si prihranili, 
 ko smo rezultate množenj zapisovali direktno v ciljno matriko in nam jih ni bilo potrebno naknadno prepisovati v ciljno matriko.
