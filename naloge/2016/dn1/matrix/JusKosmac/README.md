@@ -40,10 +40,14 @@ T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*mk*) + O(*kn*) + O(*mn*) = 49\*T(*m/4,k/4,
 Če označimo z *M* = min(*m,k,n*), se rezultat prepiše v T(*m,k,n*) = O((*mnk*/*M*^3)\*(*M*^log_2(7))). Poglejmo si še robne primere: če je *m* = *k* = *n*, dobimo enako kot prej T(*m,k,n*) = O(*M*^log_2(7)) = O(*N*^log_2(7)), če pa je *M* = 1, dobimo enako kot pri SlowMatrix T(*m,k,n*) = O(*mnk*).
 
 *Prostorska zahtevnost*  
-S S(*m,k,n*) označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo le najslabši primer.
-Velja  
-S(*m,k,n*) = 7\*S(*m/2,k/2,n/2*) + 23\*O(*m/2*\**n/2*) + 5\*O(*m/2*\**k/2*) + 5\*O(*k/2*\**n/2*) + 10\*O(*m/2*) + 10\*O(*n/2*).  
-Spet lahko enačbo poenostavimo v S(*N*) = 7\*S(*N/2*) + 33\*O(*N^2*), torej je S(*N*) = O(*N*^(log_2(7))) oz. bolj natančno v S(*m,k,n*) = O((*mnk*/*M*^3)\**M*^log_2(7)).
+S S(*m,k,n*) označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo le najslabši primer, ko so vse dimenzije lihe.
+Če bi sešteli prostorske zahtevnosti vseh korakov, bi dobili  
+S(*m,k,n*) = 7\*S(*m/2,k/2,n/2*) + 23\*O(*m/2*\**n/2*) + 5\*O(*m/2*\**k/2*) + 5\*O(*k/2*\**n/2*) + 10\*O(*m/2*) + 10\*O(*n/2*). 
+Vendar moramo paziti, da so lokalne spremenljivke, ki jih ustvari funkcija, shranjene v spominu samo toliko časa, dokler je aktiven klic te funkcije. To pomeni, da prvi rekurzivni klic za množenje hrani vse spremenljivke, dokler ne pridemo do dna rekurzije (takrat je največja poraba spomina). Ko pa se vračamo nazaj gor, se nerabljene spremenljivke sproti brišejo iz spomina. Torej preden drugič rekurzivno množimo, se spomin do konca počisti. Kljub temu, da imamo 7 rekurzivnih množenj, zato porabimo le toliko prostora, kot ga porabi eno rekurzivno množenje. Torej je prava formula  
+S(*m,k,n*) = S(*m/2,k/2,n/2*) + 23\*O(*m/2*\**n/2*) + 5\*O(*m/2*\**k/2*) + 5\*O(*k/2*\**n/2*) + 10\*O(*m/2*) + 10\*O(*n/2*).
+Spet lahko enačbo poenostavimo v S(*N*) = S(*N/2*) + 33/4\*O(*N^2*), kar nam po krovnem izreku tokrat da S(*N*) = O(*N*^2). Bolj natančno pa spet lahko računamo (*m* >= *k* >= *n*):  
+S(*m,k,n*) = S(*m/2,k/2,n/2*) + O(*mk*) + O(*kn*) + O(*mn*) = S(*m/4,k/4,n/4*) + O(*m/2*\**k/2*) + O(*k/2*\**n/2*) + O(*m/2*\**n/2*) + O(*mk*) + O(*kn*) + O(*mn*) = ... = T(*m*/*n*,*k*/*n*,1) + (O(*mk*) + O(*kn*) + O(*mn*))\*(1 + 1/4 + (1/4)^2 + ... + (1/4)^(log_2(*n*)-1)) = O(1) (običajno množenje) + (O(*mk*) + O(*kn*) + O(*mn*))\*(1 - (1/4)^log_2(*n*))\*4/3 = O(*mk*) + O(*kn*) + O(*mn*) = O(*mk*) = O(*mkn*/*n*).  
+Torej dobimo S(*m,k,n*) = O(*mkn*/*M*). Pri *m* = *k* = *n* spet dobimo S(*m,k,n*) = O(*N*^2), pri *M* = 1 pa formula ne da pravega rezultata. Pri izpeljavi smo namreč implicitno privzeli, da lahko *n* vsaj enkrat razpolovimo.
 
 __CheapMatrix__  
 Algoritem za množenje je enak kot pri FastMatrix, le da varčuje s prostorom. Pomagamo si z dodatno delovno matriko, v katero shranjujemo vmesne rezultate množenja.
