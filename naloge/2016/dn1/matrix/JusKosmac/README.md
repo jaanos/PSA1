@@ -8,20 +8,20 @@ za množenje matrik velikosti *m x k* in *k x n*.
   
 
 __SlowMatrix__  
-Matrike množimo na običajen način, *(i, j)*-ti element ciljne matrike izračunamo kot skalarni produkt *i*-te vrstice in *j*-tega stolpca vhodnih matrik.
+Matrike množimo na običajen način, *( i , j )* - ti element ciljne matrike izračunamo kot skalarni produkt *i* - te vrstice in *j* - tega stolpca vhodnih matrik.
 
 *Časovna zahtevnost*  
-Za izračun posameznega elementa porabimo O(*k*) operacij, velikost ciljne matrike je *m x n*, torej skupno porabimo O(*mnk*) operacij. 
+Za izračun posameznega elementa porabimo O(*k*) operacij (skalarni produkt dveh vektorjev dolžine *k*), velikost ciljne matrike je *m x n*, torej skupno porabimo O(*mnk*) operacij. 
 
 *Prostorska zahtevnost*  
-Pri računanju skalarnih produktov vmesne produkte vedno prištevamo isti spremenljivki, torej ne porabljamo nič novega prostora. 
+Pri računanju skalarnih produktov vmesne produkte vedno prištevamo isti spremenljivki, ki jo nato zapišemo v ciljno matriko, torej ne porabljamo nič novega prostora. 
 Prostorska zahtevnost je torej O(1).
 
 
 __FastMatrix__  
-Matrike množimo z uporabo Strassenovega algoritma. Algoritem razpolovi stranici obeh matrik (če sta večji kot 1) in s tem vsako razdeli na 4 podmatrike.
-Podmatrike rekurzivno zmnožimo s 7 množenji in nato s seštevanjem/odštevanjem skonstruiramo ustrezne podmatrike v ciljni matriki.
-Če matriki nimata stranic sodih dolžin, zadnji stolpec oz. zadnjo vrstico obravnavamo posebej.
+Matrike množimo z uporabo Strassenovega algoritma. Algoritem razpolovi stranici obeh matrik (če sta večji od 1) in s tem vsako matriko razdeli na 4 manjše podmatrike.
+Podmatrike rekurzivno zmnožimo s sedmimi množenji in nato s seštevanjem/odštevanjem skonstruiramo ustrezne podmatrike v ciljni matriki.
+Če matriki nimata stranic sodih dolžin, moramo opraviti dodatna množenja zaradi zadnjega stolpca oz. zadnje vrstice. Ker v tem primeru vedno množimo vektor z matriko ali dva vektorja med sabo, lahko uporabljamo običajno množenje, brez da bi pokvarili skupno časovno zahtevnost.
 
 Skica deljenja matrik (zadnji stolpec in zadnja vrstica nastopita samo, če so dimenzije lihe):
 ```
@@ -32,12 +32,12 @@ Skica deljenja matrik (zadnji stolpec in zadnja vrstica nastopita samo, če so d
 
 *Časovna zahtevnost*  
 S T(*m,k,n*) označimo časovno zahtevnost množenja matrik. V najslabšem primeru so vsi *m, k* in *n* lihi, torej moramo opravljati dodatno delo.
-V datoteki z algoritmom so opisane časovne zahtevnosti posameznih korakov. Če seštejemo zahtevnosti vseh korakov, dobimo rekurzivno formulo  
+V datoteki z algoritmom so bolj natančno opisane časovne zahtevnosti posameznih korakov. Če seštejemo zahtevnosti vseh korakov, dobimo rekurzivno formulo  
 T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 9\*O(*m/2*\**k/2*) + 9\*O(*k/2*\**n/2*) + 20\*O(*m/2*\**n/2*) + 8\*O(*m/2*) + 8\*O(*n/2*) + 2\*O(*k/2*).  
 Če upoštevamo, da zadnje 3 člene linearne zahtevnosti lahko zanemarimo, in uvedemo *N* = max(*m,k,n*), se nam formula poenostavi v
-T(*N*) = 7\*T(*N/2*) + 38\*O(*N^2*). Krovni izrek nam pove, da je skupna časovna zahtevnost T(*N*) = O(*N*^(log_2(7))). Torej je tudi T(*m,k,n*) = O(*N*^(log_2(7))). Če želimo bolj natančno časovno zahtevnost, pa jo izračunamo ročno iz poenostavljene enačbe T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*). Ker je enačba simetrična glede na vse spremenljivke, lahko brez škode za splošnost predpostavimo *m* >= *k* >= *n*. Računamo:  
-T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*) = 49\*T(*m/4,k/4,n/4*) + 7\*(O(*m/2*\**k/2*) + O(*k/2*\**n/2*) + O(*m/2*\**n/2*)) + O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*) = ... = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\*(1 + 7/4 + (7/4)^2 + ... + (7/4)^(log_2(*n*)-1)) + 7^log_2(*n*)\*T(*m*/*n*,*k*/*n*,1) = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\*((7/4)^log_2(*n*) - 1)\*4/3 + *n*^log_2(7)\*O(*m*/*n*\**k*/*n*) = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\*((7/4)^log_2(*n*) + *n*^log_2(7)\*O(*m*/*n*\**k*/*n*) = (O(*m*\**k*) + O(*k*\**n*) + O(*m*\**n*))\**n*^log_2(7)/*n*^2 + *n*^log_2(7)\*O(*m*/*n*\**k*/*n*) = O((*m*/*n*\**k*/*n* + *k*/*n* + *m*/*n*)\**n*^log_2(7)) = O(*m*/*n*\**k*/*n*\**n*^log_2(7)) =  O((*mnk*/*n*^3)\**n*^log_2(7))  
-Če označimo z *M* = min(*m,k,n*), se rezultat prepiše v T(*m,k,n*) = O((*mnk*/*M*^3)\**M*^log_2(7)). Poglejmo si še robne primere: če je *m*=*k*=*n*, dobimo enako kot prej T(*m,k,n*) = O(*M*^(log_2(7))) = O(*N*^(log_2(7))), če pa je *M* = 1, dobimo enako kot pri SlowMatrix T(*m,k,n*) = O(*mnk*).
+T(*N*) = 7\*T(*N/2*) + 38/4\*O(*N^2*). Krovni izrek nam pove, da je skupna časovna zahtevnost T(*N*) = O(*N*^log_2(7)). Torej je tudi T(*m,k,n*) = O(*N*^log_2(7)). Če želimo bolj natančno časovno zahtevnost, pa jo izračunamo ročno iz poenostavljene enačbe T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*mk*) + O(*kn*) + O(*mn*). Ker je enačba simetrična glede na vse spremenljivke, lahko brez škode za splošnost predpostavimo *m* >= *k* >= *n*. Računamo:  
+T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + O(*mk*) + O(*kn*) + O(*mn*) = 49\*T(*m/4,k/4,n/4*) + 7\*(O(*m/2*\**k/2*) + O(*k/2*\**n/2*) + O(*m/2*\**n/2*)) + O(*mk*) + O(*kn*) + O(*mn*) = ... = (O(*mk*) + O(*kn*) + O(*mn*))\*(1 + 7/4 + (7/4)^2 + ... + (7/4)^(log_2(*n*)-1)) + (7^log_2(*n*))\*T(*m*/*n*,*k*/*n*,1) = (O(*mk*) + O(*kn*) + O(*mn*))\*((7/4)^log_2(*n*) - 1)\*4/3 + (*n*^log_2(7))\*O(*m*/*n*\**k*/*n*) = (O(*mk*) + O(*kn*) + O(*mn*))\*((7/4)^log_2(*n*)) + (*n*^log_2(7))\*O(*m*/*n*\**k*/*n*) = (O(*mk*) + O(*kn*) + O(*mn*))\*(*n*^log_2(7))/*n*^2 + (*n*^log_2(7))\*O(*m*/*n*\**k*/*n*) = O((*m*/*n*\**k*/*n* + *k*/*n* + *m*/*n*)\*(*n*^log_2(7))) = O(*m*/*n*\**k*/*n*\*(*n*^log_2(7))) =  O((*mnk*/*n*^3)\*(*n*^log_2(7))).  
+Če označimo z *M* = min(*m,k,n*), se rezultat prepiše v T(*m,k,n*) = O((*mnk*/*M*^3)\*(*M*^log_2(7))). Poglejmo si še robne primere: če je *m* = *k* = *n*, dobimo enako kot prej T(*m,k,n*) = O(*M*^log_2(7)) = O(*N*^log_2(7)), če pa je *M* = 1, dobimo enako kot pri SlowMatrix T(*m,k,n*) = O(*mnk*).
 
 *Prostorska zahtevnost*  
 S S(*m,k,n*) označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo le najslabši primer.
