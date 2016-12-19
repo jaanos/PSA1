@@ -50,34 +50,32 @@ S(*m,k,n*) = S(*m/2,k/2,n/2*) + O(*mk*) + O(*kn*) + O(*mn*) = S(*m/4,k/4,n/4*) +
 Torej dobimo S(*m,k,n*) = O(*mkn*/*M*). Pri *m* = *k* = *n* spet dobimo S(*m,k,n*) = O(*N*^2), pri *M* = 1 pa formula ne da pravega rezultata. Pri izpeljavi smo namreč implicitno privzeli, da lahko *n* vsaj enkrat razpolovimo.
 
 __CheapMatrix__  
-Algoritem za množenje je enak kot pri FastMatrix, le da varčuje s prostorom. Pomagamo si z dodatno delovno matriko, v katero shranjujemo vmesne rezultate množenja.
-Podrobnejši komentarji so v datoteki z algoritmom.
+Algoritem za množenje je enak kot pri FastMatrix, le da varčuje s prostorom. Pomagamo si z dodatno delovno matriko, v katero shranjujemo vmesne rezultate množenja. Med množenjem spreminjamo vhodni matriki, vendar ju sproti popravljamo nazaj v prvotno stanje. Dokler je ciljna matrika še prazna zapisujemo produkte *P_i* kar vanjo, nato pa v delovno matriko in jih prištevamo ustreznim podmatrikam ciljne matrike. Podrobnejši komentarji so v datoteki z algoritmom.
 
 *Časovna zahtevnost*  
 S T(*m,k,n*) spet označimo časovno zahtevnost množenja matrik.
 Velja  
 T(*m,k,n*) = 7\*T(*m/2,k/2,n/2*) + 13\*O(*m/2*\**k/2*) + 13\*O(*k/2*\**n/2*) + 16\*O(*m/2*\**n/2*) + 4\*O(*m/2*) + 4\*O(*n/2*) + 2\*O(*k/2*)   
-oziroma T(*N*) = 7\*T(*N/2*) + 42\*O(*N^2*), kar nam spet da časovno zahtevnost T(*N*) = O(*N*^(log_2(7))). Torej je rezultat enak kot pri FastMatrix, razlikuje se le v konstanti. 
+oziroma T(*N*) = 7\*T(*N/2*) + 42/4\*O(*N^2*), kar nam spet da časovno zahtevnost T(*N*) = O(*N*^(log_2(7))). Tudi natančnejši izračun je enak kot pri FastMatrix: T(*m,k,n*) = O((*mnk*/*M*^3)\*(*M*^log_2(7))), razlikuje se le v konstanti. 
 Pri CheapMatrix smo opravljali precej več seštevanj, saj smo morali vhodni matriki ves čas popravljati nazaj na prvotno stanje. Nekaj dela pa smo si prihranili, 
 ko smo rezultate množenj zapisovali direktno v ciljno matriko in nam jih ni bilo potrebno naknadno prepisovati.
 
 *Prostorska zahtevnost*  
-Algoritem na začetku ustvari delovno matriko, ki je enakih dimenzij kot ciljna matrika. S tem porabi O(mn) dodatnega prostora. Poleg rekurzivnih klicev smo porabili
-le O(1) prostora. Rekurzivne klice opravljamo vedno z deli že obstoječe delovne matrike, torej se ne ustvarjajo nove delovne matrike.
-Toda po krovnem izreku iz enačbe S(*m,k,n*) = 7\*S(*m/2,k/2,n/2*) + O(1) še vedno sledi enaka prostorska zahtevnost kot prej, torej S(*N*) = O(*N*^(log_2(7))).
+Algoritem na začetku ustvari delovno matriko, ki je enakih dimenzij kot ciljna matrika. S tem porabimo O(mn) prostora. Poleg rekurzivnih klicev smo porabili le O(1) prostora. Rekurzivne klice vedno opravljamo z deli že obstoječe delovne matrike, torej se ne ustvarjajo nove delovne matrike.
+Z enakim razmislekom kot prej vidimo, da je prostorska zahtevnost odvisna le od največje globine rekurzije. Iz enačbe S(*m,k,n*) = S(*m/2,k/2,n/2*) + O(1) = S(*m/4,k/4,n/4*) + 2\*O(1) = ... sledi, da je globina enaka log_2(*M*) in na vsakem koraku rekurzije dobimo eno konstanto več. Torej je S(*m,k,n*) = O(log_2(*M*)), kar ustreza zahtevi po  največ O(*mkn*) dodatnega prostora poleg delovne matrike. 
 
 ##Primerjava časov izvajanja algoritmov
 Primerjali bomo samo množenje kvadratnih matrik. Če bi množili matrike, ki imajo eno dimenzijo precej večjo ali manjšo od ostalih dveh, bi lahko naredili sorazmerno malo razpolavlanj, preden bi prišli do stranice z velikostjo 1. V tem primeru pa vsi trije algoritmi delujejo enako. Zato bi tudi pri FastMatrix in CheapMatrix večino dela opravili z običajnim množenjem in bi zmanjšali razliko med časovno zahtevnostjo SlowMatrixa in Fast/CheapMatrixa.  
 
-Za *m*=*k*=*n*=1, ..., 150 smo generirali naključne matrike s celoštevilskimi elementi med -100 in 100. Za vsakega izmed treh razredov smo ustvarili dve matriki in izmerili koliko časa potrebujemo za množenje. Graf je prikazan na spodnji sliki (čas smo merili v sekundah): modra barva predstavlja SlowMatrix, rdeča in zelena pa FastMatrix in CheapMatrix.  
+Za *m* = *k* = *n* = 1, ..., 150 smo generirali naključne matrike s celoštevilskimi elementi med -100 in 100. Za vsakega izmed treh razredov smo ustvarili dve matriki in izmerili koliko časa potrebujemo za množenje. Graf je prikazan na spodnji sliki (čas smo merili v sekundah): modra barva predstavlja SlowMatrix, rdeča in zelena pa FastMatrix in CheapMatrix.  
 
 ![graf2](https://cloud.githubusercontent.com/assets/13056585/21294589/80555c9e-c540-11e6-9cbd-1b07fd183025.png)
 
-Vidimo lahko, da med Fast in CheapMatrix ni skoraj nobene razlike, SlowMatrix pa je precej hitrejši od obeh. Kljub temu, da ima običajno množenje asimptotično slabšo časovno zahtevnost, pa so konstante pri Strassenovem algoritmu tako velike, da je za manjše matrike tako množenje veliko počasnejše. Opazimo tudi, da čas za množenje s SlowMatrixom, narašča zelo enakomerno, pri Fast/CheapMatrixu pa imamo na nekaterih mestih občutne skoke. Največji skok se zgodi pri dimenziji 128 = 2^7, ko moramo matriko še sedmič razpoloviti in s tem povečamo globino rekurzije (ostali večji skoki so pri 64 = 2^6 in 96 = 64 + 32). Če pa ostajamo na istem nivoju rekurzije, čas tudi tukaj narašča dokaj enakomerno.  
+Vidimo lahko, da med Fast in CheapMatrix ni skoraj nobene razlike, SlowMatrix pa je precej hitrejši od obeh. Kljub temu, da ima običajno množenje asimptotično slabšo časovno zahtevnost, pa so konstante pri Strassenovem algoritmu tako velike, da je za manjše matrike tako množenje precej počasnejše. Opazimo tudi, da čas za množenje s SlowMatrixom narašča zelo enakomerno, pri Fast/CheapMatrixu pa imamo na nekaterih mestih občutne skoke. Največji skok se zgodi pri dimenziji 128 = 2^7, ko moramo matriko še sedmič razpoloviti in s tem povečamo globino rekurzije (ostali večji skoki so pri 64 = 2^6 in 96 = 64 + 32 = 2^6 + 2^5). Če pa ostajamo na istem nivoju rekurzije, čas tudi tukaj narašča dokaj enakomerno.  
 
-Če si ogledamo matrike malo večjih dimenzij (*m*=*k*=*n*=100, 200, ..., 600), opazimo, da čas (spet merjen v sekundah) za množenje narašča v skladu z izračunano časovno zahtevnostjo. Modre točke pripadajo FastMatrixu, rdeče pa SlowMatrixu.
+Če si ogledamo matrike malo večjih dimenzij (*m* = *k* = *n* = 100, 200, ..., 600), opazimo, da čas (spet merjen v sekundah) za množenje narašča v skladu z izračunano časovno zahtevnostjo. Modre točke pripadajo FastMatrixu, rdeče pa SlowMatrixu.
 
 ![graf1](https://cloud.githubusercontent.com/assets/13056585/21294588/753710be-c540-11e6-9de7-9f9494fbd323.png)
 
-Z modro in rdečo krivuljo, smo poskusili točke najbolje aproksimirati po metodi najmanjših kvadratov. Rdeča krivulja se zelo dobro prilega točkam, pri modri pa ena točka precej odstopa (leži pod krivuljo). To je ravno točka pri velikosti 500, ki je zelo blizu 512 = 2^9, kjer bi se zgodil občuten skok (kot smo razložili prej). Za rdečo krivuljo smo izbrali najbolj prilegajoč polinom tretje stopnje (2.2311e-005\*x^3 - 3.2437e-003\*x^2 + 2.3498e-002\*x + 6.5569e+000). Modrih točk nismo mogli aproksimirati s polinomom, saj je časovna zahtevnost O(*m*^(log_2(7))). Lahko bi jih aproksimirali z racionalno funkcijo, pri kateri se razmerje stopenj polinomov v števcu in imenovalcu čimbolj približa log_2(7) = 2,81. Z razlogom poenostavitve pa smo jih aproksimirali kar s funkcijo oblike *a*\*x^2,81 (*a* = 1.2169e-004). S tem lahko ocenimo približno velikost matrike, pri kateri bi FastMatrix množil hitreje kot SlowMatrix. Izkaže se, da se to zgodi pri približno *m*=*k*=*n*=8300. 
+Z modro in rdečo krivuljo, smo poskusili točke najbolje aproksimirati po metodi najmanjših kvadratov. Rdeča krivulja se zelo dobro prilega točkam, pri modri krivulja pa ena točka precej odstopa (leži pod krivuljo). To je ravno točka pri velikosti 500, ki je zelo blizu 512 = 2^9, kjer bi se zgodil občuten skok v času množenja (kot smo razložili prej). Za rdečo krivuljo smo izbrali najbolj prilegajoč se polinom tretje stopnje (2.2311\*10^-5\*x^3 - 3.2437\*10^-3\*x^2 + 2.3498\*10^-2\*x + 6.5569). Modrih točk nismo mogli aproksimirati s polinomom, saj je časovna zahtevnost O(*M*^(log_2(7))). Lahko bi jih aproksimirali z racionalno funkcijo, pri kateri se razmerje stopenj polinomov v števcu in imenovalcu čimbolj približa log_2(7) = 2,81. Z razlogom poenostavitve pa smo jih aproksimirali kar s funkcijo oblike *a*\*x^2,81 (*a* = 1.2169\*10^-4). S tem lahko ocenimo približno velikost matrik, pri kateri bi FastMatrix množil hitreje kot SlowMatrix. Izkaže se, da se to zgodi pri velikosti približno 8300.
 
