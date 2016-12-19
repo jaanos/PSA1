@@ -69,67 +69,117 @@ class CheapMatrix(SlowMatrix):
         # najprej poglejmo mnozenje matrik, katerih dimenzije so sode:
 
         if stStolpcevLeveMatrike % 2 == 0 and stVrsticLeveMatrike % 2 == 0 and stStolpcevDesneMatrike % 2 == 0:
-            A = left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2]
-            B = left[0:stVrsticLeveMatrike // 2, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]
-            C = left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevLeveMatrike // 2]
-            D = left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]
-            E = right[0:stStolpcevLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2]
-            F = right[0:stStolpcevLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike]
-            G = right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, 0:stStolpcevDesneMatrike // 2]
-            H = right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike,
-                stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike]
 
-            # za izpis teh matrik porabimo konstantno časa, oz. O(8) = O(1),
-            # torej je časovna zahtevnost na tem koraku T(n,k,m) = O(1) + O(1) = O(1)
-            # prve štiri matrike so velikosti n/2 * k/2, zadnje štiri pa k/2*m/2, torej prostorsko zahtevnost v tem koraku povečamo za
-            # O(n/2*k/2+k/2*m/2)=O(n*k+m*k)=O(k*(m+n)), torej je naš nov P(n,k,m) = O(1) + O(k*(m+n)) = O(k*(m+n))
+            work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = \
+                left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2] * \
+                (right[0:stStolpcevLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] - \
+                 right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike])
+            #v zgornjo levo cetrtino delovne matrike vpisemo P1 = \
+            #A = ... * \
+            #(F = ... - \
+            # H = ...)
 
-            P1 = A * (F - H)
-            P2 = (A + B) * H
-            P3 = (C + D) * E
-            P4 = D * (G - E)
-            P5 = (A + D) * (E + H)
-            P6 = (B - D) * (G + H)
-            P7 = (A - C) * (E + F)
+            work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = \
+                (left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2] + \
+                 left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]) * \
+                (right[0:stStolpcevLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
+                 right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike])
+            #v zgorno desno cetrtino delovne matrike vpisemo P5 = \
+            #(A = ... + \
+            #D = ... ) * \
+            #(E = ... + \
+            #H = ... )
 
-            work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = P1
-            work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = P5
-            work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = P3
-            work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = P7
+            work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = \
+                (left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevLeveMatrike // 2] + \
+                 left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]) * \
+                right[0:stStolpcevLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2]
+            #v spodnjo levo cetrtino delovne matrike vpisemo P3 = \
+            #(C = ... + \
+            #D = ... ) * \
+            #E = ...
 
-            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] =
-            work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] -
-            work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] - work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike,stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = \
+                (left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2] - \
+                 left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevLeveMatrike // 2]) * \
+                (right[0:stStolpcevLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
+                 right[0:stStolpcevLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike])
+            #v spodnjo desno cetrtino delovne matrike vpisemo P7 = \
+            #(A = ... - \
+            #C = ... ) * \
+            #(E = ... + \
+            #F = ... )
 
-            #na tem koraku ne potrebujemo več P7, torej na njegovo mesto napišemo P2 (shranjene imamo sedaj P1, P5, P3 in P2)
+            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = \
+                work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
+                work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] - \
+                work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] - \
+                work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike,stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            #spodnjo desno cetrtino koncne matrike nastavimo na
+            #P1 = ... + \
+            #P5 = ... - \
+            #P3 = ... - \
+            #P7 = ...
 
-            work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = P2
-            self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            #na tem koraku ne potrebujemo več P7, torej na njegovo mesto napišemo P2 (shranjene bomo imeli P1, P5, P3 in P2)
 
-            #na tem koraku ne potrebujemo več P1, zato ga nadomestimo z P4 (shranjene imamo sedaj P4, P5, P3 in P2)
+            work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = \
+                (left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2] + \
+                 left[0:stVrsticLeveMatrike // 2, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]) * \
+                right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike]
+            #v spodnjo desno cetrtino delovne matrike si torej zapisemo P2 = \
+            #(A = ... + \
+            #B = ... ) * \
+            #H = ...
 
-            work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = P4
-            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] + work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2]
+            self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = \
+                work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
+                work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            #zgornjo desno cetrtino matrike nastavimo na
+            #P1 = ... + \
+            #P2 = ...
 
-            #na tem koraku ne potrebujemo več P3, zato ga nadomestimo s P6 (shranjene imamo sedaj P4, P5, P6 in P2)
+            #na tem koraku ne potrebujemo več P1, zato ga nadomestimo s P4 (shranjene bomo imeli P4, P5, P3 in P2)
 
-            work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = P6
-            self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] +
-            work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] - work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = \
+                left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike] * \
+                (right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, 0:stStolpcevDesneMatrike // 2] - \
+                 right[0:stStolpcevLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2])
+            #zgornjo levo cetrtino delovne matrike nastavimo na P4 = \
+            #D = ... * \
+            #(G = ... - \
+            #E = ... )
 
-            # na vsakem od teh korakov naredimo eno ali dve seštevanji v času O(n/2 * k/2) ali O(k/2 * m/2), torej za seštevanje porabimo O(max(m,n)*k) časa,
-            # za vsako množenje pa T(n/2, k/2, m/2), torej je v tem koraku časovna zahtevnost enaka T(n,k,m) = O(1) + 7*T(n/2, k/2, m/2) + O(max(m,n)*k)
-            # P1,P2,P3,P4,P5,P6,P7 so velikosti n/2*m/2, za zapis vsake od njih porabimo O(n/2*m/2)=O(n*m), zaradi rekurzivnega klica pa v tem koraku porabimo še 7*P(n/2,k/2,m/2),
-            # torej je naša prostorska zahtevnost v tem koraku enaka P(n,k,m) = O(1) * O(k*(m+n)) + O(n*m) + 7*P(n/2,k/2,m/2)
+            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = \
+                work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] + \
+                work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2]
+            #spodnjo levo cetrtino koncne matrike nastavimo na
+            #P3 = ... + \
+            #P4 = ...
 
-            self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = (P4 + P5 + P6 - P2)
-#            self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = (P1 + P2)
-#            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = (P3 + P4)
-#            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = (P1 + P5 - P3 - P7)
+            #na tem koraku ne potrebujemo več P3, zato ga nadomestimo s P6 (shranjene bomo imeli P4, P5, P6 in P2)
 
-            # na tem delu za seštevanje spet porabimo O(max(m,n)*k) časa, torej se časovna zahtevnost na tem koraku ne spremeni
-            # tudi prostorska zahtevnost se v tem koraku ne spremeni
+            work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = \
+                (left[0:stVrsticLeveMatrike // 2, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike] - \
+                 left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]) * \
+                (right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, 0:stStolpcevDesneMatrike // 2] + \
+                 right[stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike])
+            #spodnjo levo cetrtino delovne matrike nastavimo na P6 = \
+            #(B = ... - \
+            #D = ... ) * \
+            #(G = ... + \
+            #H = ... )
 
+            self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = \
+                work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
+                work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] + \
+                work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] - \
+                work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            #zgornjo desno cetrtino koncne matrike nastavimo na
+            #P4 = ... + \
+            #P5 = ... + \
+            #P6 = ... - \
+            #P2 = ...
             return self
 
         if stVrsticLeveMatrike % 2 == 1:
