@@ -187,7 +187,149 @@ Velikost kvadratnih matrik A in B | čas izračuna
     500x500 * 500x500 | 1140.776s
 
 ##3.del: CheapMatrix:
+###Opis algoritma SlowMatrix:
+Metoda CheapMatrix deluje podobno kot metoda FastMatrix, razlikujeta se le v predelu, ko so vse dimenzije (torej število vrstic matrike A,
+število stolpcev matrike A, ki je enako številu vrstic matrike B in število stolpcev matrike B) sode. Prilagajanje matrik do matrik
+sodih dimenzij ostaja enako.
 
+Algoritem v predelu računanja matrik sodih dimenzij uporablja dodatno delovno matriko, ki je enakih dimenzij kot končna matrika, torej n//2xm//2.
+Ta matrika je tudi edini dodaten prostor, ki ga mnozenje matrik dodatno porabi poleg vhodnih matrik A in B ter končne matrike C.
+
+Če še enkrat zapišemo Strassenov algoritem za množenje matrik:
+
+```
+  A' =   in   B' =
+[ A B ]    [ E F ]
+[ C D ]    [ G H ]
+```
+
+* *P1 = A (F - H)*,
+* *P2 = (A + B) H*,
+* *P3 = (C + D) E*,
+* *P4 = D (G - E)*,
+* *P5 = (A + D) (E + H)*,
+* *P6 = (B - D) (G + H)* in
+* *P7 = (A - C) (E + F)*.
+
+```
+                 C'=A'*B' =
+[ P4 + P5 + P6 - P2         P1 + P2      ]
+[      P3 + P4         P1 + P5 - P3 - P7 ]
+```
+
+Ugotovimo, da naenkrat potrebujemo le 4 vrednosti izmed (P1, P2, P3, P4, P5, P6 in P7).
+Naša delovna matrika pa lahko naenkrat shrani 4 vrednosti (matrike) velikosti n//2 x m//2, kar pa je ravno velikost vseh
+matrik P1, P2, P3, P4, P5, P6 in P7.
+
+Če si delovno matriko razdelimo na 4 dele:
+
+```
+      work =
+[   D1      D2  ]
+[   D3      D4  ]
+```
+
+V algoritmu najprej želimo zapisati spodjni desni del končne matrike C', zato v D1 shranimo P1, v D2 shranimo P5, v D3
+shranimo P3 in v D4 shranimo P7.
+Naša "work" matrika zdaj izgleda takole:
+
+```
+    work =
+[   P1      P5  ]
+[   P3      P7  ]
+```
+Za spodnjo desno četrtino končne matrike C' torej velja, da je enaka:
+
+D1 + D2 - D3 - D5
+
+En del produkta C' smo s tem že izračunali. Na tem koraku opazimo, da vrednosti P7 za izračun ostalih delov končne
+matrike C' ne potrebujemo več, zato jo lahko zamenjamo (prepišemo) z eno izmed vrednosti P2, P4 in P6. Vidimo, da imamo
+s prepisom vrednosti P7 z vrednostjo P4 dovolj podatkov za izračun spodnjega levega dela končne matrike C'.
+
+Naša "work" sedaj izgleda takole:
+
+```
+    work =
+[   P1      P5  ]
+[   P3      P4  ]
+```
+
+Za spodnjo levo cetrtino končne matrike C' torej velja, da je enaka:
+
+D3 + D4
+
+S tem smo izračunali že drugi del produkta C'. V teh dveh izračunih smo že dvakrat uporabili vrednost P3, v prihodnje pa je
+ne bomo več potrebovali. Vrednost P3 lahko sedaj prepišemo z eno izmed vrednosti P2 in P6. Vidimo, da imamo s prepisom
+vrednosti P3 z vrednostjo P2 dovolj podatkov za izračun zgornjega desnega dela končne matrike C'.
+
+Naša "work" matrika sedaj izgleda takole:
+
+```
+    work =
+[   P1      P5  ]
+[   P2      P4  ]
+```
+
+Za zgornjo desno cetrtino končne matrike C' torej velja, da je enaka:
+
+D1 + D3
+
+S tem smo izračunali že tretji del produkta C'. V teh treh izračunih smo že dvakrat uporabili vrednost P1, v prihodnje pa
+je ne bomo več potrebovali. Edina še neuporabljena vrednost je sedaj P6. Vrednost P1 lahko sedaj zato prepišemo z
+vrednostjo P6. Vidimo, da imamo s prepisom vrednosti P1 z vrednostjo P6 sedaj dovolj podatkov za izračun še zadnjega
+(torej zgornjega desnega) dela končne matrike C'.
+
+Naša "work" matrika sedaj izgleda takole:
+
+```
+    work =
+[   P6      P5  ]
+[   P2      P4  ]
+```
+
+Za zgornjo levo cetrtino končne matrike C' torej velja, da je enaka:
+
+D4 + D2 + D1 - D3
+
+S tem smo izračunali še zadnji del protukta C'.
+
+
+###Primerjava dejanskih časov izvajanja algoritmov pri vhodih različne velikost:
+Velikost kvadratnih matrik A in B | čas izračuna
+----------------------------------|--------------
+    1x1 * 1x1 | 0.000s
+    5x5 * 5x5 | 0.009s
+    10x10 * 10x10 | 0.060s
+    15x15 * 15x15 | 0.083s
+    20x20 * 20x20 | 0.436s
+    25x25 * 25x25 | 0.594s
+    30x30 * 30x30 | 0.641s
+    35x35 * 35x35 | 2.988s
+    40x40 * 40x40 | 3.196s
+    45x45 * 45x45 | 3.338s
+    50x50 * 50x50 | 3.946s
+    55x55 * 55x55 | 4.289s
+    60x60 * 60x60 | 4.427s
+    65x65 * 65x65 | 21.572s
+    70x70 * 70x70 | 20.801s
+    75x75 * 75x75 | 1.759s
+    80x80 * 80x80 | 2.257s
+    85x85 * 85x85 | 2.600s
+    90x90 * 90x90 | 3.295s
+    95x95 * 95x95 | 4.185s
+    100x100 * 100x100 | 4.411s
+    125x125 * 125x125 | 9.514s
+    150x150 * 150x150 | 16.268s
+    175x175 * 175x175 | 28.596s
+    200x200 * 200x200 | 46.541s
+    225x225 * 225x225 | 71.574s
+    250x250 * 250x250 | 105.487s
+    275x275 * 275x275 | 149.519s
+    300x300 * 300x300 | 207.473s
+    350x350 * 350x350 | 359.316s
+    400x400 * 400x400 | 596.140s
+    450x450 * 450x450 | 944.968s
+    500x500 * 500x500 | 1392.869s
 
 vzorec
 Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
