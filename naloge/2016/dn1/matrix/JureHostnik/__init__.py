@@ -3,3 +3,6 @@ __all__ = ['SlowMatrix', 'FastMatrix']
 
 from slowmatrix import SlowMatrix
 from fastmatrix import FastMatrix
+from cheapmatrix import CheapMatrix
+
+
