@@ -293,6 +293,56 @@ D4 + D2 + D1 - D3
 
 S tem smo izračunali še zadnji del protukta C'.
 
+###Časovna zahtevnost algoritma:
+Pri študiju časovne zahtevnosti bomo vzeli najslabši možen primer, torej primer, ko so vse tri dimenzije liha števila.
+
+Najprej za shranjevanje dimenzih porabimo *O(1)* časa, nato porabimo *O(k*m)* dodatnega časa za izračun zadnje vrstice produkta. V naslednjem koraku
+porabimo *O(n*k)* dodatnega časa za izračun zadnjega stolpca produkta. V nasljenjem koraku 'popravimo' lihost števila stolpcev matrike A in
+števila vrstic matrike B, v katerem porabimo za drugi del vsote *O(m*n)* dodatnega časa, za produkt zdaj že matrik sodih dimenzij pa
+porabimo *O(8)*=*O(1)* dodatnega časa za izpis 'četrtinskih delov' matrik A in B, *O(max(m,n)*k)* dodatnega časa za seštevanje,
+ter *T(n//2, k//2, m//2)* dodatnega časa za vsako množenje, ki jih je 7.
+Skupna časovna zahtevnost je torej
+```
+T(n,k,m) = O(1) + O(k*m) + O(n*k) + O(m*n) + o(1) + O(max(n,m)*k) + 7*T(n//2,k//2,m//2) =
+         = O(1) + O(k*m) + O(n*k) + O(m*n) + O(max(n,m)*k) + 7*T(n//2,k//2,m//2)=
+         = O(k*m+n*k+m*n) + O(max(n,m)*k) + 7*T(n//2,k//2, m//2)=...
+```
+V naslednjem koraku definiramo novo oznako *M=max(n,k,m)*.
+S to oznako dobimo sedaj, da je časovna zahtevnost metode FastMatrix enaka:
+```
+T(M) = O(3*M^2) + O(M^2) + 7*T(M//2) =
+     = 3*O(M^2) + O(M^2) + 7*T(M//2) =
+     = O(M^2) + 7*T(M//2) =
+     = 7*T(M//2) + O(M^2)
+```
+
+
+###Prostorska zahtevnost algoritma:
+Tudi pri študijo podatkovne zahtevnosti bomo vzeli najslabši možni primer, torej primer, ko so vse tri dimenzije liha števila. Opazimo, da pri "popravljanju" matrik
+porabimo konstantno dodatno prostora. Tudi za shranjevanje dimenzij porabimo konstantno dodatnega prostora. Za zapis 'četrtinskih delov' matrik A in B porabimo
+O(n//2*k//2+k//2*m//2)=O(n*k+m*k)=O(k*(m+n)) dodatnega prostora. Matrike P1,P2,P3,P4,P5,P6,P7 so velikosti n//2*m//2, za zapis vsake od njih porabimo O(n/2*m/2)=O(n*m)
+dodatnega prostora, zaradi rekurzivnega klica pa v tem koraku porabimo še 7*P(n//2,k//2,m//2).
+Skupna podatkovna zahtevnost je torej:
+```
+P(n,k,m) = O(1) + O(1) + O(k*(n+m)) + O(n*m) + 7*P(n//2,k//2,m//2)=
+         = O(1) + O(k*n + k*m + n*m) + 7*P(n//2,k//2,m//2)=
+         = O(k*n + k*m + n*m) + 7*P(n//2, k//2, m//2)=...
+```
+
+Spet si definiramo oznako *M=max(n,k,m)*.
+S to oznako dobimo sedaj, da je prostorska zahtevnost metode FastMatrix enaka:
+```
+P(M) = O(3*M^2) + 7*P(M//2) =
+     = 3*O(M^2) + 7*P(M//2) =
+     = O(M^2) + 7*P(M//2) =
+     = 7*P(M//2) + O(M^2)
+```
+Po krovnem izreku je to torej spet enako:
+
+**P(M) = O(M^(log_{2}(7)))**
+
+(natančnejša izpeljava v komentarjih v kodi)
+
 
 ###Primerjava dejanskih časov izvajanja algoritmov pri vhodih različne velikost:
 Velikost kvadratnih matrik A in B | čas izračuna

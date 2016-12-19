@@ -79,6 +79,10 @@ class CheapMatrix(SlowMatrix):
             #(F = ... - \
             # H = ...)
 
+            #v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje (prištevanje nasprotnih vrednosti), za kar porabimo
+            #T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(k//2 * m//2) dodatnega časa za odštevanje
+            #P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za odštevanje
+
             work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = \
                 (left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2] + \
                  left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]) * \
@@ -90,6 +94,10 @@ class CheapMatrix(SlowMatrix):
             #(E = ... + \
             #H = ... )
 
+            # v tem koraku naredimo eno rekurzivno množenje ter dve seštevanji, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
+
             work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = \
                 (left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevLeveMatrike // 2] + \
                  left[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevLeveMatrike // 2:stStolpcevLeveMatrike]) * \
@@ -98,6 +106,10 @@ class CheapMatrix(SlowMatrix):
             #(C = ... + \
             #D = ... ) * \
             #E = ...
+
+            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) dodatnega časa za seštevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
 
             work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] = \
                 (left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2] - \
@@ -110,6 +122,10 @@ class CheapMatrix(SlowMatrix):
             #(E = ... + \
             #F = ... )
 
+            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje in eno odštevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje in odštevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odštevanje
+
             self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = \
                 work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
                 work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] - \
@@ -120,6 +136,10 @@ class CheapMatrix(SlowMatrix):
             #P5 = ... - \
             #P3 = ... - \
             #P7 = ...
+
+            #v tem koraku naredimo 3 seštevanja, za kar porabimo
+            #3*O(n//2 * m//2) = O(n//2 * m//2) dodatnega časa
+            #nič dodatnega prostora
 
             #na tem koraku ne potrebujemo več P7, torej na njegovo mesto napišemo P2 (shranjene bomo imeli P1, P5, P3 in P2)
 
@@ -132,12 +152,20 @@ class CheapMatrix(SlowMatrix):
             #B = ... ) * \
             #H = ...
 
+            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) dodatnega časa za seštevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
+
             self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = \
                 work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
                 work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
             #zgornjo desno cetrtino matrike nastavimo na
             #P1 = ... + \
             #P2 = ...
+
+            # v tem koraku naredimo 1 seštevanj2, za katero porabimo
+            # O(n//2 * m//2) dodatnega časa
+            # nič dodatnega prostora
 
             #na tem koraku ne potrebujemo več P1, zato ga nadomestimo s P4 (shranjene bomo imeli P4, P5, P3 in P2)
 
@@ -150,12 +178,21 @@ class CheapMatrix(SlowMatrix):
             #(G = ... - \
             #E = ... )
 
+            # v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(k//2 * m//2) dodatnega časa za odštevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
+
             self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = \
                 work[stVrsticLeveMatrike // 2 : stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] + \
                 work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2]
             #spodnjo levo cetrtino koncne matrike nastavimo na
             #P3 = ... + \
             #P4 = ...
+
+            # v tem koraku naredimo eno seštevanje, za katero porabimo
+            # O(n//2 * m//2) dodatnega časa
+            # nič dodatnega prostora
+
 
             #na tem koraku ne potrebujemo več P3, zato ga nadomestimo s P6 (shranjene bomo imeli P4, P5, P6 in P2)
 
@@ -170,6 +207,10 @@ class CheapMatrix(SlowMatrix):
             #(G = ... + \
             #H = ... )
 
+            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje in eno odštevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((m+n)//2 * k//2) dodatnega časa za seštevanje in odštevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odštevanje
+
             self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = \
                 work[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] + \
                 work[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike] + \
@@ -180,6 +221,11 @@ class CheapMatrix(SlowMatrix):
             #P5 = ... + \
             #P6 = ... - \
             #P2 = ...
+
+            # v tem koraku naredimo 3 seštevanja, za kar porabimo
+            # 3*O(n//2 * m//2) = O(n//2 * m//2) dodatnega časa
+            # nič dodatnega prostora
+
             return self
 
         if stVrsticLeveMatrike % 2 == 1:
@@ -202,9 +248,9 @@ class CheapMatrix(SlowMatrix):
             self[:, :] = left[:, 0:stStolpcevLeveMatrike - 1] * right[0:stStolpcevLeveMatrike - 1, :] + left[:,stStolpcevLeveMatrike - 1] * right[stStolpcevLeveMatrike - 1,:]
             return self
 
-            # v tem koraku porabimo O(m*n) dodatnega časa
-            # v tem koraku ne porabimo nobenega dodatnega prostora
+        # v tem koraku porabimo O(m*n) dodatnega časa
+        # v tem koraku ne porabimo nobenega dodatnega prostora
 
             # Sklep:
-            # Časovna zahtevnost: T(n,k,m) = O(1) + 7*T(n/2, k/2, m/2) + O(max(m,n)*k) + O(n*k) + O(k*m) + O(m*n)
-            # Prostorska zahtevnost: P(n,k,m) = O(1) * O(k*(m+n)) + O(n*m) + 7*P(n/2,k/2,m/2) + O(1)
+            # Časovna zahtevnost: T(n,k,m) = O(1) +   + O(n*k) + O(k*m) + O(m*n)
+            # Prostorska zahtevnost: P(n,k,m) =  + O(1)
