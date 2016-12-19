@@ -27,7 +27,7 @@ torej na koncu porabimo le O(1), torej konstantno veliko prostora.
 Ta algoritem torej prostorsko ni zahtevem, medtem ko pa je časovno zelo zahteven.
 
 ###Primerjava dejanskih časov izvajanja algoritmov pri vhodih različne velikost:
-velikosti vhodnih matrik (gledala sem pridukt dveh kvadratnih matrik, keterih vsi elementi so bili enaki 1)
+velikosti vhodnih matrik (gledala sem produkt dveh kvadratnih matrik, keterih vsi elementi so bili enaki 1)
 
 Velikost kvadratnih matrik A in B | čas izračuna
 ----------------------------------|--------------
@@ -181,10 +181,10 @@ Velikost kvadratnih matrik A in B | čas izračuna
     250x250 * 250x250 | 147.558s
     275x275 * 275x275 | 529.036s
     300x300 * 300x300 | 591.306s
-    i350x350 * 350x350 | 359.316s
-    i400x400 * 400x400 | 596.140s
-    i450x450 * 450x450 | 944.968s
-    i500x500 * 500x500 | 1392.869s
+    350x350 * 350x350 | 652.103s
+    400x400 * 400x400 | 790.870s
+    450x450 * 450x450 | 1109.650s
+    500x500 * 500x500 | 1140.776s
 
 ##3.del: CheapMatrix:
 
