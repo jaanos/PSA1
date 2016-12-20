@@ -58,6 +58,7 @@
 
     Metoda `multiply` vsebuje dve gnezdeni `for` zanki, ki se izvedeta do konca, zunanja se izvede `N`-krat, notranja `K` krat, v notranji ~~pa `dot_product` na vektorju dolžine `M`.~~ zanki pa `M` produktov, `M` seštevanj in zapis v matriko. Torej je časovna zahtevnost metode `multiply` v razredu `SlowMatrix` `O(NMK)` oziroma `O(L³)`.
 
+    Dodatna prostorska zahtevnost je neodvisna od velikosti matrike in torej konstantna `O(1)` (če uporabljamo python3, v python2 nam dejstvo, da `range` ni generator pokvari časovno zahtevnost v `O(L)`), drugače pa ob klicu ustvarimo zgolj nekaj dodatnih spremenljivk.
 
 2. Strassenovo množenje
 
@@ -75,18 +76,44 @@
 
     Največja časovna zahtevnost bo dosežena, ko se bo izvedla vsa koda (ko bodo vse dimenzije lihe). Najpomembnejša je ugotovitev, da so vse dodatne matrike, ki pri tem nastanjejo zgolj stolpci ali pa vrstice (lahko je tudi zgolj `1 × 1` matrika v primeru `A33` ali `B33`), tako da ja seštevanje ali pa množenje takih matrik z ustreznimi matrikami vedno  `O(L²)`, število teh operacij pa je konstantno (do 19 množenj in do 14 seštevanj). Tako ocena da je časovna zahtevnost za razdelitev podproblema in njegovo kombiniranje `O(L²)` velja in zato velja tudi izpeljava celotne časovne zahtevnosti s krovnim izrekom.
 
+    Prostorska zahtevnost navadnega strassenovega množenja je dominirana z ustvarjanjem novih matrik (dodatek rekurzije je minimalen) med samim postopkom. Ker naredimo največ konstantno število novih (pod)matrik (konstanta sicer ni majhna) med seštevanjem in vmesnim množenjem je torej omejeno z `O(L²)`, ob predpostavki, da se med ustvarjenjem novih podmatrik skopira zgolj smiselni del nadmatrike.
+
 3. Strassenovo množenje z manjšo porabo spomina
 
     Za analizo razreda `CheapMatrix` se bomo posvetili bolj prostorski zahtevnosti, saj je izpeljava časovne zahtevnosti podobna kot pri razredu `FastMatrix`. Enako kot pri `FastMatrix` opravimo `7` klicev rekurzije, ki razpolovi naš problem, poleg tega pa še `O(L²)` dodatnega časa za urejanje in pripravo. Tako z enakim argumentom uporabimo krovni izrek.
 
-    Implementirana je standardna oblika Strassenovega algoritma, le da namesto navadnega množenja na željeni rezultatni matriki kličemo metodo `_multiply` in ji kot primerno delovno matriko podamo referneco na ustrezno podmatriko delovne matrike `D`, prav tako ne opravljamo nodemin direktnih seštevanj ali odštevanj, ampak samo doprištevamo k neki matriki. to prispeva k nekoliko več prištevanjem med samim algoritmom (najprej prištejemo, da množimo pravi matriki, nato odštejemo, da *pospravimo za sabo*).
+    Implementirana je standardna oblika Strassenovega algoritma, le da namesto navadnega množenja na željeni rezultatni matriki kličemo metodo `_multiply` in ji kot primerno delovno matriko podamo referneco na ustrezno podmatriko delovne matrike `D`, prav tako ne opravljamo nobenih direktnih seštevanj ali odštevanj, ampak samo doprištevamo k neki matriki. To prispeva k nekoliko več prištevanjem med samim algoritmom (najprej prištejemo, da množimo pravi matriki, nato odštejemo, da *pospravimo za sabo*).
     
     Vse matrike najprej poindeksiramo s primernimi bločnimi matrikami (operacija je konstantna v času, prav tako pa ne porabi dodatnega spomina (`self._data` je zgolj referenca na `_data` nadmatrike)), je pa zato skozi kodo veliko bolj očitno, katere operacije uporabljamo, pa tudi koda je bolj samo-dokumentativna. Nato primerno z zmnožki napolnimo`C` in `D`, kar nam zaradi množenja na sami matriki in uporabi delovne matrike ne doda porabe prostora.
     
-    V delu kode, ki poskrbi za ne-sode matrike je zadeva povsem enaka, le da zato, ker določenim podmatrikam prištevamo (recimo `C13`), jih moramo najprej počistiti (to v `O(L²)` naredimo kar tako, da jih pomnožimo s skalarjem `0` ). Nekoliko smo šlampasti le v primeru, ko sta obe dimenziji matrike lihi, saj takrat konstruiramo novo matriko, da jo lahko z uporabo metode `multiply` pomnožimo direktno na željeni matriki, kar pa porabi zgolj `O(1)` dodatnega prostora.
+    V delu kode, ki poskrbi za ne-sode matrike je zadeva povsem enaka, le da zato, ker določenim podmatrikam prištevamo (recimo `C13`), jih moramo najprej počistiti (to v `O(L²)` naredimo kar tako, da jih pomnožimo s skalarjem `0` ). Nekoliko smo *šlampasti* le v primeru, ko sta obe dimenziji matrike lihi, saj takrat konstruiramo novo matriko, da jo lahko z uporabo metode `multiply` pomnožimo direktno na željeni matriki, kar pa porabi zgolj `O(1)` dodatnega prostora. Tako posamezni klic brez upoštevanja rekurzivnih klicev porabi konstantno dodatnega prostora.
+    
+    Natančnejši argument, da je prostorska zahtevnost `O(log(MNK)) = O(log(L)) = O(3log(L)) = O(L)`, si pogledamo malo drugače. Posamezni klic metode `multiply` ob ignoriranju cene rekurzije porabi zgolj konstantno dodatnega prostora, zanima nas, kakšna pa je cena za vzdrževanje sklada. Sklad se gradi rekurzivno, a v nobenem primeru ni večji kot `O(log(L))`, saj se polni le do največje globine rekurzije, potem pa se ob končanju rekurzivnega klica *zniža* za en nivo. Z razliko od časovne zahtevnosti, pri prostorski lahko ponovno uporabimo že porabljen spomin. 
     
     Časovna zahtevnost je tako enaka kot pri standardnem Strassenovem algoritmu (`O(n^(log₂7))`), prostorska pa je mnogo manjšana, saj porabi zgolj prostor za vzdrževanja sklada pri rekurziji.
     
 ### Primerjava dejanskih časov izvajanja
 
-#### TODO
+#### Direktna primerjava časov
+
+| Algoritem    |   16   |   32   |   64   |   128   |   256   |    512   |
+|:------------:|:------:|:------:|:------:|:-------:|:-------:|:--------:|
+| SlowMatrix   | 0.01 s | 0.11 s | 1.00 s |  8.95 s |  94.6 s | 1025.6 s |
+| FastMatrix   | 0.22 s | 1.45 s | 10.2 s |  70.3 s | 496.1 s | 3471.6 s |
+| CheapMatrix  | 0.16 s | 1.17 s | 7.86 s |  53.6 s | 374.1 s | 2654.6 s |
+
+#### Primerjava dvojiškega logaritma razmerja zaporednih časov
+
+Z logaritiranjem razmerja zaporednih časov in dejstva, da velikosti matrik, na katerih testiramo algoritem naraščajo s faktorjem 2 lahko hitro pridemo do eksponenta pri časovni zahtevnosti.
+
+| Algoritem    |  16  |  32  |  64  | 128  | 256  |  
+|:------------:|:----:|:----:|:----:|:----:|:----:|  
+| SlowMatrix   | 3.46 | 3.18 | 3.16 | 3.40 | 3.44 |
+| FastMatrix   | 2.72 | 2.81 | 2.78 | 2.82 | 2.81 |
+| CheapMatrix  | 2.87 | 2.75 | 2.77 | 2.80 | 2.83 |  
+
+#### Komentar na rezultate
+
+Naivni algoritem za množenje matrik se obnaša dokaj pričakovano, saj narašča *približno* s pravilnim eksponentom (eksponen je nekoliko večji), prav tako pa zaradi dokaj majhne natančnosti lahko pride do večjih napak pri izračunu, a vseeno sledi pravilnem trendu.
+
+Obe implementaciji Strassenovega algoritma imata veliko bolj konstanten eksponent, ki je zelo blizu pravilnemu (2.8). Pomembno je omeniti predvsem nepričakovano dejstvo, da je `CheapMatrix` opazno hitrejši od `FastMatrix`. Natančnejša analiza ppkaže, da je eden izmed poglavitnih vzrokov za to predvsem priprava podmatrik, ki se uporabljajo v metodi multiply, ki opravi sicer dodatne klice `__init__` in s tem porabi dodaten čas, a se mi zdi, da je za samo implementacijo in lažje branje kode bolje, da kljub *overheadu* teh dodatnih klicev uporabljamo dodatne matrike, saj asimptotska hitrost ostane enaka, algoritem pa je bolj razumljiv. 
