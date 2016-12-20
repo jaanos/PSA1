@@ -47,6 +47,7 @@ class FastMatrix(SlowMatrix):
             b = bbb / 2
             c = ujemanje / 2
 
+            #podmatrike
             A = left[:a,:c]
             B = left[:a,c:]
             C = left[a:,:c]
@@ -57,7 +58,7 @@ class FastMatrix(SlowMatrix):
             G = right[a:,:c]
             H = right[a:,c:]
 
-
+            #7 množenj
             p1 = self.multiply(A, F - H)
             p2 = self.multiply(A+B,H)
             p3 = self.multiply(C+D,E)
@@ -66,6 +67,7 @@ class FastMatrix(SlowMatrix):
             p6 = self.multiply(B-D,G+H)
             p7 = self.multiply(A-C,E+F)
 
+            #seštevanje
             self[:a,:b] = p4 + p5 + p6 -p2
             self[:a,b:] = p1 + p2
             self[a:,:b] = p3 + p4
