@@ -17,29 +17,57 @@ class FastMatrix(SlowMatrix):
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
 
 
-        a = self.nrow()
-        b = self.ncol()
+        aaa = self.nrow()
+        bbb = self.ncol()
         ujemanje = left.ncol()
 
         #če imamo množenje z vektorjem zmnožimo na običajen način
-        if (a == 1) or (b == 1) or (ujemanje == 1):
+        if (aaa == 1) or (bbb == 1) or (ujemanje == 1):
             super(FastMatrix, self).multiply(left,right)
 
-        #poskrbimo če stranice niso sode
+        #poskrbimo če stranice matrik niso sode
 
-        elif a%2 == 1:
-            self[:a,:] = self.multiply(left[:a,:],right)
-            self[a,:] = self.multiply(left[a,:],right)
+        elif aaa%2 == 1:
+            self[:aaa,:] = self.multiply(left[:aaa,:],right)
+            self[aaa,:] = self.multiply(left[aaa,:],right)
 
-        elif b%2 == 1:
-            self[:,:b] = self.multiply(left, right[:,:b])
-            self[b,:] = self.multiply(left, right[:,b])
+        elif bbb%2 == 1:
+            self[:,:bbb] = self.multiply(left, right[:,:bbb])
+            self[bbb,:] = self.multiply(left, right[:,bbb])
 
-        elif c%2 == 1:
+        elif ujemanje%2 == 1:
             self[:,:] = self.multiply(left[:,:ujemanje], right[:ujemanje,:]) + self.multiply(left[:,ujemanje], right[ujemanje,:])
 
 
         #če so sode
 
+
         else:
-            pass
+            a = aaa / 2
+            b = bbb / 2
+            c = ujemanje / 2
+
+            A = left[:a,:c]
+            B = left[:a,c:]
+            C = left[a:,:c]
+            D = left[a:,c:]
+
+            E = right[:a,:c]
+            F = right[:a,c:]
+            G = right[a:,:c]
+            H = right[a:,c:]
+
+
+            p1 = self.multiply(A, F - H)
+            p2 = self.multiply(A+B,H)
+            p3 = self.multiply(C+D,E)
+            p4 = self.multiply(D,G-E)
+            p5 = self.multiply(A+D,E+H)
+            p6 = self.multiply(B-D,G+H)
+            p7 = self.multiply(A-C,E+F)
+
+            self[:a,:b] = p4 + p5 + p6 -p2
+            self[:a,b:] = p1 + p2
+            self[a:,:b] = p3 + p4
+            self[a:,b:] = p1 + p5 - p3 -p7
+
