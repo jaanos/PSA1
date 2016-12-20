@@ -221,77 +221,69 @@ Ugotovimo, da naenkrat potrebujemo le 4 vrednosti izmed (P1, P2, P3, P4, P5, P6 
 Naša delovna matrika pa lahko naenkrat shrani 4 vrednosti (matrike) velikosti n//2 x m//2, kar pa je ravno velikost vseh
 matrik P1, P2, P3, P4, P5, P6 in P7.
 
-Če si delovno matriko razdelimo na 4 dele:
+Če si delovno matriko in self matriko razdelimo na 4 dele:
 
 ```
-      work =
-[   D1      D2  ]
-[   D3      D4  ]
+      self =                work =
+[   S1      S2  ]   [   D1      D2  ]
+[   S3      S4  ]   [   D3      D4  ]
 ```
 
-V algoritmu najprej želimo zapisati spodjni desni del končne matrike C', zato v D1 shranimo P1, v D2 shranimo P5, v D3
-shranimo P3 in v D4 shranimo P7.
-Naša "work" matrika zdaj izgleda takole:
+V algoritmu najprej želimo zapisati spodjni desni del končne matrike C', zato v S1 shranimo P5, v S2 shranimo P1, v S3
+shranimo P3 in v S4 shranimo P7.
+Za izračun vrednosti P1, P3, P5 in P7 smo pri množenjih za delovne matrike uporabili matrike D1, D2, D3 in D4.
+Naši "work" in "self" matriki zdaj izgledata takole:
 
 ```
-    work =
-[   P1      P5  ]
-[   P3      P7  ]
+     self =                 work =
+[   P5      P1  ]   [   D1      D2  ]
+[   P3      P7  ]   [   D3      D4  ]
 ```
-Za spodnjo desno četrtino končne matrike C' torej velja, da je enaka:
+vrednosti S4 mora biti enaka P1 + P5 - P3 - P7, zato S4 najprej pomnožimo z (-1), nato pa ji prištejemo še S1 (P5) in S2 (P1)
+ter odštejemo S3 (P3).
 
-D1 + D2 - D3 - D5
-
-En del produkta C' smo s tem že izračunali. Na tem koraku opazimo, da vrednosti P7 za izračun ostalih delov končne
-matrike C' ne potrebujemo več, zato jo lahko zamenjamo (prepišemo) z eno izmed vrednosti P2, P4 in P6. Vidimo, da imamo
-s prepisom vrednosti P7 z vrednostjo P4 dovolj podatkov za izračun spodnjega levega dela končne matrike C'.
-
-Naša "work" sedaj izgleda takole:
+En del produkta C' smo s tem že izračunali. Sedaj želimo izračunati S2. Na položaju S2 imamo že matriko P1, prišteti pa ji
+moramo še matriko P2. V ta namen si v D1 shranimo vrednost P2, ki jo izračunamo s pomočjo delovne matrike D2.
 
 ```
-    work =
-[   P1      P5  ]
-[   P3      P4  ]
+     self =                         work =
+[   P5      P1  ]             [   P2      D2  ]
+[   P3      -P7+P5+P1-P3  ]   [   D3      D4  ]
 ```
 
-Za spodnjo levo cetrtino končne matrike C' torej velja, da je enaka:
-
-D3 + D4
-
-S tem smo izračunali že drugi del produkta C'. V teh dveh izračunih smo že dvakrat uporabili vrednost P3, v prihodnje pa je
-ne bomo več potrebovali. Vrednost P3 lahko sedaj prepišemo z eno izmed vrednosti P2 in P6. Vidimo, da imamo s prepisom
-vrednosti P3 z vrednostjo P2 dovolj podatkov za izračun zgornjega desnega dela končne matrike C'.
-
-Naša "work" matrika sedaj izgleda takole:
+Sedaj novo vrednost D1 prištejemo vrednosti S2.
 
 ```
-    work =
-[   P1      P5  ]
-[   P2      P4  ]
+     self =                         work =
+[   P5      P1+P2  ]          [   P2      D2  ]
+[   P3      -P7+P5+P1-P3  ]   [   D3      D4  ]
 ```
 
-Za zgornjo desno cetrtino končne matrike C' torej velja, da je enaka:
-
-D1 + D3
-
-S tem smo izračunali že tretji del produkta C'. V teh treh izračunih smo že dvakrat uporabili vrednost P1, v prihodnje pa
-je ne bomo več potrebovali. Edina še neuporabljena vrednost je sedaj P6. Vrednost P1 lahko sedaj zato prepišemo z
-vrednostjo P6. Vidimo, da imamo s prepisom vrednosti P1 z vrednostjo P6 sedaj dovolj podatkov za izračun še zadnjega
-(torej zgornjega desnega) dela končne matrike C'.
-
-Naša "work" matrika sedaj izgleda takole:
+S tem smo izračunali že drugi del produkta C'. Sedaj želimo izračunati S3. Na položaju S3 imamo že matriko P3, prišteti pa ji
+moramo še matriko P4. V ta namen si v D2 shranimo vrednost P4, ki jo izračunamo s pomočjo delovne matrike D3.
 
 ```
-    work =
-[   P6      P5  ]
-[   P2      P4  ]
+     self =                         work =
+[   P5      P1+P2  ]          [   P2      P4  ]
+[   P3      -P7+P5+P1-P3  ]   [   D3      D4  ]
+```
+Sedaj novo vrednost D2 prištejemo vrednosti S3.
+
+```
+     self =                           work =
+[   P5      P1+P2  ]             [   P2      P4  ]
+[   P3+P4      -P7+P5+P1-P3  ]   [   D3      D4  ]
 ```
 
-Za zgornjo levo cetrtino končne matrike C' torej velja, da je enaka:
+S tem smo izračunali že tretji del produkta C'. Sedaj želimo izračunati S1. Na položaju S1 imamo že matriko P5, prišteti pa ji
+moramo še matriki P4 in P6 te odšteti matriko P2. V ta namen si v D3 shranimo vrednost P6, ki jo izračunamo s pomočjo delovne matrike D4.
 
-D4 + D2 + D1 - D3
-
-S tem smo izračunali še zadnji del protukta C'.
+```
+     self =                           work =
+[   P5      P1+P2  ]             [   P2      P4  ]
+[   P3+P4      -P7+P5+P1-P3  ]   [   P6      D4  ]
+```
+vrednosti S1 mora biti enaka P5 + P4 + P6 - P2, zato S1 najprej prištejemo D2 (P4) in D3 (P6) ter odštejemo D1 (P2).
 
 ###Časovna zahtevnost algoritma:
 Pri študiju časovne zahtevnosti bomo vzeli najslabši možen primer, torej primer, ko so vse tri dimenzije liha števila.

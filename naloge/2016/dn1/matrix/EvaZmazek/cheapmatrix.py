@@ -97,8 +97,8 @@ class CheapMatrix(SlowMatrix):
             S4 = self[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
 
             F -= H
-            D1.multiply(A,F, S1)
-            #v zgornjo levo cetrtino koncne matrike D1 vpisemo P1 = A  * (F - H)
+            S2.multiply(A,F,D1)
+            #v zgornjo levo cetrtino delovne matrike D1 vpisemo P1 = A  * (F - H)
             F += H
 
             #v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje (prištevanje nasprotnih vrednosti), za kar porabimo
@@ -107,7 +107,7 @@ class CheapMatrix(SlowMatrix):
 
             A += D
             E += H
-            D2.multiply(A,E)
+            S1.multiply(A,E,D2)
             #v zgorno desno cetrtino delovne matrike D2 vpisemo P5 = (A + D) * (E + H)
             A -= D
             E -= H
@@ -117,7 +117,7 @@ class CheapMatrix(SlowMatrix):
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
 
             C += D
-            D3.multiply(C,E)
+            S3.multiply(C,E,D3)
             #v spodnjo levo cetrtino delovne matrike D3 vpisemo P3 = (C + D) * E
             C -= D
 
@@ -127,7 +127,7 @@ class CheapMatrix(SlowMatrix):
 
             A -= C
             E += F
-            D4.multiply(A,E)
+            S4.multiply(A,E,D4)
             #v spodnjo desno cetrtino delovne matrike D4 vpisemo P7 = (A - C ) * (E + F)
             A += C
             E -= F
@@ -136,7 +136,12 @@ class CheapMatrix(SlowMatrix):
             # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje in odštevanje
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odštevanje
 
-            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = D1 + D2 - D3 - D4
+            S4 *= (-1)
+            S4 += S2
+            S4 += S1
+            S4 -= S3
+
+#            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = D1 + D2 - D3 - D4
             #spodnjo desno cetrtino koncne matrike nastavimo na
             #P1 = ... + \
             #P5 = ... - \
@@ -150,7 +155,7 @@ class CheapMatrix(SlowMatrix):
             #na tem koraku ne potrebujemo več P7, torej na njegovo mesto napišemo P2 (shranjene bomo imeli P1, P5, P3 in P2)
 
             A += B
-            D4.multiply(A,H)
+            D1.multiply(A,H,D2)
             #v spodnjo desno cetrtino delovne matrike si torej zapisemo P2 = (A + B ) * H
             A -= B
 
@@ -158,7 +163,8 @@ class CheapMatrix(SlowMatrix):
             # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) dodatnega časa za seštevanje
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
 
-            self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = D1 + D4
+            S2 += D1
+#            self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = D1 + D4
             #zgornjo desno cetrtino matrike nastavimo na P1 + P2
 
             # v tem koraku naredimo 1 seštevanj2, za katero porabimo
@@ -168,7 +174,7 @@ class CheapMatrix(SlowMatrix):
             #na tem koraku ne potrebujemo več P1, zato ga nadomestimo s P4 (shranjene bomo imeli P4, P5, P3 in P2)
 
             G -= E
-            D1.multiply(D,G)
+            D2.multiply(D,G,D3)
             #zgornjo levo cetrtino delovne matrike nastavimo na P4 = D * (G - E)
             G +=E
 
@@ -176,7 +182,8 @@ class CheapMatrix(SlowMatrix):
             # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(k//2 * m//2) dodatnega časa za odštevanje
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanj
 
-            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = D3 + D1
+            S3 += D2
+#            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = D3 + D1
             #spodnjo levo cetrtino koncne matrike nastavimo na P3 + P4
 
             # v tem koraku naredimo eno seštevanje, za katero porabimo
@@ -188,7 +195,7 @@ class CheapMatrix(SlowMatrix):
 
             B -= D
             G += H
-            D3.multiply(B,G)
+            D3.multiply(B,G,D4)
             #spodnjo levo cetrtino delovne matrike nastavimo na P6 = (B - D) * (G + H)
             B += D
             G -= H
@@ -197,7 +204,10 @@ class CheapMatrix(SlowMatrix):
             # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((m+n)//2 * k//2) dodatnega časa za seštevanje in odštevanje
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odštevanje
 
-            self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = D1 + D2 + D3 - D4
+            S1 -= D1
+            S1 += D2
+            S1 += D3
+            #self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = D1 + D2 + D3 - D4
             #zgornjo desno cetrtino koncne matrike nastavimo na P4 + P5 + P6 - P2
 
             # v tem koraku naredimo 3 seštevanja, za kar porabimo
