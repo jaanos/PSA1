@@ -16,7 +16,13 @@ class CheapMatrix(SlowMatrix):
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
 
+        # Množimo matriki velikosti n x k in k x m
+        # T(n, k, m) ... časovna zahtevnost algoritma
+        # S(n, k, m) ... prostorska zahtevnost algoritma
 
+
+        # Če ima katera izmed matrik, ki ju množimo število stolpcev ali vrstic enako ena, ju zmnožimo z izračunom skalarnega produkta
+        # Za to porabimo O(1*k*m) ali O(n*1*m) ali O(n*k*1) časa
         if left.nrow() == 1 or left.ncol() == 1 or right.ncol() == 1:
             return super().multiply(left, right)
 
@@ -27,13 +33,18 @@ class CheapMatrix(SlowMatrix):
             assert self.nrow() == work.nrow() and self.ncol() == work.ncol(), \
                 "Dimenzije delovne matrike ne ustrezajo dimenzijam produkta!"
 
-        n0 = left.nrow() % 2
+        # Devet vrednosti izračunamo in shranimo v O(1) časa in prostora
+        n0 = left.nrow() % 2    # 1, če je število vrstic leve matrike liho, drugače 0
         n1, n2 = left.nrow() // 2, left.nrow() - n0
-        k0 = left.ncol() % 2
+        k0 = left.ncol() % 2    # 1, če je število stolpcev leve matrike in število vrstic desne matrike liho, drugače 0
         k1, k2 = left.ncol() // 2, left.ncol() - k0
-        m0 = right.ncol() % 2
+        m0 = right.ncol() % 2   # 1, če je število stolpcev desne matrike liho, drugače 0
         m1, m2 = right.ncol() // 2, right.ncol() - m0
 
+
+        # Zaradi preglednosti in lažjega računanja, naredimo reference na dele matrik, ki jih bomo množili in seštevali
+        # ter na dele ciljne in delovne matrike
+        # Časovna in prostorska zahtevnost sta enaki O(1)
         A, B, C, D = left[0: n1, 0: k1], \
                      left[0: n1, k1: k2], \
                      left[n1: n2, 0: k1], \
@@ -58,6 +69,13 @@ class CheapMatrix(SlowMatrix):
 
             # Najprej izracunamo P1 in ga zapisemo na ustrezna mesta v ciljni matriki
             # Enako storimo z ostalimi šestimi produkti
+
+            # Za vsakega od sledečih elementov opravimo eno ali dve seštevanji in še eno oz. dve obratni operaciji ter izvedemo en klic rekurzije na matrikah velikosti n/2 x k/2 in k/2 x m/2
+            # To naredimo 10-krat in torej porabimo 10*O(n/2*k/2) in 10*O(k/2*m/2) časa
+            # Za vsak rekurzivni klic porabimo še S(n/2, k/2, m/2) prostora in T(n/2, k/2, m/2) časa
+            # Torej skupaj:
+            # Prostorska zahtevnost: 7* S(n/2, k/2, m/2)
+            # Časovna zahtevnost: 7* T(n/2, k/2, m/2) + 10*O(n/2*k/2) + 10*O(k/2*m/2)
 
             # P1 = A * (F - H)
             F -= H
@@ -119,9 +137,13 @@ class CheapMatrix(SlowMatrix):
 
             S4[:,:] -= W1
 
+            # Rekurzivno množimo dodatno vrstico v levi matriki z desno matriko
+            # Porabimo O(k*m) časa za množenje in O(m) za prepisovanje v dodatno vrstico
             if n0 == 1:
                 self[n2, 0: m2 + m0].multiply(left[n2,:], right, work[n2, 0 : m2 + m0])
 
+            # Rekurzivno množimo levo matriko z dodatnim stolpcem v desni matriki
+            # Porabimo O(n*k) časa za množenje in O(n) za prepisovanje
             if m0 == 1:
                 self[0: n2 + n0, m2].multiply(left, right[0: k2, m2], work[0 : n2 + n0, m2])
 
@@ -129,9 +151,11 @@ class CheapMatrix(SlowMatrix):
 
         else:
 
+            # Množimo matriki dimenzij n x (k-1) in (k-1) x m, da pridemo na prejšnji primer
             self[:,:].multiply(left[0 : n2 + n0, 0 : k2], right[0 : k2, 0 : m2 + m0], work)
-            #Naslednji korak si lahko privoščimo, ker bo prvi pogoj ujel to množenje in ne bo ustvaril nove delovne matrike
-            #Tako ne bomo porabili dodatnega prostora
+            # Naslednji korak si lahko privoščimo, ker bo prvi pogoj v algoritmu ujel to množenje in ne bo ustvaril nove delovne matrike
+            # Tako ne bomo porabili dodatnega prostora
+            # Za to porabimo 2*O(n*m) časa (množenje in prištevanje)
             work.multiply(left[0: n2 + n0, k2], right[k2, 0: m2 + m0])
             self += work
 
