@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from EvaErzin.slowmatrix import SlowMatrix
+from .slowmatrix import SlowMatrix
 
 class FastMatrix(SlowMatrix):
     """
@@ -51,7 +51,7 @@ class FastMatrix(SlowMatrix):
             self[n1 : n2, m1 : m2] = P1 + P5 - P3 - P7
 
             if n0 == 1:
-                self[n2, 0: m2] = left[n2, 0: k2] * right
+                self[n2, 0: m2 + m0] = left[n2, 0: k2] * right
 
             if m0 == 1:
                 self[0: n2 + n0, m2] = left * right[0: k2, m2]
@@ -60,8 +60,8 @@ class FastMatrix(SlowMatrix):
 
         else:
 
-            self = left[0 : n2 + n0, 0 : k2] * right[0 : k2, 0 : m2 + m0]
-            self += left[0 : n2 + n0, k2] * right[k2, 0 : m2 + m0]
+            self[ : , : ] = left[0 : n2 + n0, 0 : k2] * right[0 : k2, 0 : m2 + m0]
+            self[ : , : ] += left[0 : n2 + n0, k2] * right[k2, 0 : m2 + m0]
 
             return self
 
