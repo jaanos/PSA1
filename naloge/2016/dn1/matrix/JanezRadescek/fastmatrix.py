@@ -19,10 +19,27 @@ class FastMatrix(SlowMatrix):
 
         a = self.nrow()
         b = self.ncol()
-        c = left.ncol()
+        ujemanje = left.ncol()
 
-        if (a == 1) or (b == 1):
+        #če imamo množenje z vektorjem zmnožimo na običajen način
+        if (a == 1) or (b == 1) or (ujemanje == 1):
             super(FastMatrix, self).multiply(left,right)
-            return self
+
+        #poskrbimo če stranice niso sode
+
+        elif a%2 == 1:
+            self[:a,:] = self.multiply(left[:a,:],right)
+            self[a,:] = self.multiply(left[a,:],right)
+
+        elif b%2 == 1:
+            self[:,:b] = self.multiply(left, right[:,:b])
+            self[b,:] = self.multiply(left, right[:,b])
+
+        elif c%2 == 1:
+            self[:,:] = self.multiply(left[:,:ujemanje], right[:ujemanje,:]) + self.multiply(left[:,ujemanje], right[ujemanje,:])
 
 
+        #če so sode
+
+        else:
+            pass
