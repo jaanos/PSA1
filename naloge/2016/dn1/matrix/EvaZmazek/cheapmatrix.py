@@ -90,9 +90,15 @@ class CheapMatrix(SlowMatrix):
             D3 = work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2]
             D4 = work[stVrsticLeveMatrike // 2: stVrsticLeveMatrike,stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
 
+            #tudi self matriko si razdelimo na cetrtine. Pri tem je
+            S1 = self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2]
+            S2 = self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+            S3 = self[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2]
+            S4 = self[stVrsticLeveMatrike // 2: stVrsticLeveMatrike, stStolpcevDesneMatrike // 2: stStolpcevDesneMatrike]
+
             F -= H
-            D1.multiply(A,F)
-            #v zgornjo levo cetrtino delovne matrike vpisemo P1 = A  * (F - H)
+            D1.multiply(A,F, S1)
+            #v zgornjo levo cetrtino koncne matrike D1 vpisemo P1 = A  * (F - H)
             F += H
 
             #v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje (prištevanje nasprotnih vrednosti), za kar porabimo
@@ -102,7 +108,7 @@ class CheapMatrix(SlowMatrix):
             A += D
             E += H
             D2.multiply(A,E)
-            #v zgorno desno cetrtino delovne matrike vpisemo P5 = (A + D) * (E + H)
+            #v zgorno desno cetrtino delovne matrike D2 vpisemo P5 = (A + D) * (E + H)
             A -= D
             E -= H
 
@@ -112,7 +118,7 @@ class CheapMatrix(SlowMatrix):
 
             C += D
             D3.multiply(C,E)
-            #v spodnjo levo cetrtino delovne matrike vpisemo P3 = (C + D) * E
+            #v spodnjo levo cetrtino delovne matrike D3 vpisemo P3 = (C + D) * E
             C -= D
 
             # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje, za kar porabimo
@@ -122,7 +128,7 @@ class CheapMatrix(SlowMatrix):
             A -= C
             E += F
             D4.multiply(A,E)
-            #v spodnjo desno cetrtino delovne matrike vpisemo P7 = (A - C ) * (E + F)
+            #v spodnjo desno cetrtino delovne matrike D4 vpisemo P7 = (A - C ) * (E + F)
             A += C
             E -= F
 
