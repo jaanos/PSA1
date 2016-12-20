@@ -4,6 +4,6 @@
 __all__ = ['SlowMatrix', 'FastMatrix', 'CheapMatrix']
 
 # Uvozimo naše razrede
-from EvaErzin.slowmatrix import SlowMatrix
-from EvaErzin.fastmatrix import FastMatrix
-from EvaErzin.cheapmatrix import CheapMatrix
+from .slowmatrix import SlowMatrix
+from .fastmatrix import FastMatrix
+from .cheapmatrix import CheapMatrix
