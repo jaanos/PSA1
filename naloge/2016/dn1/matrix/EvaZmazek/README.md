@@ -291,16 +291,19 @@ Pri študiju časovne zahtevnosti bomo vzeli najslabši možen primer, torej pri
 Najprej za shranjevanje dimenzih porabimo *O(1)* časa, nato porabimo *O(k*m)* dodatnega časa za izračun zadnje vrstice produkta. V naslednjem koraku
 porabimo *O(n*k)* dodatnega časa za izračun zadnjega stolpca produkta. V nasljenjem koraku 'popravimo' lihost števila stolpcev matrike A in
 števila vrstic matrike B, v katerem porabimo za drugi del vsote *O(m*n)* dodatnega časa, za produkt zdaj že matrik sodih dimenzij pa
-porabimo *O(8)*=*O(1)* dodatnega časa za izpis 'četrtinskih delov' matrik A in B, *O(max(m,n)*k)* dodatnega časa za seštevanje,
+porabimo *O(max(m,n)*k)* dodatnega časa za seštevanja in odstevanja,
 ter *T(n//2, k//2, m//2)* dodatnega časa za vsako množenje, ki jih je 7.
 Skupna časovna zahtevnost je torej
 ```
-T(n,k,m) = O(1) + O(k*m) + O(n*k) + O(m*n) + o(1) + O(max(n,m)*k) + 7*T(n//2,k//2,m//2) =
-         = O(1) + O(k*m) + O(n*k) + O(m*n) + O(max(n,m)*k) + 7*T(n//2,k//2,m//2)=
-         = O(k*m+n*k+m*n) + O(max(n,m)*k) + 7*T(n//2,k//2, m//2)=...
+T(n,k,m) = O(1) + 7*T(n//2,k//2,m//2) + O(k//2 * m//2) + O((n+m)//2 * k//2) +
+           O(n//2 * k//2) + O((n+m)//2 * k//2) + O(n//2 * m//2) + O(n*k) + O(k*m) + O(m*n) + O(n//2 * k//2) +
+           O(n//2 * m//2) + O(k//2 * m//2) + O(n//2 * m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2) =
+         = O(1) + 7*T(n//2,k//2,m//2) + 5*O((n+m)//2 * k//2)+ 4*O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n) =
+         = O(1) + 7*T(n//2,k//2,m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n) =
+         = ...
 ```
 V naslednjem koraku definiramo novo oznako *M=max(n,k,m)*.
-S to oznako dobimo sedaj, da je časovna zahtevnost metode FastMatrix enaka:
+S to oznako dobimo sedaj, da je časovna zahtevnost metode CheapMatrix enaka:
 ```
 T(M) = O(3*M^2) + O(M^2) + 7*T(M//2) =
      = 3*O(M^2) + O(M^2) + 7*T(M//2) =
@@ -308,6 +311,11 @@ T(M) = O(3*M^2) + O(M^2) + 7*T(M//2) =
      = 7*T(M//2) + O(M^2)
 ```
 
+Po Krovnem izreku sedaj velja:
+
+**T(M) = O(M^(log_{2}(7)))**
+
+(natančnejša izpeljava v komentarjih v kodi)
 
 ###Prostorska zahtevnost algoritma:
 Tudi pri študijo podatkovne zahtevnosti bomo vzeli najslabši možni primer, torej primer, ko so vse tri dimenzije liha števila. Opazimo, da pri "popravljanju" matrik
@@ -340,30 +348,30 @@ Po krovnem izreku je to torej spet enako:
 Velikost kvadratnih matrik A in B | čas izračuna
 ----------------------------------|--------------
     1x1 * 1x1 | 0.000s
-    5x5 * 5x5 | 0.009s
-    10x10 * 10x10 | 0.060s
-    15x15 * 15x15 | 0.083s
-    20x20 * 20x20 | 0.436s
-    25x25 * 25x25 | 0.594s
-    30x30 * 30x30 | 0.641s
-    35x35 * 35x35 | 2.988s
-    40x40 * 40x40 | 3.196s
-    45x45 * 45x45 | 3.338s
-    50x50 * 50x50 | 3.946s
-    55x55 * 55x55 | 4.289s
-    60x60 * 60x60 | 4.427s
-    65x65 * 65x65 | 21.572s
-    70x70 * 70x70 | 20.801s
-    75x75 * 75x75 | 1.759s
-    80x80 * 80x80 | 2.257s
-    85x85 * 85x85 | 2.600s
-    90x90 * 90x90 | 3.295s
-    95x95 * 95x95 | 4.185s
-    100x100 * 100x100 | 4.411s
-    125x125 * 125x125 | 9.514s
-    150x150 * 150x150 | 16.268s
-    175x175 * 175x175 | 28.596s
-    200x200 * 200x200 | 46.541s
+    5x5 * 5x5 | 0.003s
+    10x10 * 10x10 | 0.024s
+    15x15 * 15x15 | 0.051s
+    20x20 * 20x20 | 0.189s
+    25x25 * 25x25 | 0.293s
+    30x30 * 30x30 | 0.347s
+    35x35 * 35x35 | 1.062s
+    40x40 * 40x40 | 1.244s
+    45x45 * 45x45 | 1.386s
+    50x50 * 50x50 | 2.012s
+    55x55 * 55x55 | 2.167s
+    60x60 * 60x60 | 2.534s
+    65x65 * 65x65 | 6.683s
+    70x70 * 70x70 | 7.215s
+    75x75 * 75x75 | 7.553s
+    80x80 * 80x80 | 8.265s
+    85x85 * 85x85 | 8.726s
+    90x90 * 90x90 | 8.831s
+    95x95 * 95x95 | 9.593s
+    100x100 * 100x100 | 14.490s
+    125x125 * 125x125 | 18.361s
+    150x150 * 150x150 | 52.002s
+    175x175 * 175x175 | 60.458s
+    200x200 * 200x200 | 102.602s
     225x225 * 225x225 | 71.574s
     250x250 * 250x250 | 105.487s
     275x275 * 275x275 | 149.519s

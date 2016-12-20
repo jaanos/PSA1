@@ -98,100 +98,85 @@ class CheapMatrix(SlowMatrix):
 
             F -= H
             S2.multiply(A,F,D1)
-            #v zgornjo levo cetrtino delovne matrike D1 vpisemo P1 = A  * (F - H)
+            #v zgornjo desno cetrtino koncne matrike S2 vpisemo P1 = A  * (F - H)
             F += H
 
-            #v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje (prištevanje nasprotnih vrednosti), za kar porabimo
-            #T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(k//2 * m//2) dodatnega časa za odštevanje
-            #P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za odštevanje
+            #v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje (prištevanje nasprotnih vrednosti) in eno prištevanje, za kar porabimo
+            #T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2*O(k//2 * m//2)=O(k//2 * m//2) dodatnega časa za odštevanje ter seštevanje
+            #P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za odštevanje in seštevanje
 
             A += D
             E += H
             S1.multiply(A,E,D2)
-            #v zgorno desno cetrtino delovne matrike D2 vpisemo P5 = (A + D) * (E + H)
+            #v zgorno levo cetrtino koncne matrike S1 vpisemo P5 = (A + D) * (E + H)
             A -= D
             E -= H
 
-            # v tem koraku naredimo eno rekurzivno množenje ter dve seštevanji, za kar porabimo
-            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje
-            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
+            # v tem koraku naredimo eno rekurzivno množenje ter dve seštevanji in dve odstevanji, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2*O(n//2 * k//2) + 2*O(k//2 * m//2) = 2*O((n+m)//2 * k//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje in odstevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odstevanje
 
             C += D
             S3.multiply(C,E,D3)
-            #v spodnjo levo cetrtino delovne matrike D3 vpisemo P3 = (C + D) * E
+            #v spodnjo levo cetrtino koncne matrike S3 vpisemo P3 = (C + D) * E
             C -= D
 
-            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje, za kar porabimo
-            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) dodatnega časa za seštevanje
-            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
+            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje in eno odstevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2*O(n//2 * k//2)=O(n//2 * k//2) dodatnega časa za seštevanje in odstevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odstevanje
 
             A -= C
             E += F
             S4.multiply(A,E,D4)
-            #v spodnjo desno cetrtino delovne matrike D4 vpisemo P7 = (A - C ) * (E + F)
+            #v spodnjo desno cetrtino koncne matrike S4 vpisemo P7 = (A - C ) * (E + F)
             A += C
             E -= F
 
-            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje in eno odštevanje, za kar porabimo
-            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje in odštevanje
+            # v tem koraku naredimo eno rekurzivno množenje ter dve seštevanji in dve odštevanji, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2*O(n//2 * k//2) + 2*O(k//2 * m//2) = 2*O((n+m)//2 * k//2)= O((n+m)//2 * k//2) dodatnega časa za seštevanje in odštevanje
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odštevanje
 
             S4 *= (-1)
             S4 += S2
             S4 += S1
             S4 -= S3
+            #s temi koraki spodnjo desno cetrtino koncne matrike nastavimo na -P7 + P1 + P5 - P3.
 
-#            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = D1 + D2 - D3 - D4
-            #spodnjo desno cetrtino koncne matrike nastavimo na
-            #P1 = ... + \
-            #P5 = ... - \
-            #P3 = ... - \
-            #P7 = ...
-
-            #v tem koraku naredimo 3 seštevanja, za kar porabimo
-            #3*O(n//2 * m//2) = O(n//2 * m//2) dodatnega časa
+            #v tem koraku naredimo 3 seštevanja in dve mnozenji z (-1), za kar porabimo
+            #5*O(n//2 * m//2) = O(n//2 * m//2) dodatnega časa
             #nič dodatnega prostora
-
-            #na tem koraku ne potrebujemo več P7, torej na njegovo mesto napišemo P2 (shranjene bomo imeli P1, P5, P3 in P2)
 
             A += B
             D1.multiply(A,H,D2)
             #v spodnjo desno cetrtino delovne matrike si torej zapisemo P2 = (A + B ) * H
             A -= B
 
-            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje, za kar porabimo
-            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) dodatnega časa za seštevanje
+            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje in eno odstevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2* O(n//2 * k//2) = O(n//2 * k//2) dodatnega časa za seštevanje in odstevanje
             # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje
 
             S2 += D1
-#            self[0:stVrsticLeveMatrike // 2, stStolpcevDesneMatrike // 2:stStolpcevDesneMatrike] = D1 + D4
-            #zgornjo desno cetrtino matrike nastavimo na P1 + P2
+            #s tem korakom zgornjo desno cetrtino koncne matrike nastavimo na P1 + P2.
 
-            # v tem koraku naredimo 1 seštevanj2, za katero porabimo
+            # v tem koraku naredimo 1 seštevanje, za katero porabimo
             # O(n//2 * m//2) dodatnega časa
             # nič dodatnega prostora
-
-            #na tem koraku ne potrebujemo več P1, zato ga nadomestimo s P4 (shranjene bomo imeli P4, P5, P3 in P2)
 
             G -= E
             D2.multiply(D,G,D3)
             #zgornjo levo cetrtino delovne matrike nastavimo na P4 = D * (G - E)
             G +=E
 
-            # v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje, za kar porabimo
-            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(k//2 * m//2) dodatnega časa za odštevanje
-            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanj
+            # v tem koraku naredimo eno rekurzivno množenje ter eno odštevanje in eno odstevanje, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2*O(k//2 * m//2) = O(k//2 * m//2) dodatnega časa za odštevanje in pristevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za odstevanje in sestevanje
 
             S3 += D2
-#            self[stVrsticLeveMatrike // 2:stVrsticLeveMatrike, 0:stStolpcevDesneMatrike // 2] = D3 + D1
-            #spodnjo levo cetrtino koncne matrike nastavimo na P3 + P4
+            #s tem korakom smo spodnjo levo cetrtino koncne matrike nastavili na P3 + P4.
 
             # v tem koraku naredimo eno seštevanje, za katero porabimo
             # O(n//2 * m//2) dodatnega časa
             # nič dodatnega prostora
-
-
-            #na tem koraku ne potrebujemo več P3, zato ga nadomestimo s P6 (shranjene bomo imeli P4, P5, P6 in P2)
 
             B -= D
             G += H
@@ -200,15 +185,14 @@ class CheapMatrix(SlowMatrix):
             B += D
             G -= H
 
-            # v tem koraku naredimo eno rekurzivno množenje ter eno seštevanje in eno odštevanje, za kar porabimo
-            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in O(n//2 * k//2) + O(k//2 * m//2) = O((m+n)//2 * k//2) dodatnega časa za seštevanje in odštevanje
-            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odštevanje
+            # v tem koraku naredimo eno rekurzivno množenje ter dve seštevanji in dve odstevanji, za kar porabimo
+            # T(n//2,k//2,m//2) dodatnega časa za rekurzivno množenje in 2*O(n//2 * k//2) + 2*O(k//2 * m//2) = 2*O((n+m)//2 * k//2) = O((n+m)//2 * k//2) dodatnega časa za seštevanje in odstevanje
+            # P(n//2,k//2,m//2) dodanega prostora za rekurzivno množenje in nič dodatnega prostora za seštevanje in odstevanje
 
             S1 -= D1
             S1 += D2
             S1 += D3
-            #self[0:stVrsticLeveMatrike // 2, 0:stStolpcevDesneMatrike // 2] = D1 + D2 + D3 - D4
-            #zgornjo desno cetrtino koncne matrike nastavimo na P4 + P5 + P6 - P2
+            #s tem korakom smo zgornjo desno cetrtino koncne matrike nastavili na P4 + P5 + P6 - P2
 
             # v tem koraku naredimo 3 seštevanja, za kar porabimo
             # 3*O(n//2 * m//2) = O(n//2 * m//2) dodatnega časa
@@ -217,28 +201,33 @@ class CheapMatrix(SlowMatrix):
             return self
 
         if stVrsticLeveMatrike % 2 == 1:
-            self[0:stVrsticLeveMatrike - 1, :] = left[0:stVrsticLeveMatrike - 1, :] * right
-            self[stVrsticLeveMatrike - 1:stVrsticLeveMatrike, :] = left[stVrsticLeveMatrike - 1:stVrsticLeveMatrike,:] * right
+            self[0:stVrsticLeveMatrike - 1, :].multiply(left[0:stVrsticLeveMatrike - 1, :], right, work[0:stVrsticLeveMatrike - 1, :])
+            self[stVrsticLeveMatrike - 1:stVrsticLeveMatrike, :] = left[stVrsticLeveMatrike - 1:stVrsticLeveMatrike,:] * right #ujame se v drugi if v algoritmu, zato to ok
             return self
 
         # v tem koraku porabimo O(k*m) dodatnega časa
         # v tem koraku porabimo O(1) dodatnega prostora
 
         if stStolpcevDesneMatrike % 2 == 1:
-            self[:, 0:stStolpcevDesneMatrike - 1] = left * right[:, 0:stStolpcevDesneMatrike - 1]
-            self[:, stStolpcevDesneMatrike - 1] = left * right[:, stStolpcevDesneMatrike - 1]
+            self[:, 0:stStolpcevDesneMatrike - 1].multiply(left,right[:, 0:stStolpcevDesneMatrike - 1], work[:, 0:stStolpcevDesneMatrike - 1])
+            self[:, stStolpcevDesneMatrike - 1] = left * right[:, stStolpcevDesneMatrike - 1] #ujame se v tretji if v algoritmu, zato to ok
             return self
 
         # v tem koraku porabimo O(n*k) dodatnega časa
         # v tem koraku porabimo O(1) dodatnega prostora
 
         else:
-            self[:, :] = left[:, 0:stStolpcevLeveMatrike - 1] * right[0:stStolpcevLeveMatrike - 1, :] + left[:,stStolpcevLeveMatrike - 1] * right[stStolpcevLeveMatrike - 1,:]
+            self[:, :].multiply(left[:, 0:stStolpcevLeveMatrike - 1],right[0:stStolpcevLeveMatrike - 1, :], work)
+            self[:, :] += left[:,stStolpcevLeveMatrike - 1] * right[stStolpcevLeveMatrike - 1,:] #ujame se v prvi if, v algoritmu, zato to ok
             return self
 
         # v tem koraku porabimo O(m*n) dodatnega časa
         # v tem koraku ne porabimo nobenega dodatnega prostora
 
             # Sklep:
-            # Časovna zahtevnost: T(n,k,m) = O(1) +   + O(n*k) + O(k*m) + O(m*n)
-            # Prostorska zahtevnost: P(n,k,m) =  + O(1)
+            # Časovna zahtevnost: T(n,k,m) = O(1) + 7*T(n//2,k//2,m//2) + O(k//2 * m//2) + O((n+m)//2 * k//2) +
+            # O(n//2 * k//2) + O((n+m)//2 * k//2) + O(n//2 * m//2) + O(n*k) + O(k*m) + O(m*n) + O(n//2 * k//2) +
+            # O(n//2 * m//2) + O(k//2 * m//2) + O(n//2 * m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2) =
+            # = O(1) + 7*T(n//2,k//2,m//2) + 5*O((n+m)//2 * k//2)+ 4*O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n)
+            # =O(1) + 7*T(n//2,k//2,m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n)
+            # Prostorska zahtevnost: P(n,k,m) = 7*P(n//2,k//2,m//2) + O(1)
