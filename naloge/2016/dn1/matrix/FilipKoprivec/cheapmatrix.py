@@ -7,9 +7,6 @@ from .slowmatrix import SlowMatrix
 
 class CheapMatrix(SlowMatrix):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     """
     Matrika s prostorsko nepotratnim množenjem.
     """
