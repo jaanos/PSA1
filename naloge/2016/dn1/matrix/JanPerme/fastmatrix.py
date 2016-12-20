@@ -15,4 +15,11 @@ class FastMatrix(SlowMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
-        raise NotImplementedError("Naredi sam!")
+        A.copy(left[0:(left.nrow()//2),0:(left.ncol()//2))
+        B.copy(left[0:(left.nrow()//2),(left.ncol()//2)):(2*(left.ncol()//2))])
+        C.copy(left[(left.nrow()//2):(2*(left.nrow()//2)),0:(left.ncol()//2)])
+        D.copy(left[(left.nrow()//2):(2*(left.nrow()//2)),(left.ncol()//2):(2*(left.ncol()//2))])
+        E.copy(right[0:(right.nrow()//2),0:(right.ncol()//2))
+        F.copy(right[0:(right.nrow()//2),(right.ncol()//2)):(2*(right.ncol()//2))])
+        G.copy(right[(right.nrow()//2):(2*(right.nrow()//2)),0:(right.ncol()//2)])
+        H.copy(right[(right.nrow()//2):(2*(right.nrow()//2)),(right.ncol()//2):(2*(right.ncol()//2))])
