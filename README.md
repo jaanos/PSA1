@@ -15,4 +15,4 @@ Imenik *vaje* vsebuje kodo v Pythonu, ki smo jo srečali na vajah.
 
 Imenik *naloge* vsebuje gradivo za domače naloge (po letih) skupaj z oddanimi nalogami.
 
-Trenutno je na voljo [1. domača naloga](naloge/2016/dn1/). Rok za oddajo je **18. december 2016**.
+Trenutno je na voljo [1. domača naloga](naloge/2016/dn1/). Rok za oddajo je **23. december 2016**.
