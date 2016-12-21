@@ -26,7 +26,7 @@ class FastMatrix(SlowMatrix):
         m = left.ncol() # = right.nrow()
         k = right.ncol()
 
-        # Definiramo nove spremenljivke, ki (sicer zanemarljivo) zmanjšajo število operacij
+        # Definiramo nove spremenljivke, ki (sicer zanemarljivo) zmanjšajo število operacij v nadaljevanju
 
         N = n//2
         M = m//2
@@ -55,7 +55,6 @@ class FastMatrix(SlowMatrix):
             G = right[M:M2, 0:K]
             H = right[M:M2, K:K2]
 
-            print("A " +  str(A), "F " + str(F), "H " + str(H))
 
             # Produkti za računanje algoritma
 
@@ -70,10 +69,10 @@ class FastMatrix(SlowMatrix):
 
             # Primer, ko so vse dimenzije sode:
 
-            self[0:N, 0:K] = P4 + P5 + P6 - P2
-            self[0:N, K:K2] = P1 + P2
-            self[N:N2, 0:K] = P3 + P4
-            self[N:N2, K:K2] = P1 + P5 - P3 - P7
+            self[0:N, 0:K] = P4 + P5 + P6 - P2                                     # V poročilu označeno s C1.
+            self[0:N, K:K2] = P1 + P2                                              # V poročilu označeno s C2.
+            self[N:N2, 0:K] = P3 + P4                                              # V poročilu označeno s C3.
+            self[N:N2, K:K2] = P1 + P5 - P3 - P7                                   # V poročilu označeno s C4.
 
 
 
@@ -103,7 +102,3 @@ class FastMatrix(SlowMatrix):
                 # Če sta m in k sode, n pa lihe stopnje:
                 else:
                     self[n-1, 0:k] = left[n - 1, 0:m] * right                       # Novi matriki dodamo vrstico 
-                        
-               
-
-            # Ne dela: Error: dimenzije se ne ujemajo!
