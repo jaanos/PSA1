@@ -48,7 +48,7 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
     ostane desni stolpec `left[0:n, m-1:m]` (če upoštevamo zamaknjenost indeksov
     v Pythonu - tudi v vseh naslednjih primerih):     
      
-     A |  B |/// 
+   A |  B |/// 
    ---|---|---
      C |  D |/// 
     
@@ -72,17 +72,17 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
    Matrika left je dimenzije `n x m` in po tem, ko jo razdelimo na 4 dele,
    nam znova ostane zadnji stolpec:
     
-   |  A |  B |///| 
-   |---|---|---|
-   |  C |  D |/// |
+   A |  B |/// 
+   ---|---|---
+   C |  D |/// 
 
    Pri matriki right nam po razdelitvi na podmatrike, kot prej ostane zadnja,
    vrstica, tokrat dobimo pa še prost zadnji stolpec:
    
-   |  E |  F |///| 
-   |---|---|---|
-   |  G |  H |/// |
-   |///|///|///|
+   E |  F |/// 
+   ---|---|---
+     G |  H |/// 
+   ///|///|///
 
    Če ignoriramo zadnji stolpec matrike right, je postopek isti, kot če je 
    lih samo `m`. Ko dobimo novo matriko, ji dodamo zadnji stolpec, ki je 
@@ -93,17 +93,17 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
    Po razdelitvi matrike left na podmatrike, nam ostaneta zadnji stolpec in 
    zadnja vrstica:
    
-   |  A |  B |///| 
-   |---|---|---|
-   |  C |  D |/// |
-   |///|///|///|
+   A |  B |/// 
+   ---|---|---
+    C |  D |/// 
+   ///|///|///
 
    Prav tako nam ostaneta zadnji stolpec in zadnja vrstica pri matriki right:
 
-   |  E |  F |///| 
-   |---|---|---|
-   |  G |  H |/// |
-   |///|///|///|
+   E |  F |/// 
+   ---|---|---
+     G |  H |/// 
+   ///|///|///
    
    Če ignoriramo zadnjo vrstico matrike left, je postopek isti kot pri
    prejšnjem primeru, ko sta `m` in `k` liha. Tokrat novi matriki dodamo 
@@ -114,17 +114,17 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
    Znova nam po razdelitvi matrike left na podmatrike, ostaneta zadnji stolpec in zadnja
    vrstica:
    
-   |  A |  B |///| 
-   |---|---|---|
-   |  C |  D |/// |
-   |///|///|///|
+   A |  B |///
+   ---|---|---
+     C |  D |/// 
+   ///|///|///
    
    Pri matriki right pa nam ostane samo zadnja vrstica:
    
-   |E | F |
-   |---|---|
-   |G | H|
-   | /// | /// |
+   E | F 
+   ---|---
+   G | H
+    /// | /// 
    
   Če ignoriramo zadnjo vrstico matrike left, lahko za matriko left dimenzije 
   `n-1 x m` in matriko right istih dimenzij, ponovimo postopek, če je samo `m`
@@ -136,15 +136,15 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
  
    Matriko left lahko razdelimo na podmatrike po Strassenovem algoritmu.
 
-   |A | B |
-   |---|---|
-   |C | D|
+   A | B 
+   ---|---
+   C | D
    
    Pri matriki right nam po razdelitvi na podmatrike ostane zadnji stolpec. 
    
-   |  E |  F |///| 
-   |---|---|---|
-   |  G |  H |/// |
+   E |  F |/// 
+   ---|---|---
+     G |  H |/// 
  
    Podmatrike pomnožimo s pomočjo sedmih produktov, nato pa zmnožimo matriko
    left in zadnji stolpec matrike right, ter dobljen vektor pridružimo k novi
@@ -156,17 +156,17 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
    Pri matriki left nam po razdelitvi na podmatrike ostane zadnja vrstica
    za posebno obravnavo:
    
-   |  A |  B | 
-   |---|---|
-   |  C |  D |
-   |///|///|///|
+   A |  B 
+   ---|---
+     C |  D 
+   ///|///|///
    
    Pri matriki right kot v prejšnjem primeru, ko je lih samo `k`, nam 
    po razdelitvi na podmatrike ostane zadnji stolpec:
    
-   |  E |  F |///| 
-   |---|---|---|
-   |  G |  H |/// |
+   E |  F |///
+   ---|---|---
+     G |  H |/// 
    
    Najprej novi matriki, ki jo dobimo s pomočjo sedmih produktov, dodamo 
    vrstico, ki je produkt zadnje vrstice matrike left in matrike right brez 
@@ -177,16 +177,16 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
 
    Matrika left po razdelitvi izgleda takole: 
 
-   |  A |  B | 
-   |---|---|
-   |  C |  D |
-   |///|///|///|
+   A |  B 
+   ---|---
+   C |  D 
+   ///|///|///
    
    Matrika right je sode dimenzije in jo lahko normalno razdelimo:
     
-   |E | F |
-   |---|---|
-   |G | H|
+   E | F 
+   ---|---
+   G | H
    
    Množimo podmatrike, nato pa novi matriki dodamo zadnjo vrstico, ki jo dobimo
    z množenjem zadnje vrstice matrike left in matrike right.
