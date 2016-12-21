@@ -48,17 +48,17 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
     ostane desni stolpec `left[0:n, m-1:m]` (če upoštevamo zamaknjenost indeksov
     v Pythonu - tudi v vseh naslednjih primerih):     
      
-   |  A |  B |///| 
-   |---|---|---|
-   |  C |  D |/// |
+     A |  B |/// 
+   ---|---|---
+     C |  D |/// 
     
    Matrika right je dimnezij `m x k`, in če jo, kot matriko left, razdelimo
     na 4 dele, nam tokrat ostane spodnja vrstica `left[n-1:n, 0:m]`:
     
-   |E | F |
-   |---|---|
-   |G | H|
-   | /// | /// |
+   E | F 
+   ---|---
+   G | H
+    /// | /// 
 
    V tem primeru izračunamo zmnožek označenih podmatrik s pomočjo sedmih 
     produktov po Strassenovem algoritmu, na koncu pa `[i,j]`-temu elementu nove matrike prištejemo še
