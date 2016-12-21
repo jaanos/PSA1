@@ -371,15 +371,15 @@ Velikost kvadratnih matrik A in B | čas izračuna
     125x125 * 125x125 | 18.361s
     150x150 * 150x150 | 52.002s
     175x175 * 175x175 | 60.458s
-    200x200 * 200x200 | 102.602s
-    225x225 * 225x225 | 71.574s
-    250x250 * 250x250 | 105.487s
-    275x275 * 275x275 | 149.519s
-    300x300 * 300x300 | 207.473s
-    350x350 * 350x350 | 359.316s
-    400x400 * 400x400 | 596.140s
-    450x450 * 450x450 | 944.968s
-    500x500 * 500x500 | 1392.869s
+    200x200 * 200x200 | 89.647s
+    225x225 * 225x225 | 102.311s
+    250x250 * 250x250 | 113.646s
+    275x275 * 275x275 | 328.812s
+    300x300 * 300x300 | 348.577s
+    350x350 * 350x350 | 416.337s
+    400x400 * 400x400 | 660.042s
+    450x450 * 450x450 | 741.824s
+    i500x500 * 500x500 | 1392.869s
 
 vzorec
 Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).

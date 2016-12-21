@@ -70,7 +70,7 @@ class CheapMatrix(SlowMatrix):
 
         if stStolpcevLeveMatrike % 2 == 0 and stVrsticLeveMatrike % 2 == 0 and stStolpcevDesneMatrike % 2 == 0:
 
-            #najprej si naredimo pointerje, ki ne vzamejo nič dodatnega prostora
+            #najprej si naredimo pointerje, ki vzamejo O(1) dodatnega prostora
 
             #cetrine leve matrike
             A = left[0:stVrsticLeveMatrike // 2, 0:stStolpcevLeveMatrike // 2]
@@ -202,7 +202,12 @@ class CheapMatrix(SlowMatrix):
 
         if stVrsticLeveMatrike % 2 == 1:
             self[0:stVrsticLeveMatrike - 1, :].multiply(left[0:stVrsticLeveMatrike - 1, :], right, work[0:stVrsticLeveMatrike - 1, :])
-            self[stVrsticLeveMatrike - 1:stVrsticLeveMatrike, :] = left[stVrsticLeveMatrike - 1:stVrsticLeveMatrike,:] * right #ujame se v drugi if v algoritmu, zato to ok
+            for j in range(stStolpcevDesneMatrike):
+                vrednost = 0
+                for k in range(stStolpcevLeveMatrike):
+                    vrednost += left[stVrsticLeveMatrike - 1:stVrsticLeveMatrike, k] * right[k, j]
+                self[stVrsticLeveMatrike - 1:stVrsticLeveMatrike, j] = vrednost
+            #self[stVrsticLeveMatrike - 1:stVrsticLeveMatrike, :] = left[stVrsticLeveMatrike - 1:stVrsticLeveMatrike,:] * right #ujame se v drugi if v algoritmu, zato to ok
             return self
 
         # v tem koraku porabimo O(k*m) dodatnega časa
@@ -210,7 +215,12 @@ class CheapMatrix(SlowMatrix):
 
         if stStolpcevDesneMatrike % 2 == 1:
             self[:, 0:stStolpcevDesneMatrike - 1].multiply(left,right[:, 0:stStolpcevDesneMatrike - 1], work[:, 0:stStolpcevDesneMatrike - 1])
-            self[:, stStolpcevDesneMatrike - 1] = left * right[:, stStolpcevDesneMatrike - 1] #ujame se v tretji if v algoritmu, zato to ok
+            for i in range(stVrsticLeveMatrike):
+                vrednost = 0
+                for k in range(stStolpcevLeveMatrike):
+                    vrednost += left[i, k] * right[k, stStolpcevDesneMatrike - 1]
+                self[i, stStolpcevDesneMatrike - 1] = vrednost
+            #self[:, stStolpcevDesneMatrike - 1] = left * right[:, stStolpcevDesneMatrike - 1] #ujame se v tretji if v algoritmu, zato to ok
             return self
 
         # v tem koraku porabimo O(n*k) dodatnega časa
@@ -218,7 +228,11 @@ class CheapMatrix(SlowMatrix):
 
         else:
             self[:, :].multiply(left[:, 0:stStolpcevLeveMatrike - 1],right[0:stStolpcevLeveMatrike - 1, :], work)
-            self[:, :] += left[:,stStolpcevLeveMatrike - 1] * right[stStolpcevLeveMatrike - 1,:] #ujame se v prvi if, v algoritmu, zato to ok
+            for i in range(stVrsticLeveMatrike):
+                for j in range(stStolpcevDesneMatrike):
+                    self[i, j] += (left[i, stStolpcevLeveMatrike - 1] * right[stStolpcevLeveMatrike - 1, j])
+            #work.multiply(left[:,stStolpcevLeveMatrike - 1],right[stStolpcevLeveMatrike - 1,:],self) #ujame se v prvi if, v algoritmu, zato self ni problem in je to ok
+            #self[:, :] += work
             return self
 
         # v tem koraku porabimo O(m*n) dodatnega časa
