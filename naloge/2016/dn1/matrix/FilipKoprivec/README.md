@@ -112,8 +112,17 @@ Z logaritiranjem razmerja zaporednih časov in dejstva, da velikosti matrik, na 
 | FastMatrix   | 2.72 | 2.81 | 2.78 | 2.82 | 2.81 |
 | CheapMatrix  | 2.87 | 2.75 | 2.77 | 2.80 | 2.83 |  
 
+#### Graf
+
+![Prikaz časov][plot]
+
+[plot]: plot.png "Prikaz časov izvajanja posameznih algoritmov"
+
+Na grafu so prikazani časi izvajanja posamezni algoritmov. Ker sta obe osi logaritemski si lahko že s preprosto premico lažje predstavljamo red časovne zahtevnosti algoritma. Točke predstavljajo dejanske čase, medtem, ko so črtkane črte aproksimacije le teh z premicami po metodi najboljših kvadratov. Koeficienti premic so prikazani ob premicah. Vidimo, da sta koeficienta za obe implementaciji Strassenovega algoritma zelo natančna, medtem ko koeficient za naivni algoritem nekoliko odstopa.
+
+
 #### Komentar na rezultate
 
 Naivni algoritem za množenje matrik se obnaša dokaj pričakovano, saj narašča *približno* s pravilnim eksponentom (eksponen je nekoliko večji), prav tako pa zaradi dokaj majhne natančnosti lahko pride do večjih napak pri izračunu, a vseeno sledi pravilnem trendu.
 
-Obe implementaciji Strassenovega algoritma imata veliko bolj konstanten eksponent, ki je zelo blizu pravilnemu (2.8). Pomembno je omeniti predvsem nepričakovano dejstvo, da je `CheapMatrix` opazno hitrejši od `FastMatrix`. Natančnejša analiza ppkaže, da je eden izmed poglavitnih vzrokov za to predvsem priprava podmatrik, ki se uporabljajo v metodi multiply, ki opravi sicer dodatne klice `__init__` in s tem porabi dodaten čas, a se mi zdi, da je za samo implementacijo in lažje branje kode bolje, da kljub *overheadu* teh dodatnih klicev uporabljamo dodatne matrike, saj asimptotska hitrost ostane enaka, algoritem pa je bolj razumljiv. 
+Obe implementaciji Strassenovega algoritma imata veliko bolj konstanten eksponent, ki je zelo blizu pravilnemu (2.8). Pomembno je omeniti predvsem nepričakovano dejstvo, da je `CheapMatrix` opazno hitrejši od `FastMatrix`. Natančnejša analiza pokaže, da je eden izmed poglavitnih vzrokov za to predvsem priprava podmatrik, ki se uporabljajo v metodi multiply, ki opravi sicer dodatne klice `__init__` in s tem porabi dodaten čas, a se mi zdi, da je za samo implementacijo in lažje branje kode bolje, da kljub *overheadu* teh dodatnih klicev uporabljamo dodatne matrike, saj asimptotska hitrost ostane enaka, algoritem pa je bolj razumljiv. 
