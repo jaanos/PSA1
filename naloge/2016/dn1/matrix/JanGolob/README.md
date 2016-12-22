@@ -2,6 +2,15 @@
 
 *Jan Golob*
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
+Množimo matiki velikosti **m** x **k** in **k** x **n**
 
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
+## SlowMatrix
+Uporablja naivno množenje matrik.
+
+### Čas
+Za vsak element v ciljni matriki porabimo k množenj. V ciljni matriki je m vrstic in n stolpcev.
+Torej je časovna zahtevnost O(kmn)
+
+### Prostor
+Poleg vhodnih in končne matrike, SlowMatrix še prostor za začasno vsoto (spremenljivka vs v kodi).
+To je dodatnega O(ln(vs)) prostora.
