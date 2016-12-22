@@ -19,15 +19,17 @@ class FastMatrix(SlowMatrix):
         m = left.ncol()
         n = left.nrow()
         p = right.ncol()
-        ms = 2*(m//2)  # (ms je sodo stevilo, ki je za 1 manjse od m - ce je m liho, ali enako m - ce je m ze sodo)
-        ns = 2*(n//2)  # (ns je sodo stevilo, ki je za 1 manjse od n - ce je n liho, ali enako n - ce je n ze sodo)
-        ps = 2*(p//2)  # (ps je sodo stevilo, ki je za 1 manjse od p - ce je p liho, ali enako p - ce je p ze sodo)
+        ms = 2 * (m // 2)  # ms je sodo stevilo, ki je za 1 manjse od m (ce je m liho) ali enako m (ce je m ze sodo)
+        ns = 2 * (n // 2)  # ns je sodo stevilo, ki je za 1 manjse od n (ce je n liho) ali enako n (ce je n ze sodo)
+        ps = 2 * (p // 2)  # ps je sodo stevilo, ki je za 1 manjse od p (ce je p liho) ali enako p (ce je p ze sodo)
 
-        # Ce imamo v kateri od matrik le en stolpec ali vrstico, potem le zmnozimo, saj ne moremo razdeliti
+        # Ce imamo v kateri od matrik le en stolpec ali vrstico, potem zmnozimo s SlowMatrix, saj ne moremo razdeliti
         if n == 1 or m == 1 or p == 1:
             super().multiply(left, right)
 
         else:
+            # Razdelitev leve in desne matrike na 4 podmatrike (ki pa ne predstavljajo cele matrike, ce je katera
+            # dimenzija liha).
             A = left[0:n//2, 0:m//2]
             B = left[0:n//2, m//2:ms]
             C = left[n//2:ns, 0:m//2]
@@ -36,6 +38,8 @@ class FastMatrix(SlowMatrix):
             F = right[0:m//2, p//2:ps]
             G = right[m//2:ms, 0:p//2]
             H = right[m//2:ms, p//2:ps]
+
+            # Izracun produktov Strassenovega mnozenja
             P1 = A * (F - H)
             P2 = (A + B) * H
             P3 = (C + D) * E
@@ -44,12 +48,13 @@ class FastMatrix(SlowMatrix):
             P6 = (B - D) * (G + H)
             P7 = (A - C) * (E + F)
 
+            # Naslednje vrednosti bomo pristeli tistim delom matrike, ki so zmnozeni s pomocjo Strassenovega algoritma
             zgoraj_levo = 0
             zgoraj_desno = 0
             spodaj_levo = 0
             spodaj_desno = 0
 
-            # Ce leva matrika nima sodo stevilo stolpcev, pristejemo se produkte z zadnjim stolpcem
+            # Ce leva matrika nima sodega stevila stolpcev, izracunamo se produkte z zadnjim stolpcem
             if m % 2 != 0:
                 zgoraj_levo = left[0:n//2, m-1] * right[m-1, 0:p//2]
                 zgoraj_desno = left[0:n//2, m-1] * right[m-1, p//2:ps]
@@ -60,7 +65,7 @@ class FastMatrix(SlowMatrix):
             if p % 2 != 0:
                 self[0:n, p - 1] = left * right[0:m, p - 1]
 
-            # Ce leva matrika nima sodega stevila vrstic, rocno obravnavamo zadnjo vrstico
+            # Ce leva matrika nima sodega stevila vrstic, izracunamo se produkte z zadnjo vrstico
             if n % 2 != 0:
                 self[n-1, 0:ps] = left[n-1, 0:m] * right[0:m, 0:ps]
 

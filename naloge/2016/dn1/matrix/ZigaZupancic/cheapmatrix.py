@@ -24,36 +24,36 @@ class CheapMatrix(SlowMatrix):
         m = left.ncol()
         n = left.nrow()
         p = right.ncol()
-        ms = 2 * (m // 2)  # (ms je sodo stevilo, ki je za 1 manjse od m - ce je m liho, ali enako m - ce je m ze sodo)
-        ns = 2 * (n // 2)  # (ns je sodo stevilo, ki je za 1 manjse od n - ce je n liho, ali enako n - ce je n ze sodo)
-        ps = 2 * (p // 2)  # (ps je sodo stevilo, ki je za 1 manjse od p - ce je p liho, ali enako p - ce je p ze sodo)
         mc = m // 2
         nc = n // 2
         pc = p // 2
+        ms = 2 * mc  # ms je sodo stevilo, ki je za 1 manjse od m (ce je m liho) ali enako m (ce je m ze sodo)
+        ns = 2 * nc  # ns je sodo stevilo, ki je za 1 manjse od n (ce je n liho) ali enako n (ce je n ze sodo)
+        ps = 2 * pc  # ps je sodo stevilo, ki je za 1 manjse od p (ce je p liho) ali enako p (ce je p ze sodo)
 
-        # Ce imamo v kateri od matrik le en stolpec ali vrstico, potem le zmnozimo, saj ne moremo razdeliti
+        # Ce imamo v kateri od matrik le en stolpec ali vrstico, potem zmnozimo s SlowMatrix, saj ne moremo razdeliti
         if n == 1 or m == 1 or p == 1:
             super().multiply(left, right)
 
         else:
-            A = left[0:n // 2, 0:m // 2]
-            B = left[0:n // 2, m // 2:ms]
-            C = left[n // 2:ns, 0:m // 2]
-            D = left[n // 2:ns, m // 2:ms]
-            E = right[0:m // 2, 0:p // 2]
-            F = right[0:m // 2, p // 2:ps]
-            G = right[m // 2:ms, 0:p // 2]
-            H = right[m // 2:ms, p // 2:ps]
+            A = left[0:nc, 0:mc]
+            B = left[0:nc, mc:ms]
+            C = left[nc:ns, 0:mc]
+            D = left[nc:ns, mc:ms]
+            E = right[0:mc, 0:pc]
+            F = right[0:mc, pc:ps]
+            G = right[mc:ms, 0:pc]
+            H = right[mc:ms, pc:ps]
 
-            ZL = self[0:n // 2, 0:p // 2]             # zgornja leva podmatrika koncne matrike
-            ZD = self[0:n // 2, p // 2:ps]            # zgornja desna podmatrika koncne matrike
-            SL = self[n // 2:ns, 0:p // 2]            # spodnja leva podmatrika koncne matrike
-            SD = self[n // 2:ns, p // 2:ps]           # spodnja desna podmatrika koncne matrike
+            ZL = self[0:nc, 0:pc]            # zgornja leva podmatrika koncne matrike (podmatrike s sodimi dimenzijami)
+            ZD = self[0:nc, pc:ps]           # zgornja desna podmatrika koncne matrike (podmatrike s sodimi dimenzijami)
+            SL = self[nc:ns, 0:pc]           # spodnja leva podmatrika koncne matrike (podmatrike s sodimi dimenzijami)
+            SD = self[nc:ns, pc:ps]          # spodnja desna podmatrika koncne matrike (podmatrike s sodimi dimenzijami)
 
-            delavna_ZL = work[0:n // 2, 0:p // 2]     # zgornja leva podmatrika delavne matrike
-            delavna_ZD = work[0:n // 2, p // 2:ps]    # zgornja desna podmatrika delavne matrike
-            delavna_SL = work[n // 2:ns, 0:p // 2]    # spodnja leva podmatrika delavne matrike
-            delavna_SD = work[n // 2:ns, p // 2:ps]   # spodnja desna podmatrika delavne matrike
+            delavna_ZL = work[0:nc, 0:pc]    # zgornja leva podmatrika delavne matrike
+            delavna_ZD = work[0:nc, pc:ps]   # zgornja desna podmatrika delavne matrike
+            delavna_SL = work[nc:ns, 0:pc]   # spodnja leva podmatrika delavne matrike
+            delavna_SD = work[nc:ns, pc:ps]  # spodnja desna podmatrika delavne matrike
 
             # Izracun zgornje leve podmatrike produkta (P4 + P5 + P6 - P2)
             # P6 je uporabljena le v zgornji levi podmatriki koncne matrike
@@ -102,12 +102,12 @@ class CheapMatrix(SlowMatrix):
 
             SL += delavna_ZD
 
-            # Izracun spodnje desne podmatrike produkta (P3 + P4)
+            # Izracun spodnje desne podmatrike produkta (P1 + P5 - P3 - P7)
 
             # P7
             A -= C
             E += F
-            SD.multiply(A, E, delavna_SD)
+            SD.multiply(A, E, delavna_SD)  # P7 shranimo neposredno v SD
             SD *= -1
             A += C
             E -= F
@@ -117,6 +117,7 @@ class CheapMatrix(SlowMatrix):
 
             # Ce leva matrika nima sodo stevilo stolpcev, pristejemo se produkte z zadnjim stolpcem
             if m % 2 != 0:
+                # Tu dodamo delavno matriko le zato, da se med izracunom produkta ne ustvari nova.
                 delavna_ZL.multiply(left[0:nc, m - 1], right[m - 1, 0:pc], delavna_ZD)
                 ZL += delavna_ZL
                 delavna_ZL.multiply(left[0:nc, m - 1], right[m - 1, pc:ps], delavna_ZD)
@@ -128,8 +129,10 @@ class CheapMatrix(SlowMatrix):
 
             # Ce desna matrika nima sodega stevila stolpcev, dodamo se te produkte
             if p % 2 != 0:
+                # Tu dodamo delavno matriko le zato, da se med izracunom produkta ne ustvari nova.
                 self[0:n, p - 1].multiply(left, right[0:m, p - 1], work[0:n, p - 1])
 
-            # Ce leva matrika nima sodega stevila vrstic, rocno obravnavamo zadnjo vrstico
+            # Ce leva matrika nima sodega stevila vrstic, izracunamo se produkte z zadnjo vrstico
             if n % 2 != 0:
+                # Tu dodamo delavno matriko le zato, da se med izracunom produkta ne ustvari nova.
                 self[n - 1, 0:ps].multiply(left[n - 1, 0:m], right[0:m, 0:ps], work[n - 1, 0:ps])
