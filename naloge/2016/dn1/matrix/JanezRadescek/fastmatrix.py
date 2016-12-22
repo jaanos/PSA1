@@ -28,16 +28,23 @@ class FastMatrix(SlowMatrix):
         #poskrbimo če stranice matrik niso sode
 
         elif aaa%2 == 1:
-            self[:aaa,:] = self.multiply(left[:aaa,:],right)
-            self[aaa,:] = self.multiply(left[aaa,:],right)
+            #self[:aaa-1,:] = self[:aaa-1,:].multiply(left[:aaa-1,:],right)
+            #self[aaa-1,:] = self[aaa-1,:].multiply(left[aaa-1,:],right)
+
+            self[:aaa-1,:] = left[:aaa-1,:] * right
+            self[aaa-1,:] = left[aaa-1,:] * right
 
         elif bbb%2 == 1:
-            self[:,:bbb] = self.multiply(left, right[:,:bbb])
-            self[bbb,:] = self.multiply(left, right[:,bbb])
+            #self[:,:bbb-1] = self[:,:bbb-1].multiply(left, right[:,:bbb-1])
+            #self[:,bbb-1] = self[:,bbb-1].multiply(left, right[:,bbb-1])
+
+            self[:,:bbb-1] = left * right[:,:bbb-1]
+            self[:,bbb-1] = left * right[:,bbb-1]
+
 
         elif ujemanje%2 == 1:
-            self[:,:] = self.multiply(left[:,:ujemanje], right[:ujemanje,:]) + self.multiply(left[:,ujemanje], right[ujemanje,:])
-
+            #self[:,:] = self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:]) + self.multiply(left[:,ujemanje-1], right[ujemanje-1,:])
+            self[:,:] = left[:,:ujemanje-1] * right[:ujemanje-1,:] + left[:,ujemanje-1] * right[ujemanje-1,:]
 
         #če so sode
 
@@ -53,19 +60,19 @@ class FastMatrix(SlowMatrix):
             C = left[a:,:c]
             D = left[a:,c:]
 
-            E = right[:a,:c]
-            F = right[:a,c:]
-            G = right[a:,:c]
-            H = right[a:,c:]
+            E = right[:c,:b]
+            F = right[:c,b:]
+            G = right[c:,:b]
+            H = right[c:,b:]
 
             #7 množenj
-            p1 = self.multiply(A, F - H)
-            p2 = self.multiply(A+B,H)
-            p3 = self.multiply(C+D,E)
-            p4 = self.multiply(D,G-E)
-            p5 = self.multiply(A+D,E+H)
-            p6 = self.multiply(B-D,G+H)
-            p7 = self.multiply(A-C,E+F)
+            p1 = A * (F - H)
+            p2 = (A + B) * H
+            p3 = (C + D) *E
+            p4 = D * (G - E)
+            p5 = (A + D) * (E + H)
+            p6 = (B - D) * (G + H)
+            p7 = (A - C) * (E + F)
 
             #seštevanje
             self[:a,:b] = p4 + p5 + p6 -p2

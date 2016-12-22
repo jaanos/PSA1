@@ -22,8 +22,8 @@ class SlowMatrix(AbstractMatrix):
         for i in range(self.nrow()):
             for j in range(self.ncol()):
                 ij = 0
-                for k in range(left.ncol):
-                    ij += left[i,k] * right[j,k]
+                for k in range(left.ncol()):
+                    ij += left[i,k] * right[k,j]
                 self[i,j] = ij
 
 
