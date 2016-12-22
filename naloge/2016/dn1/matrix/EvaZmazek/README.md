@@ -16,10 +16,10 @@ in istem stolpcu kot izbran stolpec druge for zanke.
 Vrnemo matriko C.
 
 ###Časovna zahtevnost algoritma:
-Če je matrika A velikosti mxn in matrika B velikosti nxp, potem je časovna zahtevnost algoritma enaka O(m*n*p).
+Če je matrika A velikosti mxn in matrika B velikosti nxp, potem je časovna zahtevnost algoritma enaka O(mnp).
 To se vidi direktno iz algoritma, ker gremo čez m števil v prvi zanki, znotraj katere gremo čez p števil, znotraj te pa še čez n števil.
 Z drugimi besedami, za vsak element v novi matriki C, velikosti mxp, moramo skalarno pomnožiti dva vektorja dolžine n, kar nam vzame O(n) časa.
-Torej za matriko C moramo izračunati m * n skalarnih produktov, iz tega pa sledi, da je časovna zahtevnost metode SlowMatrix O(mnp).
+Torej za matriko C moramo izračunati mn skalarnih produktov, iz tega pa sledi, da je časovna zahtevnost metode SlowMatrix O(mnp).
 
 ###Prostorska zahtevnost algoritma:
 Od dodatnega prostora porabimo prostor za shranjevanje vrednosti "vrednost", ki jo skozi vse for zanke le spreminjamo in ne ustvarjamo vedno nove,
@@ -71,16 +71,16 @@ Velikost kvadratnih matrik A in B | čas izračuna
 ###Opis algorima FastMatrix:
 V metodi FastMatrix si najprej sharnimo velikosti matrik A in B, ki jih dobimo s pomočjo ukazov *".ncol"* in *".nrow"*, nato pa pogledamo, ali je katera od dimenzij enaka 1.
 Če je, matriki A in B pomnožimo med seboj tako kot pri metodi *SlowMatrix* (torej po naivni metodi), sicer se pa osredotočimo na primer, ko so
-vse tri dimenzije sode. Takrat lahko namreč na matrikah A in B uporabimo Strassenov algoritem, kjer vsako od matrik A in b razdelimo na štiri dele,
+vse tri dimenzije sode. Takrat lahko namreč na matrikah A in B uporabimo Strassenov algoritem, kjer vsako od matrik A in b razdelimo na štiri dele enakih velikosti,
 nato pa s pomočjo matrik P1,P2,P3,P4,P5,P6,P7 rekurzivno izračunamo produkt. Posebnost tega algoritma je, da namesto osem množenj uporabimo sedem.
 
 V primeru, ko število vrstic matrike A ni sodo, torej je liho, zadnjo vrstico obravnavamo posebaj. Torej matriko A brez zadnje vrstice pomnožimo z matriko B,
 njen prosukt pa shranimo v končni matriki v del matrike brez zadnje vrstice. Zadnjo vrstico končne matrike pa dobimo tako, da zadnjo vrstico matrike A pomnožimo
-z matriko B. V primeru, ko je število stolpcev v matriki B liho, zadnji stolpec matrike B obravnavamo posebej. Torej matriko A pomnožimo najprej z matriko B brez
-zadnjega stolpca in njun prosukt shranimo v končni matriki brez zadnjega stolpca. Zadnji stolpec končne matrike izračunamo s produktom matrike A in zadnjim
-stolpcem matrike B. v primeru, ko pa imamo število stolpcev matrike A, torej tudi število vrstic matrike B, liho, končno matriko produkta dobimo kot vsoto
+z matriko B. V primeru, ko je število stolpcev v matriki B liho, zadnji stolpec matrike B obravnavamo posebaj. Torej matriko A pomnožimo najprej z matriko B brez
+zadnjega stolpca in njun produkt shranimo v končni matriki brez zadnjega stolpca. Zadnji stolpec končne matrike izračunamo s produktom matrike A in zadnjim
+stolpcem matrike B. V primeru, ko je število stolpcev matrike A, torej tudi število vrstic matrike B, liho, končno matriko produkta dobimo kot vsoto
 produkta matrike A brez zadnjega stolpca in matrike B brez zadnje vrstice ter produkta zadnjega stolpca matrike A in zadnje vrstice matrike B.
-Vrnemo produkt C
+Vrnemo produkt C.
 
 ###Časovna zahtevnost algoritma:
 Pri študiju časovne zahtevnosti bomo vzeli najslabši možen primer, torej primer, ko so vse tri dimenzije liha števila.
@@ -123,7 +123,7 @@ Iz tega lahko do konca izpeljemo našo formulo:
 (natančnejša izpeljava v komentarjih v kodi)
 
 ###Podatkovna zahtevnost algoritma:
-Tudi pri študijo podatkovne zahtevnosti bomo vzeli najslabši možni primer, torej primer, ko so vse tri dimenzije liha števila. Opazimo, da pri "popravljanju" matrik
+Tudi pri študiju podatkovne zahtevnosti bomo vzeli najslabši možni primer, torej primer, ko so vse tri dimenzije liha števila. Opazimo, da pri "popravljanju" matrik
 porabimo konstantno dodatno prostora. Tudi za shranjevanje dimenzij porabimo konstantno dodatnega prostora. Za zapis 'četrtinskih delov' matrik A in B porabimo
 O(n//2*k//2+k//2*m//2)=O(n*k+m*k)=O(k*(m+n)) dodatnega prostora. Matrike P1,P2,P3,P4,P5,P6,P7 so velikosti n//2*m//2, za zapis vsake od njih porabimo O(n/2*m/2)=O(n*m)
 dodatnega prostora, zaradi rekurzivnega klica pa v tem koraku porabimo še 7*P(n//2,k//2,m//2).
@@ -190,7 +190,8 @@ Velikost kvadratnih matrik A in B | čas izračuna
 ###Opis algoritma SlowMatrix:
 Metoda CheapMatrix deluje podobno kot metoda FastMatrix, razlikujeta se le v predelu, ko so vse dimenzije (torej število vrstic matrike A,
 število stolpcev matrike A, ki je enako številu vrstic matrike B in število stolpcev matrike B) sode. Prilagajanje matrik do matrik
-sodih dimenzij ostaja enako.
+je napisano s for zankami po istem principu kot metoda SlowMatrix. V tem delu množenje napišemo raje v tej obliki, saj bi se ob klicu
+"*.multiply(...)*" ustvarila nova delovna matrika, kar bi pa porablo več prostora.
 
 Algoritem v predelu računanja matrik sodih dimenzij uporablja dodatno delovno matriko, ki je enakih dimenzij kot končna matrika, torej n//2xm//2.
 Ta matrika je tudi edini dodaten prostor, ki ga mnozenje matrik dodatno porabi poleg vhodnih matrik A in B ter končne matrike C.
@@ -332,9 +333,7 @@ S to oznako dobimo sedaj, da je prostorska zahtevnost metode FastMatrix enaka:
 ```
 P(M) = O(1) + 7*P(M//2)
 ```
-Po krovnem izreku je to torej spet enako:
-
-**P(M) = O(M^(log_{2}(7)))**
+torej konstantno veliko prostora.
 
 (natančnejša izpeljava v komentarjih v kodi)
 
@@ -376,7 +375,50 @@ Velikost kvadratnih matrik A in B | čas izračuna
     450x450 * 450x450 | 741.824s
     500x500 * 500x500 | 1346.555s
 
-vzorec
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
 
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
+
+###Primerjava časov med algoritmi:
+
+Velikost kvadratnih matrik A in B |  SlowMatrix  |  FastMatrix |   CheapMatrix
+----------------------------------|--------------|-------------|-----------------
+    1x1 * 1x1 | 0.000s | 0.000s | 0.000s
+    5x5 * 5x5 | 0.001s | 0.005s | 0.003s
+    10x10 * 10x10 | 0.005s | 0.036s | 0.024s
+    15x15 * 15x15 | 0.012s | 0.059s | 0.051s
+    20x20 * 20x20 | 0.024s | 0.276s | 0.189s
+    25x25 * 25x25 | 0.052s | 0.375s | 0.293s
+    30x30 * 30x30 | 0.087s | 0.439s | 0.347s
+    35x35 * 35x35 | 0.152s | 1.610s | 1.062s
+    40x40 * 40x40 | 0.259s | 1.732s | 1.244s
+    45x45 * 45x45 | 0.429s | 2.209s | 1.386s
+    50x50 * 50x50 | 0.510s | 2.597s | 2.012s
+    55x55 * 55x55 | 0.611s | 2.552s | 2.167s
+    60x60 * 60x60 | 0.948s | 2.832s | 2.534s
+    65x65 * 65x65 | 1.176s | 10.459s | 6.683s
+    70x70 * 70x70 | 1.405s | 10.772s | 7.215s
+    75x75 * 75x75 | 1.759s | 10.876s | 7.553s
+    80x80 * 80x80 | 2.257s | 12.187s | 8.265s
+    85x85 * 85x85 | 2.600s | 13.665s | 8.726s
+    90x90 * 90x90 | 3.295s | 14.492s | 8.831s
+    95x95 * 95x95 | 4.185s | 14.624s | 9.593s
+    100x100 * 100x100 | 4.411s | 17.824s | 14.490s
+    125x125 * 125x125 | 9.514s | 23.127s | 18.361s
+    150x150 * 150x150 | 16.268s | 81.869s | 52.002s
+    175x175 * 175x175 | 28.596s | 84.372s | 60.458s
+    200x200 * 200x200 | 46.541s | 119.964s | 89.647s
+    225x225 * 225x225 | 71.574s | 140.859s | 102.311s
+    250x250 * 250x250 | 105.487s | 147.558s | 113.646s
+    275x275 * 275x275 | 149.519s | 529.036s | 328.812s
+    300x300 * 300x300 | 207.473s | 591.306s | 348.577s
+    350x350 * 350x350 | 359.316s | 652.103s | 416.337s
+    400x400 * 400x400 | 596.140s | 790.870s | 660.042s
+    450x450 * 450x450 | 944.968s | 1109.650s | 741.824s
+    500x500 * 500x500 | 1392.869s | 1140.776s | 1346.555s
+
+
+
+
+
+
+
+
