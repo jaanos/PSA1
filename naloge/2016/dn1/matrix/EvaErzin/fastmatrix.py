@@ -44,23 +44,23 @@ class FastMatrix(SlowMatrix):
                      right[k1: k2, 0: m1], \
                      right[k1: k2, m1: m2]
 
-        # Za vsakega od sledečih elementov opravimo eno ali dve seštevanji ter izvedemo en klic rekurzije na matrikah velikosti n/2 x k/2 in k/2 x m/2
-        # Ustvarimo sedem novih matrik dimenzij n/2 x m/2 - za to porabimo 7*O(n/2*m/2) prostora
-        # Ko dve matriki seštevamo ali odštevamo nastane nova matrika dimenzije n/2 x k/2 oziroma k/2 x m/2. To naredimo 10-krat in torej porabimo
-        # 5*O(n/2*k/2) in 5*O(k/2*m/2) časa in prostora
-        # Za vsak rekurzivni klic porabimo še S(n/2, k/2, m/2) prostora in T(n/2, k/2, m/2) časa
-        # Torej skupaj:
-        # Prostorska zahtevnost: 7* S(n/2, k/2, m/2) + 7*O(n/2*m/2) + 5*O(n/2*k/2) + 5*O(k/2*m/2)
-        # Časovna zahtevnost: 7* T(n/2, k/2, m/2) + 5*O(n/2*k/2) + 5*O(k/2*m/2)
-        P1 = A * (F - H)
-        P2 = (A + B) * H
-        P3 = (C + D) * E
-        P4 = D * (G - E)
-        P5 = (A + D) * (E + H)
-        P6 = (B - D) * (G + H)
-        P7 = (A - C) * (E + F)
-
         if k0 == 0:
+            # Za vsakega od sledečih elementov opravimo eno ali dve seštevanji ter izvedemo en klic rekurzije na matrikah velikosti n/2 x k/2 in k/2 x m/2
+            # Ustvarimo sedem novih matrik dimenzij n/2 x m/2 - za to porabimo 7*O(n/2*m/2) prostora
+            # Ko dve matriki seštevamo ali odštevamo nastane nova matrika dimenzije n/2 x k/2 oziroma k/2 x m/2. To naredimo 10-krat in torej porabimo
+            # 5*O(n/2*k/2) in 5*O(k/2*m/2) časa in prostora
+            # Za vsak rekurzivni klic porabimo še S(n/2, k/2, m/2) prostora in T(n/2, k/2, m/2) časa
+            # Torej skupaj:
+            # Prostorska zahtevnost: 7* S(n/2, k/2, m/2) + 7*O(n/2*m/2) + 5*O(n/2*k/2) + 5*O(k/2*m/2)
+            # Časovna zahtevnost: 7* T(n/2, k/2, m/2) + 5*O(n/2*k/2) + 5*O(k/2*m/2)
+
+            P1 = A * (F - H)
+            P2 = (A + B) * H
+            P3 = (C + D) * E
+            P4 = D * (G - E)
+            P5 = (A + D) * (E + H)
+            P6 = (B - D) * (G + H)
+            P7 = (A - C) * (E + F)
 
             # Naredimo 8 operacij seštevanja oziroma odštevanja in rezultate prepišemo v ciljno matriko
             # Prostorska zahtevonst:  8*O(n/2*m/2) (pri vsaki operaciji se ustvari nova matrika)
