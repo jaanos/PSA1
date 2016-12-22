@@ -8,7 +8,7 @@
 
     V razredu `Slowmatrix` je implementirano naivno množenje matrik, ki matrike zmnoži po šolsko, torej *j*-ti element 
     ciljne matrike v *i*-t i vrstici je skalarni produkt *i*-te vrstice prve in *j*-tega stolpca druge matrike. 
-    ~~V ta namen si v razredu SlowMatrix definiramo pomožno statično metodo dot_product, ki sprejme dva vektorja (matriko z eno samo vrstico in matriko z enim samim stolpcem), ter vrne vrednost njunega skalarnega produkta.~~ Ker ta način vsebuje dodatno kopiranje podmatrik je veliko počasnejši, zato skaralno množenje izpeljemo kar v še eni zanki.
+    ~~V ta namen si v razredu SlowMatrix definiramo pomožno statično metodo dot_product, ki sprejme dva vektorja (matriko z eno samo vrstico in matriko z enim samim stolpcem), ter vrne vrednost njunega skalarnega produkta.~~ Ker ta način vsebuje dodatno kopiranje podmatrik je veliko počasnejši, zato skalarno namesto v posebni metodi s opiranjem podmatrik izpeljemo kar v še eni zanki.
 
 2. Strassenovo množenje
 
@@ -24,9 +24,9 @@
     
     Postopamo podobno kot pri standardni implementaciji Strassenovega algoritma, la da moramo biti pri vseh operacija pazljivi in namesto ustvarjanja novih matrik uporabljati spomin, ki nam je na voljo (leva(`A`) in desna(`B`) matrika, ki ju moramo po končanem opravljanju vrniti nazaj na prvotno stanje, matrika rezultata(`C`), ki mora na koncu vsebovati rezultat in delovna matrika(`D`), ki je enakih dimenzij kot `C`, o njej pa nimamo nobenih pogojev) in zato vse operacije izvajamo *na mestu*. 
     
-    Tako za računanje produktov vsto bločnih matrik, kjer smo lahko pri `FastMatrix` uporabljali normalno seštevanje najprej *popravimo* osnovno matriko, opravimo množenje rekurzivno, kjer mu za delovno matriko podamo primerno bločno matriko v `D` nato pa prvotno matriko popravimo nazaj (odštejemo/prištejemo kar smo prej prišteli/odšteli). V svoji implementaciji sem za delovno matriko v rekurziji vseskozi uporabljal `D22` saj sem tako imel proste roke za shranjevanje ostalih vmesnih matrik na ostala mesta v delovni matriki.              
+    Tako za računanje produktov vsoto bločnih matrik, kjer smo lahko pri `FastMatrix` uporabljali normalno seštevanje najprej *popravimo* osnovno matriko, opravimo množenje rekurzivno, kjer mu za delovno matriko podamo primerno bločno matriko v `D` nato pa prvotno matriko popravimo nazaj (odštejemo/prištejemo kar smo prej prišteli/odšteli). V svoji implementaciji sem za delovno matriko v rekurziji vseskozi uporabljal `D22` saj sem tako imel proste roke za shranjevanje ostalih vmesnih matrik na ostala mesta v delovni matriki.              
     
-    Ko smo izračunali vseh 7 rekurzivnih množenj, ki si jih sranjujemo tako v `C` kot v `D` je potrebno vse te bločne matrike še zgolj sestaviti v `C` na pravilen način.
+    Ko smo izračunali vseh 7 rekurzivnih množenj, ki si jih shranjujemo tako v `C` kot v `D`, je potrebno vse te bločne matrike še zgolj sestaviti v `C` na pravilen način.
     
     Zadnji del je spet podoben delu v `FastMatrix`, la da je potrebno zopet paziti da na ustvarjamo novih matrik. Tako zopet sledimo isti ideji kot prej, na željeni matriki množimo levo in desno in to matriko. Za razliko od prej si je potrebno nekajkrat pred množenjem *pospraviti* ciljno matriko, čemur bi se sicer lahko izognili, če bi ob vsakem doprištevanju prepisali pravi del ciljne matrike, a se mi zdi da je zaradi jasnosti, za katero bločno matriko rezultata gre vredno žrtvovati nekaj dodatnih operacij.
       
@@ -70,7 +70,7 @@
 
     Sledi 7 rekurzivnih množenj na matrikah pol manjših velikosti (`n × m` × `m × k` matrike), kar lahko na podlagi krovnega izreka zapišemo kot `7T(L/2)`. Potem pa je potrebno dobljene produkte še sestaviti nazaj v skupno matriko, kar vsebuje 7 seštevanj `n × k` matrik in kreiranje treh novih `n × k` matrik, kar lahko spet omejimo z `O(l²) = O(L²)`
 
-    Ob predpostavki, da imamo matrike sodih dimenzij tako velja oblika krovnega izreka: `T(L) = 7×T(L/2) + O(L²)`. Tako imamo verzijo krovnega izreka za `log₂7 > 2` in torej velja ocena časovne zahtevnosti `O(n^(log₂7))`.
+    Ob predpostavki, da imamo matrike sodih dimenzij tako velja oblika krovnega izreka: `T(L) = 7×T(L/2) + O(L²)`. Tako imamo verzijo krovnega izreka za `log₂7 > 2` in torej velja ocena časovne zahtevnosti `O(L^(log₂7))`.
 
     Da bo časovna ocena res veljala, se je potrebno prepričati, da tudi obravnavanje dodatne vrstice (preveč) ne poveča časovne zahtevnosti, da še vedno ustreza izpeljavi časovne zahtevnosti s pomočjo krovnega izreka je dovolj, če pokažamo, da ima časovno zahtevnost `O(L²)`.
 
@@ -92,9 +92,9 @@
     
     Časovna zahtevnost je tako enaka kot pri standardnem Strassenovem algoritmu (`O(n^(log₂7))`), prostorska pa je mnogo manjšana, saj porabi zgolj prostor za vzdrževanja sklada pri rekurziji.
     
-### Primerjava dejanskih časov izvajanja
+## Primerjava dejanskih časov izvajanja
 
-#### Direktna primerjava časov
+### Direktna primerjava časov
 
 | Algoritem    |   16   |   32   |   64   |   128   |   256   |    512   |
 |:------------:|:------:|:------:|:------:|:-------:|:-------:|:--------:|
@@ -102,7 +102,7 @@
 | FastMatrix   | 0.22 s | 1.45 s | 10.2 s |  70.3 s | 496.1 s | 3471.6 s |
 | CheapMatrix  | 0.16 s | 1.17 s | 7.86 s |  53.6 s | 374.1 s | 2654.6 s |
 
-#### Primerjava dvojiškega logaritma razmerja zaporednih časov
+### Primerjava dvojiškega logaritma razmerja zaporednih časov
 
 Z logaritiranjem razmerja zaporednih časov in dejstva, da velikosti matrik, na katerih testiramo algoritem naraščajo s faktorjem 2 lahko hitro pridemo do eksponenta pri časovni zahtevnosti.
 
@@ -112,7 +112,7 @@ Z logaritiranjem razmerja zaporednih časov in dejstva, da velikosti matrik, na 
 | FastMatrix   | 2.72 | 2.81 | 2.78 | 2.82 | 2.81 |
 | CheapMatrix  | 2.87 | 2.75 | 2.77 | 2.80 | 2.83 |  
 
-#### Graf
+### Graf
 
 ![Prikaz časov][plot]
 
@@ -121,8 +121,10 @@ Z logaritiranjem razmerja zaporednih časov in dejstva, da velikosti matrik, na 
 Na grafu so prikazani časi izvajanja posamezni algoritmov. Ker sta obe osi logaritemski si lahko že s preprosto premico lažje predstavljamo red časovne zahtevnosti algoritma. Točke predstavljajo dejanske čase, medtem, ko so črtkane črte aproksimacije le teh z premicami po metodi najboljših kvadratov. Koeficienti premic so prikazani ob premicah. Vidimo, da sta koeficienta za obe implementaciji Strassenovega algoritma zelo natančna, medtem ko koeficient za naivni algoritem nekoliko odstopa.
 
 
-#### Komentar na rezultate
+### Komentar na rezultate
 
 Naivni algoritem za množenje matrik se obnaša dokaj pričakovano, saj narašča *približno* s pravilnim eksponentom (eksponen je nekoliko večji), prav tako pa zaradi dokaj majhne natančnosti lahko pride do večjih napak pri izračunu, a vseeno sledi pravilnem trendu.
 
 Obe implementaciji Strassenovega algoritma imata veliko bolj konstanten eksponent, ki je zelo blizu pravilnemu (2.8). Pomembno je omeniti predvsem nepričakovano dejstvo, da je `CheapMatrix` opazno hitrejši od `FastMatrix`. Natančnejša analiza pokaže, da je eden izmed poglavitnih vzrokov za to predvsem priprava podmatrik, ki se uporabljajo v metodi multiply, ki opravi sicer dodatne klice `__init__` in s tem porabi dodaten čas, a se mi zdi, da je za samo implementacijo in lažje branje kode bolje, da kljub *overheadu* teh dodatnih klicev uporabljamo dodatne matrike, saj asimptotska hitrost ostane enaka, algoritem pa je bolj razumljiv. 
+
+Filip Koprivec
