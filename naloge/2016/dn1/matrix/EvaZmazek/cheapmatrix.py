@@ -231,8 +231,7 @@ class CheapMatrix(SlowMatrix):
             for i in range(stVrsticLeveMatrike):
                 for j in range(stStolpcevDesneMatrike):
                     self[i, j] += (left[i, stStolpcevLeveMatrike - 1] * right[stStolpcevLeveMatrike - 1, j])
-            #work.multiply(left[:,stStolpcevLeveMatrike - 1],right[stStolpcevLeveMatrike - 1,:],self) #ujame se v prvi if, v algoritmu, zato self ni problem in je to ok
-            #self[:, :] += work
+            #self[:, :] += left[:,stStolpcevLeveMatrike - 1] *right[stStolpcevLeveMatrike - 1,:] #ujame se v prvi if, v algoritmu, zato self ni problem in je to ok
             return self
 
         # v tem koraku porabimo O(m*n) dodatnega časa

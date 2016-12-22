@@ -106,7 +106,7 @@ class FastMatrix(SlowMatrix):
             self[stVrsticLeveMatrike-1:stVrsticLeveMatrike, : ] = left[stVrsticLeveMatrike-1:stVrsticLeveMatrike, :] * right
             return self
 
-        #v tem koraku porabimo O(k*m) dodatnega časa
+        #v tem koraku porabimo O(k*m) dodatnega (dodatno še prostor, porabljen v drugih if zankah) časa
         #v tem koraku porabimo O(1) dodatnega prostora
 
         if stStolpcevDesneMatrike % 2 == 1:
@@ -114,14 +114,14 @@ class FastMatrix(SlowMatrix):
             self[:, stStolpcevDesneMatrike-1] = left * right[:, stStolpcevDesneMatrike-1]
             return self
 
-        #v tem koraku porabimo O(n*k) dodatnega časa
+        #v tem koraku porabimo O(n*k) dodatnega (dodatno še prostor, porabljen v drugih if zankah) časa
         #v tem koraku porabimo O(1) dodatnega prostora
 
         else:
             self[:,:] = left[:, 0:stStolpcevLeveMatrike-1] * right[0:stStolpcevLeveMatrike-1, :] + left[:, stStolpcevLeveMatrike-1] * right[stStolpcevLeveMatrike-1, :]
             return self
 
-        #v tem koraku porabimo O(m*n) dodatnega časa
+        #v tem koraku porabimo O(m*n) dodatnega (dodatno še prostor, porabljen v drugih if zankah) časa
         #v tem koraku ne porabimo nobenega dodatnega prostora
 
         # Sklep:

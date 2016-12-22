@@ -285,6 +285,9 @@ moramo še matriki P4 in P6 te odšteti matriko P2. V ta namen si v D3 shranimo 
 ```
 vrednosti S1 mora biti enaka P5 + P4 + P6 - P2, zato S1 najprej prištejemo D2 (P4) in D3 (P6) ter odštejemo D1 (P2).
 
+**Komentar:** Na začetku algoritma v primeru sodih dimenzij, si označimo "četrtinske" dele vseh matrik. To nam sicer vzame nekaj
+dodatnega prostora in tudi časa, vendar je zaradi tega koda dosti bolj pregledna.
+
 ###Časovna zahtevnost algoritma:
 Pri študiju časovne zahtevnosti bomo vzeli najslabši možen primer, torej primer, ko so vse tri dimenzije liha števila.
 
@@ -298,17 +301,15 @@ Skupna časovna zahtevnost je torej
 T(n,k,m) = O(1) + 7*T(n//2,k//2,m//2) + O(k//2 * m//2) + O((n+m)//2 * k//2) +
            O(n//2 * k//2) + O((n+m)//2 * k//2) + O(n//2 * m//2) + O(n*k) + O(k*m) + O(m*n) + O(n//2 * k//2) +
            O(n//2 * m//2) + O(k//2 * m//2) + O(n//2 * m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2) =
-         = O(1) + 7*T(n//2,k//2,m//2) + 5*O((n+m)//2 * k//2)+ 4*O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n) =
-         = O(1) + 7*T(n//2,k//2,m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n) =
-         = ...
+         = O(1) + 7*T(n//2,k//2,m//2) + 5*O((n+m)//2 * k//2)+ 4*O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n)
+         = O(1) + 7*T(n//2,k//2,m//2) + O((n+m)//2 * k//2) + O(n//2 * m//2)+ O(n*k) + O(k*m) + O(m*n)
 ```
 V naslednjem koraku definiramo novo oznako *M=max(n,k,m)*.
 S to oznako dobimo sedaj, da je časovna zahtevnost metode CheapMatrix enaka:
 ```
-T(M) = O(3*M^2) + O(M^2) + 7*T(M//2) =
-     = 3*O(M^2) + O(M^2) + 7*T(M//2) =
-     = O(M^2) + 7*T(M//2) =
-     = 7*T(M//2) + O(M^2)
+T(M) = O(1) + 7*T(M//2) + O(M^2) + O(M^2) + O(M^2) + O(M^2) + O(M^2) =
+     = O(1) + 7*T(M//2) + O(M^2) =
+     = ...
 ```
 
 Po Krovnem izreku sedaj velja:
@@ -319,23 +320,17 @@ Po Krovnem izreku sedaj velja:
 
 ###Prostorska zahtevnost algoritma:
 Tudi pri študijo podatkovne zahtevnosti bomo vzeli najslabši možni primer, torej primer, ko so vse tri dimenzije liha števila. Opazimo, da pri "popravljanju" matrik
-porabimo konstantno dodatno prostora. Tudi za shranjevanje dimenzij porabimo konstantno dodatnega prostora. Za zapis 'četrtinskih delov' matrik A in B porabimo
-O(n//2*k//2+k//2*m//2)=O(n*k+m*k)=O(k*(m+n)) dodatnega prostora. Matrike P1,P2,P3,P4,P5,P6,P7 so velikosti n//2*m//2, za zapis vsake od njih porabimo O(n/2*m/2)=O(n*m)
-dodatnega prostora, zaradi rekurzivnega klica pa v tem koraku porabimo še 7*P(n//2,k//2,m//2).
-Skupna podatkovna zahtevnost je torej:
+porabimo konstantno dodatno prostora. Tudi za shranjevanje dimenzij porabimo konstantno dodatnega prostora. Za oznake 'četrtinskih delov' matrik A in B porabimo
+O(1) dodatnega prostora. V "glavnem delu algoritma porabimo 7*P(n//2,k//2,m//2), za "popravljanje dimenzij" pa O(1) dodatnega prostora.
+Skupna podatkovna zahtevnost (zraven delovne matrike) je torej:
 ```
-P(n,k,m) = O(1) + O(1) + O(k*(n+m)) + O(n*m) + 7*P(n//2,k//2,m//2)=
-         = O(1) + O(k*n + k*m + n*m) + 7*P(n//2,k//2,m//2)=
-         = O(k*n + k*m + n*m) + 7*P(n//2, k//2, m//2)=...
+P(n,k,m) = 7*P(n//2,k//2,m//2) + O(1)
 ```
 
 Spet si definiramo oznako *M=max(n,k,m)*.
 S to oznako dobimo sedaj, da je prostorska zahtevnost metode FastMatrix enaka:
 ```
-P(M) = O(3*M^2) + 7*P(M//2) =
-     = 3*O(M^2) + 7*P(M//2) =
-     = O(M^2) + 7*P(M//2) =
-     = 7*P(M//2) + O(M^2)
+P(M) = O(1) + 7*P(M//2)
 ```
 Po krovnem izreku je to torej spet enako:
 
@@ -379,7 +374,7 @@ Velikost kvadratnih matrik A in B | čas izračuna
     350x350 * 350x350 | 416.337s
     400x400 * 400x400 | 660.042s
     450x450 * 450x450 | 741.824s
-    i500x500 * 500x500 | 1392.869s
+    500x500 * 500x500 | 1346.555s
 
 vzorec
 Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
