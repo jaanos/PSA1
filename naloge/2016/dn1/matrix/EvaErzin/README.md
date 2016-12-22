@@ -82,6 +82,10 @@ Primerjava algoritmov za množenje pravokotnih matrik ni toliko smiselna, saj la
 
 Kot je razvidno iz spodnjega grafa in tabele, je metoda implementirana v razredu SlowMatrix za matrike takih dimenzij najhitrejša. Ostali dve sicer asimptotsko naraščata počasneje, vendar to postane uporabno šele pri matrikah veliko večjih dimenzij.
 
+**Graf časov izvajanja algoritmov**
+
+**Tabela časov izvajanja algoritmov**
+
 |dimenzija|SlowMatrix|FastMatrix|CheapMatrix|
 |---|---|---|---|
 |1x1|0.000s|0.000s|0.000s|
