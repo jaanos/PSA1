@@ -19,7 +19,9 @@ class SlowMatrix(AbstractMatrix):
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
 
-        #raise NotImplementedError("Naredi sam!")
+        ## Časovna zahtevnost: O(n*m*k)
+        ## Prostorska zahtevnost: O(1)
+
 
         for i in range(left.nrow()):                # Gremo po vrsticah matrike left.
             for k in range(right.ncol()):           # Gremo po stolpcih matrike right

@@ -20,17 +20,38 @@ je `O(n^3)` (`n^2` elementov in `n množenj + n seštevanj = 2n => O(n)` nam da 
 množenj + m seštevanj => O(m)`, iz česar pa dobimo `O(nmk)`). Algoritem je časovno zelo zahteven za matrike
 velikih dimenzij.
 
-* __Prostorska zahtevnost__
+* __Prostorska zahtevnost__:
 Poleg vhodnih podatkov (torej matrike left in matrike right) porabimo konstanten prostor s številom `l`, kateremu
 v vsaki tretji for zanki v algoritmu prištevamo produkte, nato pa število znova vrnemo na nič. Število je vedno
 samo eno, zato je naša prostorska zahtevnost `O(1)`, ne glede na velikost vhodnih matrik.
 
 
-### Primerjava dejanskih časovi pri vhodih različnih velikosti
+### Primerjava dejanskih časov pri vhodih različnih velikosti
+
+
+Pri primerjavi časov dejanski dimenzij nas zanimajo primeri, ko so vhodi sodi in lihi (za
+nadaljno primerjavo s `FastMatrix` in `CheapMatrix`), 
+ter kako se čas spreminja na podlagi velikosti dimenzij. 
+
+Tabela predstavlja izračunano povprečje 10ih poskusov za določene dimenzije. Koda za 
+izračune se nahaja v mapi `test.SaraKorat.casovna_zahtevnost`.
+
+n|m|k|povprečje
+---|---|---|---
+10|10|10|0.002727
+10|11|10|0.003522
+11|11|10|0.003561
+10|11|11|0.003613
+11|11|11|0.003698
+50|50|50|0.415034
+51|51|51|0.434669
+100|100|100|3.913663
+101|101|101|4.077199
+200|200|200|41.613351
+201|201|201|42.350267
+500|500|500|1218.236100
 
 --------------
-
-
 
 
 ## FastMatrix
@@ -204,7 +225,7 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
 ### Analiza zahtevnosti
 
 * __Časovna zahtevnost__ `T(n,m,k)` Strassenovega algoritma je manjša kot pri navadnem množenju matrik, 
-    vendar sem nam ga splača uporabljati le pri večjih matrikah. Pri izračunu si časovne
+    vendar se nam ga splača uporabljati le pri večjih matrikah. Pri izračunu časovne
     zahtevnosti si pomagamo s krovnim izrekom. 
     * Definiranje novih spremenljivk (`N`, `M`, `K`, `N2`,`M2`, `K2`) nam vzame konstanten čas
     `O(1)`.
@@ -225,54 +246,105 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
         P7 : A - C => O(N*M) , E + F => O(M*K)
         ```
 
-        Za seštevanja torej porabimo `O(M*K)`, `O(N*M)` ali `O(N*M) + O(M*K)`.
+        Za seštevanja torej porabimo `O(M*K)`, `O(N*M)` ali `O(N*M) + O(M*K)`, torej `5*O(N*M) + 5*O(M*K)`.
         Skupno je časovna zahtevnost seštevanj enaka `O(L*M)`, pri čemer smo za
         `L` vzeli maksimum od `N` in `K`: `L = max{K, N}`.
         
-        Za vsak __produkt__ porabimo `T(N,M,K)` (po krovnem izreku), torej `7*T(N,M,K)`. 
+        Za vsak __produkt__ porabimo `T(N,M,K)` (po krovnem izreku), torej skupaj `7*T(N,M,K)`. 
      * V primeru, ko so __vse dimenzije sode__, s seštevanjem matrik `Pi` 
-        za `i = 1, ..., 7` dobimo časovno zahtevnost `O(N*K)`:
+        za `i = 1, ..., 7` dobimo časovno zahtevnost `8*O(N*K)` oz. `O(N*K)`:
             
         ```
-            C1 : P4 + P5 + P6 - P2 => O(N*K)
+            C1 : P4 + P5 + P6 - P2 => 3*O(N*K)
             C2 : P1 + P2 => O(N*K)
             C3 : P3 + P4 => O(N*K)
-            C4 : P1 + P5 - P3 - P7 => O(N*K)
+            C4 : P1 + P5 - P3 - P7 => 3*O(N*K)
         ```
          
-         Skupni čas za matriki sodih dimenzij je 
+         Vzamemo maksimalno dimnezijo `s = max{n, m, k}` in s tem dobimo največjo časovno
+         zahtevnost, zanemarimo konstante. Pri izračunu upoštevamo krovni izrek.
+         Skupni čas za matriki sodih dimenzij je :
+         
          ```
          T(n, m, k) = O(1) + O(L*M) + 7*T(N, M, K) + O(N*K) 
-         T(n, m, k) = O(L*M) + 7*T(N, M, K)
-         ```
-        
-          Vzamemo maksimalno dimnezijo `s = max{n, m, k}` in upoštevamo krovni izrek:
+         T(n, m, k) = O((s//2)*(s//2)) + 7*T(N, M, K)
+         
+         s = max{n,m,k}, s//2 = max{N,M,K}
+         
+         T(s) = 7*T(s//2) + O((s//2)^2) = 7*T(s//2) + O(s^2)
+         2 < log_2 (7) => T(s) = O(s^(log_2 (7))
           ```
-           T(s) = 7*T(s//2) + O((s//2)^2) = 7*T(s//2) + O(s^2)
-           2 < log_2 (7) => T(s) = O(s^(log_2 (7))
-          ```
         
-      * V (časovno najzahtevnejšem) primeru - ko so vse dimenzije lihe, porabimo
+      * V (časovno najzahtevnejšem) primeru, ko so vse dimenzije lihe, porabimo
         še dodaten čas za računanje za:
         
-        * množenje in prištevanje k novi matriki: `O(n*k)` množenj +
+        * _množenje in prištevanje k novi matriki_: `O(n*k)` množenj +
         `O(n*k)` prištevanj `=> O(n*k)`
-        * računanje in dodajanje stolpca: `O(n*m)`
-        * računanje in dodajanje vrstice: `O(m*k)`
+        * _računanje in dodajanje stolpca_: `O(n*m)`
+        * _računanje in dodajanje vrstice_: `O(m*k)`
         
-        Skupni seštevek časa dobimo z upoštevanjem krovnega izreka:
+        Skupni seštevek časa dobimo z upoštevanjem krovnega izreka (kot pri primeru samih lihih dimenzij):
            
          ```
            T(n, m, k) = O(1) + O(L*M) + 7*T(N, M, K) + O(N*K) + O(n*k) + O(n*m) + O(m*k)
-           T(n, m, k) = 5*O(s^2) + 7*T(s//2) = O(s^2) + 7*T(s//2)
+           
+           s = max{n,m,k}, s//2 = max{N,M,K}
+           
+           T(n, m, k) = 4*O(s^2) + 7*T(s//2) = O(s^2) + 7*T(s//2)
            2 < log_2 (7) => 
            T(s) = O(s^(log_2 (7))
          ```
 
 
-* __Prostorska zahtevnost__
+* __Prostorska zahtevnost__ je večja kot pri navadnem množenju matrik. 
+    * Definiranje novih spremenljivk (`N`, `M`, `K`, `N2`,`M2`, `K2`) nam vzame konstanten 
+    prostor `O(1)`. 
+    * Če imamo eno od dimenzij matrik enako `1`, je prostorska zahtevnost
+    enaka časovni zahtevnosti v `SlowMatrix`.
+    * Za definiranje podmatrik (`A`, `B`, `C`, `D`,`E`, `F`, `G`, `H`)
+     porabimo `O(1)`.
+    * Računanje sedmih produktov. Vsak produkt porabi prostor za vmesno matriko/matriki, ki jo/ju dobimo
+     s seštevanjem/odštevanjem, na desni strani porabimo `O(M*K)` prostora, na levi strani
+     porabimo `O(N*M)`, množenje pa nam doda še `7*P(N, M, K)`. Skupno za produkte porabimo
+     `7*P(N, M, K) + O(L*M)`, pri čemer `L = max{K, N}`.
+    * Za izračun matrike sodih dimenzij porabimo `8` seštevanj/odštevanj, skupno `8*O(N*K)` prostora, ki
+    ga porabijo vmesne matrike, iz katerih na koncu sestavimo novo matriko. 
+    * Za izračun matrike lihih dimenzij poleg prostora za novo matriko, porabimo še prostor:
+        * _pri množenju in prištevanju k novi matriki_: zaradi sprotnega zapisovanja v novo matriko in množenja
+        skalarjev, porabimo `O(1)` dodatnega prostora
+        * _pri računanju in dodajanju stolpca_: porabimo `O(n)` prostora za vektor, ki ga pridamo novi matriki
+        * _pri računanju in dodajanju vrstice_: porabimo `O(k)` prostora za vektor, ki ga pridamo novi matriki
+    
+        Skupna prostorska zahtevnost:
+        
+        ```
+           P(n, m, k) = O(1) + O(M*K) + O(N*M) + 7*P(N, M, K) + 8*O(N*K) + O(1) + O(n) + O(k)
+           P(n, m, k) = 7*P(N, M, K) + O(M*K) + O(N*M) + O(N*K) + O(n) + O(k)
+           
+           s = max{n, m, k}
+           
+           P(s) = 7*P(s//2) + O(s^2) + O(s)
+           P(s) = 7*P(s//2) + O(s^2)
+           P(s) = O(s^(log_2 (7))
+         ```
+        
 
-### Primerjava dejanskih časovi pri vhodih različnih velikosti
+### Primerjava dejanskih časov pri vhodih različnih velikosti
+
+n|m|k|povprečje
+---|---|---|---
+10|10|10|0.035543
+10|11|10|0.035235
+11|11|10|0.035345
+10|11|11|0.035003
+11|11|11|0.035538
+50|50|50|2.015315
+51|51|51|2.063882
+100|100|100|14.177991
+101|101|101|14.352611
+200|200|200|95.032223
+201|201|201|97.741663
+500|500|500|
 
 --------------
 
@@ -281,16 +353,47 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
 
 ### Opis
 
+
+
 ### Analiza zahtevnosti
 
 
-### Primerjava dejanskih časovi pri vhodih različnih velikosti
+### Primerjava dejanskih časov pri vhodih različnih velikosti
+
+n|m|k|povprečje
+---|---|---|---
+10|10|10|
+10|11|10|
+11|11|10|
+10|11|11|
+11|11|11|
+50|50|50|
+51|51|51|
+100|100|100|
+101|101|101|
+200|200|200|
+201|201|201|
+500|500|500|
 
 --------------
 
 
 ## Zaključki
 
+n|m|k|SlowMatrix|FastMatrix|CheapMatrix
+---|---|---|---|---|---
+10|10|10|0.002727|0.035543|
+10|11|10|0.003522|0.035235|
+11|11|10|0.003561|0.035345|
+10|11|11|0.003613|0.035003|
+11|11|11|0.003698|0.035538|
+50|50|50|0.415034|2.015315|
+51|51|51|0.434669|2.063882|
+100|100|100|3.913663|14.177991|
+101|101|101|4.077199|14.352611|
+200|200|200|41.613351|
+201|201|201|
+500|500|500|
 
 
 
