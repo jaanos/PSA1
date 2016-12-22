@@ -15,7 +15,7 @@ class FastMatrix(SlowMatrix):
                "Dimenzije matrik ne dopuščajo množenja!"
         assert self.nrow() == left.nrow() and right.ncol() == self.ncol(), \
                "Dimenzije ciljne matrike ne ustrezajo dimenzijam produkta!"
-        
+
         m = left.nrow()  # št. vrstic leve matrike
         n = right.nrow() # št. stolpcev leve = št. vrstic desne matrike
         o = right.ncol() # št. stolpcev desne matrike
@@ -48,6 +48,7 @@ class FastMatrix(SlowMatrix):
             d = m - (m % 2)
             e = o//2
             f = o - (o % 2)
+            
             A = left[0:c, 0:a]
             B = left[0:c, a:b]
             C = left[c:d, 0:a]
@@ -56,13 +57,15 @@ class FastMatrix(SlowMatrix):
             F = right[0:a, e:f]
             G = right[a:b, 0:e]
             H = right[a:b, e:f]
-            P1 = A * (F - H)
-            P2 = (A + B) * H
-            P3 = (C + D) * E
-            P4 = D * (G - E)
-            P5 = (A + D) * (E + H)
-            P6 = (B - D) * (G + H)
+
             P7 = (A - C) * (E + F)
+            P6 = (B - D) * (G + H)
+            P5 = (A + D) * (E + H)
+            P4 = D * (G - E)
+            P3 = (C + D) * E
+            P2 = (A + B) * H
+            P1 = A * (F - H)
+            
             self[0:c, 0:e] = P5 + P4 - P2 + P6
             self[0:c, e:f] = P1 + P2
             self[c:d, 0:e] = P3 + P4

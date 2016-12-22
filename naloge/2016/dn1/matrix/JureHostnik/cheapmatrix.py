@@ -20,12 +20,6 @@ class CheapMatrix(SlowMatrix):
         else:
             assert self.nrow() == work.nrow() and self.ncol() == work.ncol(), \
                "Dimenzije delovne matrike ne ustrezajo dimenzijam produkta!"
-        print('//////////////////////////')
-        print(self)
-##        print('-----   self -----')
-##        print(work)
-        print(left)
-        print(right)
         
         m = left.nrow()  # št. vrstic leve matrike
         n = right.nrow() # št. stolpcev leve = št. vrstic desne matrike
@@ -69,6 +63,7 @@ class CheapMatrix(SlowMatrix):
             d = m - (m % 2)
             e = o//2
             f = o - (o % 2)
+            
             A = left[0:c, 0:a]
             B = left[0:c, a:b]
             C = left[c:d, 0:a]
@@ -77,140 +72,95 @@ class CheapMatrix(SlowMatrix):
             F = right[0:a, e:f]
             G = right[a:b, 0:e]
             H = right[a:b, e:f]
+            
             X = work[0:c, 0:e]
             Y = work[0:c, e:f]
             Z = work[c:d, 0:e]
             W = work[c:d, e:f]
+            
             P = self[0:c, 0:e]
             Q = self[0:c, e:f]
             R = self[c:d, 0:e]
             S = self[c:d, e:f]
-            print(A)
-            print('------  A   -----')
-            print(B)
-            print('------  B   -----')
-            print(C)
-            print('------  C   -----')
-            print(D)
-            print('------  D   -----')
-            print(E)
-            print('------  E   -----')
-            print(F)
-            print('------  F   -----')
-            print(G)
-            print('------  G   -----')
-            print(H)
-            print('------  H   -----')
-##            print(P)
-##            print('------  P   -----')
-##            print(Q)
-##            print('------  Q   -----')
-##            print(R)
-##            print('------  R   -----')
-##            print(S)
-##            print('------  S   -----')
-##            print(X)
-##            print('------  X   -----')
-##            print(Y)
-##            print('------  Y   -----')
-##            print(Z)
-##            print('------  Z   -----')
-##            print(W)
-##            print('------  W   -----')
-            
-##            P1 = A * (F - H)
-##            P2 = (A + B) * H
-##            P3 = (C + D) * E
-##            P4 = D * (G - E)
-##            P5 = (A + D) * (E + H)
-##            P6 = (B - D) * (G + H)
-##            P7 = (A - C) * (E + F)
+
 
             # P7 = (A - C) * (E + F)
             A -= C
             E += F
             # S = -P7
-            S.multiply(A, E)#, work = Z)
+            S.multiply(A, E, work = Z)
             S *= -1
             A += C
             E -= F
+            Z *= 0
 
             # P6 = (B - D) * (G + H)
             B -= D
             G += H
             # P = P6
-            P.multiply(B, G)#, work = X)
+            P.multiply(B, G, work = X)
             B += D
             G -= H
+            X *= 0
 
-            # W = P5 = (A + D) * (E + H)
+            # P5 = (A + D) * (E + H)
             A += D
             E += H
-            W.multiply(A, E)#, work = Z)
+            W.multiply(A, E, work = Z)
             A -= D
             E -= H
             # S = P5 - P7
             S += W
             # P = P5 + P6
             P += W
+            Z *= 0
+            W *= 0
 
-##            # P5 = (A + D) * (E + H)
-##            A += D
-##            E += H
-##            # S = P5 - P7
-##            S.multiply(A, E)#, work = Z)
-##            # P = P5 + P6
-##            P.multiply(A, E)#, work = Z)
-##            A -= D
-##            E -= H
-
-            # Y = P4 = D * (G - E)
+            # P4 = D * (G - E)
             G -= E
-            Y.multiply(D, G)#, work = Z)
+            Y.multiply(D, G, work = Z)
             G += E
             # R = P4
             R += Y
             # P = P4 + P5 + P6
             P += Y
+            Y *= 0
+            Z *= 0
 
-            # X = P3 = (C + D) * E
+            # P3 = (C + D) * E
             C += D
-            X.multiply(C, E)#, work = Z)
+            X.multiply(C, E, work = Z)
             C -= D
             # R = P3 + P4
             R += X
             # S = P5 - P3 - P7
             S -= X
+            X *= 0
+            Z *= 0
 
-            # Z = P2 = (A + B) * H
+            # P2 = (A + B) * H
             A += B
-            Z.multiply(A, H)#, work = Z)
+            Z.multiply(A, H, work = X)
             A -= B
             # Q = P2
             Q += Z
             # P = P5 + P4 - P2 + P6
             P -= Z
+            Z *= 0
+            X *= 0
 
-            # W = P1 = A * (F - H)
+            # P1 = A * (F - H)
             F -= H
-##            V = self.__class__(nrow = c, ncol = e)
-            W.multiply(A, F)#, work = Z)
+            W.multiply(A, F, work = Z)
             F += H
             # Q = P1 + P2
             Q += W
             # S = P1 + P5 - P3 - P7
             S += W
-            
-##            self[0:c, 0:e] = P5 + P4 - P2 + P6
-##            self[0:c, e:f] = P1 + P2
-##            self[c:d, 0:e] = P3 + P4
-##            self[c:d, e:f] = P1 + P5 - P3 - P7
-            
-##            self[0:c, 0:e] = ((A + D) * (E + H)) + (D * (G - E)) - ((A + B) * H) + ((B - D) * (G + H))
-##            self[0:c, e:f] = (A * (F - H)) + ((A + B) * H)
-##            self[c:d, 0:e] = ((C + D) * E) + (D * (G - E))
-##            self[c:d, e:f] = (A * (F - H)) + ((A + D) * (E + H)) - ((C + D) * E) - ((A - C) * (E + F))
+            W *= 0
+            Z *= 0
 
+            
             # Če je n liho, vsem elementom prištejemo ustrezen produkt.
             if n % 2 == 1:
                 for i in range(m):
