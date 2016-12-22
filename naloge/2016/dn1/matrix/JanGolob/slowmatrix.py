@@ -19,8 +19,8 @@ class SlowMatrix(AbstractMatrix):
         #Naivno množenje matrik
         for i in range(self.nrow()):
             for j in range(self.ncol()):
-                vs = 0
-                #Uporabimo vs, kej je hitreje kot da pri pri vsakem spreminjali self[i, j]
+                vs = 0 #porabi toliko prostora, ga kolikor je potrebno za shranjevanje Podatkovne strukture, ki bo v matriki
+                #Uporabimo vs, ker je hitreje kot, da bi pri vsakem elementu matrike spreminjali self[i, j]
                 for k in range(left.ncol()):
                         vs += left[i, k] * right[k, j]
                 self[i, j] = vs
