@@ -11,7 +11,7 @@ Njun produkt je enak matriki C velikosti *nXm*, pri čemer je *n* enako številu
 ###Opis algoritma SlowMatrix:
 V metodi SlowMatrix si najprej sharnimo velikosti matrik A in B, ki jih dobimo s pomočjo ukazov ".ncol" in ".nrow", nato pa se sprehodimo čez tri for zanke.
 Torej sprehodimo se čez vse vrstice prve matrike (prva for zanka) in vse stolpce druge matrike (druga for zanka), nato pa s tretjo for zanko izvedemo skalarni produkt,
-izbran vrstice matrike A in izbranega stolpca matrike B. ta skalarni produkt nato shranimo v element matrike C, ki leži v isti vrstici, kot izbrana vrstica v prvi for zanki,
+izbrane vrstice matrike A in izbranega stolpca matrike B. Ta skalarni produkt nato shranimo v element matrike C, ki leži v isti vrstici kot izbrana vrstica v prvi for zanki,
 in istem stolpcu kot izbran stolpec druge for zanke.
 Vrnemo matriko C.
 
@@ -19,7 +19,7 @@ Vrnemo matriko C.
 Če je matrika A velikosti mxn in matrika B velikosti nxp, potem je časovna zahtevnost algoritma enaka O(m*n*p).
 To se vidi direktno iz algoritma, ker gremo čez m števil v prvi zanki, znotraj katere gremo čez p števil, znotraj te pa še čez n števil.
 Z drugimi besedami, za vsak element v novi matriki C, velikosti mxp, moramo skalarno pomnožiti dva vektorja dolžine n, kar nam vzame O(n) časa.
-Torej za matriko C, moramo izračunati m*n skalarnih produktov, iz tega pa sledi, da je časovna zahtevnost metode SlowMatrix O(m*n*p).
+Torej za matriko C moramo izračunati m * n skalarnih produktov, iz tega pa sledi, da je časovna zahtevnost metode SlowMatrix O(mnp).
 
 ###Prostorska zahtevnost algoritma:
 Od dodatnega prostora porabimo prostor za shranjevanje vrednosti "vrednost", ki jo skozi vse for zanke le spreminjamo in ne ustvarjamo vedno nove,
