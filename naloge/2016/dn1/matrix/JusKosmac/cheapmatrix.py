@@ -24,6 +24,9 @@ class CheapMatrix(SlowMatrix):
         #velikosti matrik sta m x k in k x n
         #T(m,k,n) naj oznacuje casovno zahtevnost mnozenja teh matrik
         #S(m,k,n) naj oznacuje prostorsko zahtevnost mnozenja teh matrik
+
+        #casovna zahtevnost: O(1)
+        #prostorska zahtevnost: O(1)
         m = left.nrow()
         k = left.ncol()
         n = right.ncol()
@@ -33,6 +36,7 @@ class CheapMatrix(SlowMatrix):
         #casovna zahtevnost: O(mn) ali O(mk) ali O(nk) (odvisno katera dimanzija je enaka 1)
         #prostorska zahtevnost: O(1)
         if m == 1 or n == 1 or k == 1:
+            #klicemo metodo za mnozenje nadrazreda SlowMatrix
             super().multiply(left, right)
         else:
             #dimenzije matrik celostevilsko razpolovimo
@@ -97,14 +101,17 @@ class CheapMatrix(SlowMatrix):
             E -= H
 
             
-            #prištejemo še P5 in P6 ter odštejemo P2
+            #S1 prištejemo še P4 in P5 ter odštejemo P2
             #casovna zahtevnost: 3*O(m/2*n/2)
             #prostorska zahtevnost: O(1)
             S1 += S3
             S1 += S4
             S1 -= S2
 
+            #trenutno imamo v S1 ze pravilen rezultat, v S2, S3 in S4 pa imamo samo matrike P2, P4 in P5
+
             #preostale produkte zapisujemo v delovno matriko in jih prištevamo ustreznim delom ciljne matrike
+            #rezultat vedno zapisemo v X, za delovno matriko pa uporabljamo Y
             #casovna zahtevnost: 3*T(m/2,k/2,n/2) (rekurzivno mnozenje) + 3*O(m/2*k/2) + 3*O(k/2*n/2) + 5*O(m/2*n/2) (sestevanje)
             #prostorska zahtevnost: 3*S(m/2,k/2,n/2)
             
@@ -112,13 +119,13 @@ class CheapMatrix(SlowMatrix):
             F -= H
             X.multiply(A, F, Y)
             F += H
-            S2 += X
+            S2 += X #v S2 imamo sedaj ze pravilen rezultat
             S4 += X
             #P3
             C += D
             X.multiply(C, E, Y)
             C -= D
-            S3 += X
+            S3 += X #v S3 imamo sedaj ze pravilen rezultat
             S4 -= X
             #P7
             A -= C
@@ -127,6 +134,7 @@ class CheapMatrix(SlowMatrix):
             A += C
             E -= F
             S4 -= X
+            #sedaj imamo tudi v S4 pravilen rezultat
             
             if k2 == k: #k je sod
                 if m2 != m: #m je lih
@@ -137,6 +145,7 @@ class CheapMatrix(SlowMatrix):
                     a1 = work[m-1, 0:n1]
                     b1 = work[m-1, n1:n2]
 
+                    #racunamo zadnjo vrstico
                     #casovna zahtevnost: 4*O(k/2*n/2) (mnozenje) + 2*O(n/2) (sestevanje)
                     #prostorska zahtevnost: O(1)
                     self[m-1, 0:n1].multiply(a, E, a1)
@@ -154,6 +163,7 @@ class CheapMatrix(SlowMatrix):
                     c1 = work[0:m1, n-1]
                     d1 = work[m1:m2, n-1]
 
+                    #racunamo zadnji stolpec
                     #casovna zahtevnost: 4*O(k/2*m/2) (mnozenje) + 2*O(m/2) (sestevanje)
                     #prostorska zahtevnost: O(1)
                     self[0:m1, n-1].multiply(A, c, c1)
@@ -164,6 +174,7 @@ class CheapMatrix(SlowMatrix):
                     self[m1:m2, n-1] += c1
                     
                 if n2 != n and m2 != m: #oba sta liha
+                    #racunamo element (m, n)
                     #casovna zahtevnost: 2*O(k/2) (mnozenje) + O(1) (sestevanje)
                     #prostorska zahtevnost: O(1) (ustvarijo se nove matrike, ki pa so velikosti 1 x 1)
                     self[m-1, n-1] = a * c 
@@ -177,6 +188,7 @@ class CheapMatrix(SlowMatrix):
                 u = right[k-1, 0:n1]
                 w = right[k-1, n1:n2]
 
+                #ker je k lih, moramo podmatrikam S_i pristeti se produkte zadnjega stolpca leve matriko in zadnje vrstice desne matrike
                 #casovna zahtevnost: 4*O(m/2*n/2) (mnozenje) + 4*O(m/2*n/2) (sestevanje)
                 #prostorska zahtevnost: O(1)
                 X.multiply(x, u, Y)
@@ -197,12 +209,13 @@ class CheapMatrix(SlowMatrix):
                     a1 = work[m-1, 0:n1]
                     b1 = work[m-1, n1:n2]
 
+                    #racunamo zadnjo vrstico
                     #casovna zahtevnost: 4*O(k/2*n/2) (mnozenje) + 2*O(n/2) (rocno mnozenje s skalarjem) + 2*O(n/2) (sestevanje)
                     #prostorska zahtevnost: O(1)
                     self[m-1, 0:n1].multiply(a, E, a1)
                     a1.multiply(b, G, b1)
                     self[m-1, 0:n1] += a1
-                    #alfa je v našem primeru skalar in zato ne moremo uporabiti multiply z alfa in u (lahko bi ustvarili novo 1 x 1 matriko z vrednostjo alfa)
+                    #alfa je v našem primeru skalar in zato ne moremo uporabiti multiply z alfa in u (lahko bi sicer ustvarili novo 1 x 1 matriko z vrednostjo alfa)
                     #u zmnozimo z alfa kar rocno in rezultat pristejemo ciljni matriki (da ne porabljamo dodatnega prostora)
                     for i in range(n1):
                         self[m-1, i] += alfa * u[0, i]
@@ -221,6 +234,7 @@ class CheapMatrix(SlowMatrix):
                     c1 = work[0:m1, n-1]
                     d1 = work[m1:m2, n-1]
 
+                    #racunamo zadnji stolpec
                     #casovna zahtevnost: 4*O(k/2*m/2) (mnozenje) + 2*O(m/2) (rocno mnozenje s skalarjem) + 2*O(m/2) (sestevanje)
                     #prostorska zahtevnost: O(1)
                     self[0:m1, n-1].multiply(A, c, c1)
@@ -235,6 +249,7 @@ class CheapMatrix(SlowMatrix):
                         self[i + m1, n-1] += beta * y[i, 0]
                         
                 if n2 != n and m2 != m: #oba sta liha
+                    #racunamo element (m, n)
                     #casovna zahtevnost: 2*O(k/2) (mnozenje) + O(1) (sestevanje)
                     #prostorska zahtevnost: O(1) (ustvarijo se nove matrike, ki pa so velikosti 1 x 1)
                     self[m-1, n-1] = a * c 
