@@ -30,13 +30,13 @@ class FastMatrix(SlowMatrix):
         if CC == 0: #Primer ko je sirina leve matrike = visina desne sodo stevilo
             if BB == 1:
                 #primer ko je leva matrika sodo visokam desna pa liho siroka (Ma en stolpec vec desna)
-                self[0:levaVrst,0:(desnaStol-1)] = left * right[0:ujemanje,0:(desnaStol-1)]
-                self[0:levaVrst,(desnaStol-1):desnaStol] = left * right[0:ujemanje,(desnaStol-1):desnaStol]
+                self[:,0:(desnaStol-1)] = left * right[:,0:(desnaStol-1)]
+                self[:,(desnaStol-1):desnaStol] = left * right[:,(desnaStol-1):desnaStol]
                 return self
             if AA == 1:
                 #Pol je leva matrika eno vrstico vec spodi
-                self[0:(levaVrst-1),0:desnaStol] = left[0:(levaVrst-1),0:ujemanje] * right
-                self[(levaVrst-1):levaVrst,0:desnaStol] = left[(levaVrst-1):levaVrst,0:ujemanje] * right
+                self[0:(levaVrst-1),:] = left[0:(levaVrst-1),:] * right
+                self[(levaVrst-1):levaVrst,:] = left[(levaVrst-1):levaVrst,:] * right
                 return self
             A = left[0:levaVrst//2,0:ujemanje//2]
             B = left[0:levaVrst//2,ujemanje//2:ujemanje]
@@ -60,18 +60,14 @@ class FastMatrix(SlowMatrix):
             return self
         if CC == 1: #Primer ko je sirina leve matrike = visina desne liho stevilo
             if BB == 1:#primer ko je leva matrika sodo visokam desna pa liho siroka (Ma en stolpec vec desna)
-                self[0:levaVrst,0:(desnaStol-1)] = left[0:levaVrst,0:(ujemanje-1)] * right[0:(ujemanje-1),0:(desnaStol-1)] +\
-                                                   left[0:levaVrst,(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:(desnaStol-1)]
-                self[0:levaVrst,(desnaStol-1):desnaStol] = left * right[0:(ujemanje),(desnaStol-1):desnaStol]
+                self[:,0:(desnaStol-1)] = left[:,0:(ujemanje-1)] * right[0:(ujemanje-1),0:(desnaStol-1)] +\
+                                                   left[:,(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:(desnaStol-1)]
+                self[:,(desnaStol-1):desnaStol] = left * right[:,(desnaStol-1):desnaStol]
                 return self
             if AA == 1:
-                self[0:(levaVrst-1),0:desnaStol] = left[0:(levaVrst-1),0:(ujemanje-1)] * right[0:(ujemanje-1),0:desnaStol] +\
-                                                   left[0:(levaVrst-1),(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:desnaStol]
-                self[(levaVrst-1):levaVrst,0:desnaStol] = left[(levaVrst-1):levaVrst,0:ujemanje] * right
+                self[0:(levaVrst-1),:] = left[0:(levaVrst-1),0:(ujemanje-1)] * right[0:(ujemanje-1),:] +\
+                                                   left[0:(levaVrst-1),(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,:]
+                self[(levaVrst-1):levaVrst,:] = left[(levaVrst-1):levaVrst,:] * right
                 return self
-            AAA = left[0:levaVrst,0:(ujemanje-1)] * right[0:(ujemanje-1),0:desnaStol]
-            BBB = left[0:levaVrst,(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,0:desnaStol]
-            CCC = AAA + BBB
-            self *= 0
-            self += CCC
+            self[:,:] = (left[:,0:(ujemanje-1)] * right[0:(ujemanje-1),:]) + (left[:,(ujemanje-1):ujemanje] * right[(ujemanje-1):ujemanje,:])
             return self
