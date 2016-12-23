@@ -86,16 +86,58 @@ class CheapMatrix(SlowMatrix):
 
             #P1
             R12-=R22
-            W12.multiply(L11, R12)
+            W12.multiply(L11, R12, W12)
             R12+=R22
             S12+=W12
             S22+=W12
 
             #P2
             L11+=L12
-            W12.multiply(L11, R22)
+            W12.multiply(L11, R22,W12)
             L11-=L12
             S11-=W12
             S12+=W12
 
-            #p3 
+            #p3 c+d*e
+            L21+=L22
+            W21.multiply(L21,R11,W21)
+            L21-=L22
+            S21+=W21
+            S22-=W21
+
+            #p4 d*g-e
+            R21-=R11
+            W11.multiply(L22, R21,W11)
+            R21+=R11
+            S11+=W11
+            S21+=W11
+
+            #p5 a+d * e+h
+            L11+=L22
+            R11+=R22
+            W11.multiply(L11, R11,W11)
+            L11-=L22
+            R11-=R22
+            S11+=W11
+            S22+=W11
+
+            #p6 b-d * g+h s11
+            L12-=L22
+            R21+=R22
+            W11.multiply(L12,R21,W11)
+            L12+=L22
+            R21-=R22
+            S11+=W11
+
+            #p7 a-c * e+f   -s22
+            L11-=L21
+            R11+=R12
+            W22.multiply(L11, R11,W22)
+            L11+=L21
+            R11-=R12
+            S22-=W22
+
+
+
+
+
