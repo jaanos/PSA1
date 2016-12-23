@@ -23,7 +23,7 @@ print("------------CheapMatrix------------")
 print(X3*Y3)
 
 f = open('rcode.txt', 'r+')
-koda="$$\\begin{array}{rrr}velikost & slow & fast & cheap\\\\"
+koda="$$\\begin{array}{rrr}velikost & slow & fast & cheap\\\\\\"
 for n in range(1,40,5):
     a=numpy.random.random((n,n))
     b=numpy.random.random((n,n))
@@ -42,7 +42,7 @@ for n in range(1,40,5):
     ct=time.time()
     X*Y
     ct=time.time()-ct
-    koda+=str(n)+" & "+str(st)+" & "+str(ft)+" & "+str(ct)+"\\\\"
+    koda+=str(n)+" & "+str(st)+" & "+str(ft)+" & "+str(ct)+"\\\\\\"
 koda+="\end{array}$$"
 print(koda)
 f.write(koda)
