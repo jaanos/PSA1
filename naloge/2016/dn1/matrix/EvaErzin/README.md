@@ -72,12 +72,13 @@ S(N) = 7 * S(N/2) + 33/4 * O(N^2) + 2 * O(N) + O(1)
 
 **Prostorska zahtevnost**
 
-V vsakem koraku rekurzije porabimo le O(1) dodatnega prostora za reference in shranjevanje dimenzij matrik. Z M označimo min(n, k, m).
+V vsakem koraku rekurzije porabimo le O(1) dodatnega prostora za reference in shranjevanje dimenzij matrik. 
+Z M označimo min(n, k, m).
 Izvedemo log2(M) korakov in v vsakem porabimo O(1) prostora. Skupaj je to torej O(log2(M)) prstora.
 
 ## 3. Primerjava časov izvajanja algoritmov 
 
-Za primerjavo časov izvajanja algoritmov sem množila kvadratne matrike dimenzij od 1x1 do 200x200 s celoštevilskimi elementi med 0 in 10.
+Za primerjavo časov izvajanja algoritmov sem množila kvadratne matrike dimenzij od 1x1 do 100x100 s celoštevilskimi elementi med 0 in 10.
 Primerjava algoritmov za množenje pravokotnih matrik ni toliko smiselna, saj lahko zelo hitro prisemo do množenja z uporabo skalarnega produkta.
 
 Kot je razvidno iz spodnjega grafa in tabele, je metoda implementirana v razredu SlowMatrix za matrike takih dimenzij najhitrejša. Ostali dve sicer asimptotsko naraščata počasneje, vendar to postane uporabno šele pri matrikah veliko večjih dimenzij.
