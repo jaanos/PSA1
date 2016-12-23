@@ -1,4 +1,4 @@
-# Poroƒçilo
+# PoroËilo
 
 *Jan Perme*
 
@@ -56,7 +56,7 @@ self[(left.nrow()//2):(2*(left.nrow()//2)),(right.ncol()//2):(2*(right.ncol()//2
 ```
 Leva matrika: `m*n`
 Desna matrika: `n*o`
-»asovna zahtevnost:Na zaËetku kode samo delamo pointerje kar je `O(1)`. Seötevanje matrik ima Ëasovno zahtevnost `O(n*m)`oz `O(n*o)` naredimo pa ga 20 krat. Z rekurzijo pa lahko ugotovimo öe Ëasovno zahtevnost mnoûenja,ki je `7*T(n/2)`. Tako dobimo `T(n)=7*T(n/2)+O(n^2)`. Iz krovnega izreka sledi da je `T(n)=O(n^```{r}log2(7)```)`
+»asovna zahtevnost:Na zaËetku kode samo delamo pointerje kar je `O(1)`. Seötevanje matrik ima Ëasovno zahtevnost `O(n*m)`oz `O(n*o)` naredimo pa ga 20 krat. Z rekurzijo pa lahko ugotovimo öe Ëasovno zahtevnost mnoûenja,ki je `7*T(n/2)`. Tako dobimo `T(n)=7*T(n/2)+O(n^2)`. Iz krovnega izreka sledi da je `T(n)=O(n^log2(7))`
 Prostorska zahtevnost:Matrike A,B,C,... so samo pointerji tako da porabijo O(1) prostroa medtem ko so P1,P2,P3,... nove matrike in za vsako od njih porabimo `n/2*o/2` prostora. Med raËunanjem P1,P2,P3... tudi seötevamo matrike in vsako seötevanje ustvari novo matriko(pri raËunanju P1,P2,P3,.. drugje se nove matrike ne ustvarijo) to je öe 10 novih matrik. 5 od teh jih je velikosti `m/2*n/2` 5 pa velikosti `n/2*o/2`.Torej je prostorska zahtevnost `O(max{n*m,n*o,o*m})`.
 ```python
 if (left.ncol())%2==1:
@@ -79,7 +79,7 @@ Desna matrika: `n*o`
 »asovna zahtevnost:Ker tukaj samo mnoûimo 1 vrstiËni stolpec z vrstico/vrsticami je algoritem enkao zahteven kot del kode na zaËetku fastmatrix.py. Torej je Ëasovna zahtevnost `O(max{m*o,o*n,m*n})`
 Prostroska zahtevnost: `O(1)` z istim razlogom kot zgoraj.
 
-Celotna Ëasovna zahtevnost:`O(n^```{r}log2(7)```)`
+Celotna Ëasovna zahtevnost:`O(n^log2(7))`
 Celotna prostorska zahtevnost:`O(max{n*m,n*o,o*m})`
 ### Cheapmatrix
 Algoritem v cheamatrix.py je samo preoblikovan algoritem iz fastmatrix.py tako, da je njegova prostorska poraba `O(log(m*n*o))`
@@ -140,12 +140,12 @@ W_1[:,:]=0
 ```
 Leva matrika: `m*n`
 Desna matrika: `n*o`
-»asovna zahtevnost: Imamo 32 seötevanj, ki vsako porabi `O(n*m)`oz `O(n*o)` in öe 7 mnoûenj. Z rekurzivno formulo tako dobimo `T(n)=7*T(n/2)+O(n^2)` in podobno kot prej vidimo da je Ëasovna zahtevnost `O(n^```{r}log2(7)```)`
+»asovna zahtevnost: Imamo 32 seötevanj, ki vsako porabi `O(n*m)`oz `O(n*o)` in öe 7 mnoûenj. Z rekurzivno formulo tako dobimo `T(n)=7*T(n/2)+O(n^2)` in podobno kot prej vidimo da je Ëasovna zahtevnost `O(n^log2(7))`
 Prostroska zahtevnost:`O(1)` saj ne spreminjamo niËesar drugega kot vhodnih matrik.
 
 Zadnji del je spet identiËen kot pri fastmatrix.
 
-Celotna Ëasovna zahtevnost:`O(n^```{r}log2(7)```)`
+Celotna Ëasovna zahtevnost:`O(n^log2(7))`
 Celotna prostroska zahtevnost:`O(1)`
 
 ## Testiranje
