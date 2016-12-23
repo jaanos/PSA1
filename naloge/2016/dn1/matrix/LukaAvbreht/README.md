@@ -51,5 +51,14 @@ Produkt potem izračunamo kot
 
 ### Časovna zahtevnost
 
-S pomočjo krovnega izreka bomo dokazali časovno zahtevnost strassenovega algoritma
+S pomočjo [krovnega izreka] (https://en.wikipedia.org/wiki/Master_theorem) bomo dokazali časovno zahtevnost strassenovega algoritma.
+
+Predpostavimo, da je sirina in visina obeh matrik sodo stevilo.  
+Problem razdelimo na sedem delov, ki so vsak pol manjsi od svojega oredhodnika. Iz izracunanih rezultatov resitev nazaj sestavimo v `O(n^2)`. Iz teh podatkov dobimo vrednosti, ki jih uporabimo v krovnem izreku   
+* b = 2  
+* a = 7  
+* d = 2  
+Vidimo, da pademo v opcijo, ko je `d < log_b(a)` torej je csovna zahtevnost algoritma enaka:
+
+`O(n^(log_2(7)))`
 
