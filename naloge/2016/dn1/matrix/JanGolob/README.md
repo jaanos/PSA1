@@ -50,7 +50,7 @@ Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, k
 1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki. Vidimo da se to spremeni pri velikosti _.
 2. CheapMatrix je pribljižno 2krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
 3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno
-4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom
+4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom, in razliko do poetnce števila 2. Pri velikih dimenzijah, ko je SlowMatrix zelo počanejša od CheapMatrix bi bilo bolje, da bi naši matriki razširili z ničlami do naslenje potence števila 2. [http://www2.nauk.si/materials/377/out-279920/index.html#state=11](Princip vidimo tukaj)
 
 ### Tabela časov
 Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 9) ter časom potrebnim za množenje matrik velikosti m x n in n x m:
@@ -73,6 +73,9 @@ Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 
 | 63 | 63 | 63 | 0.8972396245376215 | 5.460229639290983 | 2.8196638799204603 |
 | 64 | 64 | 64 | 0.9880292501443257 | 20.53662639782762 | 7.745000320725268 |
 | 100 | 100 | 100 | 3.7262874981290963 | 30.22643417648443 | 14.785279565524178 |
+| 128 | 128 | 128 | 8.137859693386645 | 136.39091321174283 | 50.30018259958521 |
+| 256 | 256 | 256 | 91.13589899292268 | 954.7721909812054 | 354.74007868459876 |
+| 512 | 512 | 512 | 1161.6806624045844 | 6707.142534584875 | 2526.2636810707936 |
 |   |   |   |      |      |       |
 | 28 | 32 | 32 | 0.10262481558297162 | 0.5537296072184567 | 0.27958861639119925 |
 | 40 | 43 | 46 | 0.25838653809147083 | 3.1590536466462824 | 1.3148068164810027 |
@@ -81,3 +84,5 @@ Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 
 | 63 | 70 | 61 | 0.9405405289828757 | 4.460101776817979 | 2.3208834912014353 |
 | 72 | 73 | 75 | 1.385250914067008 | 19.98685325749963 | 7.976849622613273 |
 | 84 | 77 | 84 | 2.0269742778336095 | 21.580232632726812 | 8.84283093502107 |
+
+Zaradi časovne učinkovitosti, bomo pri visokih dimenzijah računali le SlowMatrix in CheapMatrix
