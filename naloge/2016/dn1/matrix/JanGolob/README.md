@@ -35,10 +35,17 @@ Algoritem je enak kot pri Fastmatrix, le da se shranjujjo stvari malce drugače.
 
 ### Prostor
 Ko množimo naivno porabimo tako kot pri SlowMatrix O(log(g)) prostora, kar je ravno ena komponenta v matriki work
-Pri Strassenovem algoritmu pa si bomo označili kam si bomo spravili kateri vmesni produkt
+Pri Strassenovem algoritmu pa si bomo označili kam si bomo spravili kateri vmesni produkt. Namesto seštevanja, pa bomo komponente A-G le začasno popravili (več o tem v komentarjih)
 
 | self: |    |   | work: |    |
 |-------|----|---|-------|----|
 | P6    | P2 |   | P3    | P5 |
 | P4    | P1 |   | P7    | M  |
 
+Vmesne rezultate smo postavili v matriko self kot kaže tabela, zato, ker se te ne pojavljajo več v enačbah po tem, ko smo opravili z tisto podmatriko(da ne bi prišlo do napak(prištevanje, že popravljene matrike))
+Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi da porabimo še dodatnega **O(mn)** prostora.
+
+## Tabela časov:
+
+| m | k | n | Slow | Fast | Cheap |
+|---|---|---|------|------|-------|
