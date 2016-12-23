@@ -19,3 +19,8 @@ Matrični produkt po definiciji. Časovna zahtevnost je O(a*b*c). Prostorska zah
 ## CheapMatrix
 
 Nadgranja FasrMatrix. povsod pazimo da ne ustvarjamo novih matrik ampak zapisujemo v A,B,C ali WORK. V glavnem delu namesto, da najprej poračunamo vseh 7 produktov in jih nato seštejemo v C, poračunamo najprej en produkt, ga  prištejemu pravemu delu matrike C in nato računamo naslednjega. Časovna zahtevnost se ne spremeni torej O(n^2,807). Prostorska zahtevnost je O(a*b) saj imamo ves čas le 2 matriki, C in WORK.
+
+## Primerjava časov
+
+Ne glede na velikost vhoda je CheapMatrix hitrejši od FastMatrix.
+Pri majhnih matrikah je SlowMatrix veliko hitrejši od preostalih dveh, kar pa se obrne za večje matrike. Priložena slika kaže primerjavo časovne zahtevnosti za majhne grafe.
