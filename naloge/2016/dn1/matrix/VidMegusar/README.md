@@ -1,7 +1,10 @@
-# Poročilo
+## Poročilo
 
-*Ime Priimek*
+*Vid Megušar*
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
+#**Opis Algoritmov**
 
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
+**1) SlowMatrix**
+Običajno množenje matrik, kot če bi ročno računali manjše matrike.
+Ker imamo tri for zanke prvi dve po stolpcih(n) in vrsticah(m) prve matrike, tretjo pa po stopcih(k) druge matrike imamo časovno zahtevnost O(abc).
+
