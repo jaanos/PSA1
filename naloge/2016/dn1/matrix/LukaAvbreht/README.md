@@ -109,8 +109,25 @@ Velikost matrik A in B |  SlowMatrix  |  FastMatrix |   CheapMatrix
     50x50 * 50x50 | 1.0107s | 1.8119s | 1.5521s 
     55x55 * 55x55 | 0.8201s | 2.0545s | 1.7397s 
     60x60 * 60x60 | 1.0603s | 2.2217s | 1.9528s 
+    65x65 * 65x65 | 1.4323s | 7.9226s | 5.5254s
+    70x70 * 70x70 | 2.1756s | 8.1363s | 5.7758s
+    75x75 * 75x75 | 2.1761s | 8.3805s | 6.0605s
+    80x80 * 80x80 | 2.6409s | 8.9291s | 6.6314s
+    85x85 * 85x85 | 3.2369s | 9.4379s | 7.0513s
+    90x90 * 90x90 | 3.9846s | 9.6620s | 7.4127s
+    95x95 * 95x95 | 7.9232s | 10.4323s | 8.0797s
+    100x100 * 100x100 | 5.6216s | 12.9171s | 10.9485s
+    120x120 * 120x120 | 10.2468s | 15.7165s | 13.4536s
+    140x140 * 140x140 | 17.0139s | 57.5209s | 40.6929s
 
 
 Na vseh grafix X-os predstavlja velikost matrik (naprimer pri x je 15 gre za matriko velikosti 15x15), 
 Y-os pa predstavlja šas, ki ga posamezen razred potrebuje za izračun merjen v sekundah. 
+
+![Graf1](graf1.png)
+Zgornji graf prikazuje casovno odvisnost delovanja algoritmov, kjer za vrednosti izberemo naklučna števila, za dimenzije pa števila, ki se seštejejo v n
+
+![Graf2](graf2.png)
+Prikazuje graf naraščanja matrik časa, ki ga porabimo da zmnožimo različe kvadratne matrike, z vrednostmi enakimi 1.
+
 
