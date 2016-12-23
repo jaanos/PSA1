@@ -26,7 +26,7 @@ prišejemo posebne produkte z zadnjim stolpcem leve matrike (lahko so 0).
 
 ### Razred `CheapMatrix`
 
-Metoda `multiply` v tem razredu deluje podobno kot v razredu `FastMatrix`, le da pri delu porabi le O(log(kmn)) 
+Metoda `multiply` v tem razredu deluje podobno kot v razredu `FastMatrix`, le da pri delu porabi le `O(log(kmn))` 
 dodatnega prostora. Izračun `P4 + P5 + P6 - P2` poteka tako, da produkt `P6` takoj zapišemo v končno matriko na mesto 
 zgoraj levo, izračunamo ga pa tako, da vhodni podmatriki `B` odštejemo `D` (da se ne ustvari nova matrika) ter 
 podmatriki `G` prištejemo `H` in nato zmnožimo `B * G` z neobveznim parametrom delavne matrike, ki je enake 
@@ -40,8 +40,76 @@ Strassenovega algoritma, posebna obravnava zadnjih stolpcev in vrstic lihih matr
 ## Analiza časovne in prostorske zahtevnosti
 
 Naj bo `X` leva matrika in `Y` desna, njun produkt `Z` in delavna `W`. `n x m` je velikost matrike `X`, `m x p` je 
-velikost matrike `Y`, `n x p` pa velikost matrike `Z` in `D`.
- 
+velikost matrike `Y`, `n x p` pa velikost matrike `Z` in `D`. Ogledali si bomo najslabši primer - ko so vse dimenzije 
+lihe.
+
+T(n,m,p) ... časovna zahtevnost množenja matrik `n x m` in `m x p`.
+
+S(n,m,p) ... prostorska zahtevnost množenja matrik `n x m` in `m x p`.
+
+### Časovna zahtevnost
+__SlowMatrix__: `O(mnp)` operacij - za izračun skalarnega produkta vrstice in stolpca je potrebnih `k` množenj in 
+`k - 1` seštevanj. Izračunati moramo `p * n` skalarnih produktov.
+
+__FastMatrix__: 
+Najprej si shranimo dimenzije matrik in nekatera druga števila, kar porabi `O(1)` operacij.
+
+Če je katera od dimenzij enaka 1, uporabimo SlowMatrix:
+*  m == 1: `O(np)` operacij, saj uporabimo mnozenje iz SlowMatrix
+*  n == 1: `O(mp)` operacij, saj uporabimo mnozenje iz SlowMatrix
+*  p == 1: `O(mn)` operacij, saj uporabimo mnozenje iz SlowMatrix
+
+Sicer pa si najprej ustvarimo kazalce na dele matrike (`A`, `B`, ... , `H`), kar porabi `O(1)` operacij, saj ne izdelamo 
+novih matrik.
+
+Izračun `P1` do `P7`: seštevanja porabijo `5*O(n/2 * m/2) + 5*O(m/2 * p/2)`, rekurzivna množenja pa 
+`7*T(n/2, m/2, p/2)`.
+
+Sledi inicializacija štirih spremenljivk - `O(1)` ter izračun štirih produkti z le enim stolpcem, kar porabi 
+`4 * O(n/2 * p/2)`. Nato izračunamo produkte leve matrike z zadnjim stolpcem desne matrike - `O(m*n)` ter zadnjo vrstico 
+leve matrike z desno matriko brez zadnjega stolpca - `O(m*(p-1))`. Na koncu še izračunamo 16 vsot (`16*O(n/2 * p/2)`) 
+ter zapišemo v končno matriko (`4*O(n/2 * p/2)`).
+
+*SKUPAJ*: `T(n,m,p) = 7*T(n/2, m/2, p/2) + O(n/2 * m/2) + O(m/2 * p/2) + O(n/2 * p/2) + O(m*(p-1)) + O(m*n) + O(1) = 
+O(n*m + m*p) + O(n/2 * p/2) + 7*T(n/2, m/2, p/2)`. S pomočjo krovnega izreka in `N = max(n,m,p)` dobimo: 
+`T(N) = O(N^log2(7))`.
+
+__CheapMatrix__:
+Začetna inicializacija spremenljivk - `O(1)`, nato obravnavamo podobno kot pri `FastMatrix`. Ustvarimo si kazalce 
+na dele matrike (`O(1)`), nato pa začnemo z računanjem produktov. 
+
+Ko s seštevajni in odštevanji spreminjamo vhodne matrike, porabimo `10*O(n/2 * m/2) + 10*O(m/2 * p/2)` operacij. Kot pri 
+`FastMatrix` imamo 7 produktov, ki porabijo `7*T(n/2 * m/2 * p/2)` operacij. Vmes pa še seštevamo `P1` do `P7` in jih 
+ zapisujemo v končno matriko, kar porabi `8*O(n/2 * p/2)` operacij.
+
+Podobno kot v `FastMatrix` imamo na koncu še produkte z matrikami, ki imajo eno dimenzijo enako 1, kar porabi 
+`4*O(n/2 * p/2) + O(n*m) + O(m*p)` operacij.
+
+*SKUPAJ*: `T(n,m,p) = 7*T(n/2, m/2, p/2) + O(n/2 * m/2) + O(m/2 * p/2) + O(n/2 * p/2) + O(m*p) + O(m*n) = 
+O(n*m + m*p) + O(n/2 * p/2) + 7*T(n/2, m/2, p/2)`. Podobno kot v primeru `FastMatrix` tudi tukaj dobimo, da je 
+`T(N) = O(N^log2(7))` za `N = max(n,m,p)`.
+
+### Prostorska zahtevnost
+__SlowMatrix__: porabi `O(1)` dodatnega prostora, saj se pri računanju skalarnega produkta vrednosti prištevajo 
+spremenljivki `temp`, ki se nato zapiše v matriko na ustrezno mesto.
+
+__FastMatrix__: Najprej si shranimo velikosti matrik in kazalce na dele matrik, kar porabi `O(1)` prostora. V primeru 
+da je katera od dimenzij enaka 1, je prostorska zahtevnost enaka kot pri `SlowMatrix`, sicer pa potrebujemo 
+`5*O(n/2 * m/2) + 5*O(m/2 * p/2)` prostora za izračun vsot pri računanju `P1` do `P7`, `7*S(n/2, m/2, p/2)` za rekurzivni 
+izračun produktov ter `7*O(n/2 * p/2)` da te produkte shranimo. Sledi inicializacija štirih spremenljivk - `O(1)` ter 
+izračun štirih produkti z le enim stolpcem, kar porabi `4 * O(n/2 * p/2)`. Ostale produkte pa zapišemo direktno v 
+končno matriko in ker se uporabi množenje iz `SlowMatrix` porabimo le `O(1)` dodatnega prostora. Na koncu moramo 
+izračunati še 16 vsot: `16*O(n/2 * p/2)`. Če seštejemo, dobimo: 
+`S(n, m, p) = 18*O(1) + 5*O(n/2 * m/2) + 5*O(m/2 * p/2) + S(n/2, m/2, p/2) + 27*O(n/2 * p/2)`. Za `m = n = p` dobimo: 
+`S(n) = S(n/2) + 37*O(n/2 * n/2) = O(n^2)` (po krovnem izreku).
+
+__CheapMatrix__: Na začetku porabi `O(1)` dodatnega prostora za shranitev dimenzij in kazalcev na dele matrike. Če je 
+katera od dimenzij leve ali desne matrike enaka 1, potem porabi `O(1)` dodatnega prostora, saj uporabi množenje iz 
+`SlowMatrix`. Delavna matrika je velikosti `O(n * p)` - enako kot ciljna matrika. Pri rekurzivnem množenju vedno podamo 
+del delavne matrike, tako, da se ne ustvarjajo nove. Poleg delavne matrike se torej ob vsakem rekurzivnem klicu porabi 
+le `O(1)` dodatnega prostora. Velja torej `S(n, m, p) = S(n/2, m/2, p/2) + O(1) = S(n/4, m/4, p/4) + 2*O(1) = ...= 
+O(log2(min(n, m, p)))` (s pomočjo krovnega izreka).
+
 ## Primerjava dejanskih časov izvajanja
 Čase izvajanja bomo gledali le za kvadratne n x n matrike. V naslednji tabeli so prikazani časi v sekundah za vse tri
 implementacije množenja v odvisnosti od velikosti matrik.
@@ -58,8 +126,13 @@ implementacije množenja v odvisnosti od velikosti matrik.
 | 500 |1900.5  |1454.0 |1160.8 |
 | 600 |3956.3  |6431.1 |4087.9 |
 
-
+Opazimo, da pri majhnih `n` množenje v `SlowMatrix` deluje občutno hitreje kot `FastMatrix` ali `CheapMatrix`. Pri 
+velikih `n` pa prevlada `n^3`, ki se hitreje povečuje in zato `SlowMatrix` takrat dosega slabše rezultate.
 Spodnji graf prikazuje čas računanja produkta v odvisnosti od velikosti vhodnih matrik (n x n). Rdeča krivulja 
 prikazuje množenje s SlowMatrix, zelena s FastMatrix in modra s CheapMatrix.
 
 ![graf](graf.png)
+
+Opazimo "skoke", ki občutno povečajo čas množenje `FastMatrix` in `CheapMatrix`, saj se takrat zgodi dodaten rekurziven 
+klic (pri 4, 8, 16, 32, 64, 128, ...) - ko matriko lahko večkrat razdelimo. Zato sta pri `n=500 < 512` `FastMatrix` in 
+`CheapMatrix` hitrejša od `SlowMatrix`, pri `ǹ=600` pa ne več.
