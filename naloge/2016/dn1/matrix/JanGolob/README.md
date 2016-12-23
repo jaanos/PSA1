@@ -43,6 +43,7 @@ Pri Strassenovem algoritmu pa si bomo označili kam si bomo spravili kateri vmes
 | P4    | P1 |   | P7    | M  |
 
 Vmesne rezultate smo postavili v matriko self kot kaže tabela, zato, ker se te ne pojavljajo več v enačbah po tem, ko smo opravili z tisto podmatriko(da ne bi prišlo do napak(prištevanje, že popravljene matrike))
+Podmatrika M pa je delovna matrika za množenja pri katerih dobimo vmesne podmatrike P.
 Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi da porabimo še dodatnega **O(mn)** prostora.
 
 ## Testiranje:
