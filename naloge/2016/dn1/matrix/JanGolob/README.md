@@ -48,8 +48,7 @@ Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, k
 
 ## Testiranje:
 1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki.
-⋅⋅* Vidimo da se to spremeni pri velikosti
-
+⋅⋅+ Vidimo da se to spremeni pri velikosti
 2. CheapMatrix je pribljižno 2krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
 3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno
 4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom
