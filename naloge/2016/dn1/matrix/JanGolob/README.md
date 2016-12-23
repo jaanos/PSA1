@@ -47,8 +47,7 @@ Podmatrika M pa je delovna matrika za množenja pri katerih dobimo vmesne podmat
 Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi da porabimo še dodatnega **O(mn)** prostora.
 
 ## Testiranje:
-1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki.
-⋅⋅+ Vidimo da se to spremeni pri velikosti
+1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki. Vidimo da se to spremeni pri velikosti _.
 2. CheapMatrix je pribljižno 2krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
 3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno
 4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom
