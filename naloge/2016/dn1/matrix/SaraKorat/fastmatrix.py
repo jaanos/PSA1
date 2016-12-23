@@ -20,6 +20,7 @@ class FastMatrix(SlowMatrix):
         # Vrednosti dimenzij shranimo v nove spremenljivke, torej je po novih spremenljivkah
         # leva matrika dimenzije n x m in desna matrika dimenzije m x k.
         ## Časovna zahtevnost: O(1)
+        ## Prostorska zahtevnost: O(1)
 
         n = left.nrow()             
         m = left.ncol() # = right.nrow()
