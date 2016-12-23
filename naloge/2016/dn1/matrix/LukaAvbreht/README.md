@@ -124,10 +124,10 @@ Velikost matrik A in B |  SlowMatrix  |  FastMatrix |   CheapMatrix
 Na vseh grafix X-os predstavlja velikost matrik (naprimer pri x je 15 gre za matriko velikosti 15x15), 
 Y-os pa predstavlja šas, ki ga posamezen razred potrebuje za izračun merjen v sekundah. 
 
-![Graf1](graf1.png)
+![Graf1](graf1.png)  
 Zgornji graf prikazuje casovno odvisnost delovanja algoritmov, kjer za vrednosti izberemo naklučna števila, za dimenzije pa števila, ki se seštejejo v n
 
-![Graf2](graf2.png)
+![Graf2](graf2.png)  
 Prikazuje graf naraščanja matrik časa, ki ga porabimo da zmnožimo različe kvadratne matrike, z vrednostmi enakimi 1.
 
 
