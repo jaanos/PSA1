@@ -36,8 +36,8 @@ Algoritem je enak kot pri Fastmatrix, le da se shranjujjo stvari malce drugače.
 ### Prostor
 Ko množimo naivno porabimo tako kot pri SlowMatrix O(log(g)) prostora, kar je ravno ena komponenta v matriki work
 Pri Strassenovem algoritmu pa si bomo označili kam si bomo spravili kateri vmesni produkt
-self
---- | ---
-P6 | P2
-P4 | P1
+self: | | | work: |
+----| --- | - | ----| ---
+P6 | P2 | | P3 | P5
+P4 | P1 | | P7 | M
 
