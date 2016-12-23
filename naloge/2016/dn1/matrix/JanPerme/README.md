@@ -1,11 +1,11 @@
-# PoroËilo
+# Poroƒçilo
 
 *Jan Perme*
 
-## Algoritmi in Ëasovne zahtevnosti
-Pri raËunanju prostorske zahtevnosti upoötevam samo dodatni prostor, ki ga porabimo ne pa ze podanih matrik
+## Algoritmi in ƒçasovne zahtevnosti
+Pri raƒçunanju prostorske zahtevnosti upo≈°tevam samo dodatni prostor, ki ga porabimo ne pa ze podanih matrik
 ### Slowmatrix
-Algoritem v slowmatrix.py je standardno mnoûenje matrix in torej grem po vseh elementih vseh vrstic prve matrike in jih mnoûi z vsemi elementi vseh stolpcev druge matrike.
+Algoritem v slowmatrix.py je standardno mno≈æenje matrix in torej grem po vseh elementih vseh vrstic prve matrike in jih mno≈æi z vsemi elementi vseh stolpcev druge matrike.
 ```python
 for i in range(left.nrow()):
   for j in range(right.ncol()):
@@ -14,10 +14,10 @@ for i in range(left.nrow()):
 ```
 Leva matrika: `m*n`
 Desna matrika: `n*o`
-Ta del kode porabi Ëasovno zahtevnost:`O(m*o*n)` saj v vsakem koraku naredimo eno mnoûenje in eno seötevanje torej `2*m*o*n` operacij
+Ta del kode porabi ƒçasovno zahtevnost:`O(m*o*n)` saj v vsakem koraku naredimo eno mno≈æenje in eno se≈°tevanje torej `2*m*o*n` operacij
 Prostorska zahtevnost:`O(1)` saj ne delamo nobenih novih spremenljivk.
 ### Fastmatrix
-Algoritem v fastmatrix.py je algoritem ki za mnoûenje matrik uporablja Strassenov algoritem.»e matrike niso s sodimi stranicami pa Strassenov algoritem uporabi na podmatriki, ki ima sode stranice in ustrezno pomnoûi preostale vrstice.
+Algoritem v fastmatrix.py je algoritem ki za mno≈æenje matrik uporablja Strassenov algoritem.ƒåe matrike niso s sodimi stranicami pa Strassenov algoritem uporabi na podmatriki, ki ima sode stranice in ustrezno pomno≈æi preostale vrstice.
 ```python
 if left.nrow()==1:
   for j in range(right.ncol()):
@@ -30,7 +30,7 @@ elif right.ncol()==1:
 ```
 Leva matrika:`1*n(oz m*n)`
 Desna matrika:`n*o(oz n*1)`
-Ta del kode nam porabi Ëasovno zahtevnost:`O(max(o*n,m*n))` saj v obeh primerih v zanki naredimo 2 operaciji (seötevanje in mnoûenje) in to `o*n` krat oz `m*n` krat.
+Ta del kode nam porabi ƒçasovno zahtevnost:`O(max(o*n,m*n))` saj v obeh primerih v zanki naredimo 2 operaciji (se≈°tevanje in mno≈æenje) in to `o*n` krat oz `m*n` krat.
 Prostorska zahtevnost:`O(1)` saj ne delamo nobenih novih spremenljivk
 ```python
 A=(left[0:(left.nrow()//2),0:(left.ncol()//2)])
@@ -57,8 +57,8 @@ self[(left.nrow()//2):(2*(left.nrow()//2)),(right.ncol()//2):(2*(right.ncol()//2
 ```
 Leva matrika: `m*n`
 Desna matrika: `n*o`
-»asovna zahtevnost:Na zaËetku kode samo delamo pointerje kar je `O(1)`. Seötevanje matrik ima Ëasovno zahtevnost `O(n*m)`oz `O(n*o)` naredimo pa ga 20 krat. Z rekurzijo pa lahko ugotovimo öe Ëasovno zahtevnost mnoûenja,ki je `7*T(n/2)`. Tako dobimo `T(n)=7*T(n/2)+O(n^2)`. Iz krovnega izreka sledi da je `T(n)=O(n^log2(7))`
-Prostorska zahtevnost:Matrike A,B,C,... so samo pointerji tako da porabijo O(1) prostroa medtem ko so P1,P2,P3,... nove matrike in za vsako od njih porabimo `n/2*o/2` prostora. Med raËunanjem P1,P2,P3... tudi seötevamo matrike in vsako seötevanje ustvari novo matriko(pri raËunanju P1,P2,P3,.. drugje se nove matrike ne ustvarijo) to je öe 10 novih matrik. 5 od teh jih je velikosti `m/2*n/2` 5 pa velikosti `n/2*o/2`.Torej je prostorska zahtevnost `O(max{n*m,n*o,o*m})`.
+ƒåasovna zahtevnost:Na zaƒçetku kode samo delamo pointerje kar je `O(1)`. Se≈°tevanje matrik ima ƒçasovno zahtevnost `O(n*m)`oz `O(n*o)` naredimo pa ga 20 krat. Z rekurzijo pa lahko ugotovimo ≈°e ƒçasovno zahtevnost mno≈æenja,ki je `7*T(n/2)`. Tako dobimo `T(n)=7*T(n/2)+O(n^2)`. Iz krovnega izreka sledi da je `T(n)=O(n^log2(7))`
+Prostorska zahtevnost:Matrike A,B,C,... so samo pointerji tako da porabijo O(1) prostroa medtem ko so P1,P2,P3,... nove matrike in za vsako od njih porabimo `n/2*o/2` prostora. Med raƒçunanjem P1,P2,P3... tudi se≈°tevamo matrike in vsako se≈°tevanje ustvari novo matriko(pri raƒçunanju P1,P2,P3,.. drugje se nove matrike ne ustvarijo) to je ≈°e 10 novih matrik. 5 od teh jih je velikosti `m/2*n/2` 5 pa velikosti `n/2*o/2`.Torej je prostorska zahtevnost `O(max{n*m,n*o,o*m})`.
 ```python
 if (left.ncol())%2==1:
     for i in range(2*(left.nrow()//2)): #2*(left.nrow()//2) da ne stejemo tistega zadnjega elementa na mestu(n,n) leve matrike 2-krat ce velja tudi (left.nrow()%2)==1:
@@ -77,14 +77,14 @@ if (right.ncol()%2)==1:
 ```
 Leva matrika: `m*n`
 Desna matrika: `n*o`
-»asovna zahtevnost:Ker tukaj samo mnoûimo 1 vrstiËni stolpec z vrstico/vrsticami je algoritem enkao zahteven kot del kode na zaËetku fastmatrix.py. Torej je Ëasovna zahtevnost `O(max{m*o,o*n,m*n})`
+ƒåasovna zahtevnost:Ker tukaj samo mno≈æimo 1 vrstiƒçni stolpec z vrstico/vrsticami je algoritem enkao zahteven kot del kode na zaƒçetku fastmatrix.py. Torej je ƒçasovna zahtevnost `O(max{m*o,o*n,m*n})`
 Prostroska zahtevnost: `O(1)` z istim razlogom kot zgoraj.
 
-Celotna Ëasovna zahtevnost:`O(n^log2(7))`
+Celotna ƒçasovna zahtevnost:`O(n^log2(7))`
 Celotna prostorska zahtevnost:`O(max{n*m,n*o,o*m})`
 ### Cheapmatrix
 Algoritem v cheamatrix.py je samo preoblikovan algoritem iz fastmatrix.py tako, da je njegova prostorska poraba `O(log(m*n*o))`
-Prvi del cheapmatrix je identiËen fastmatrix zato je tudi prostorska in Ëasovna poraba enaka. RazliËni je samo del spodaj zato bom samo zanj raËunal prostorsko in Ëasovno porabo.
+Prvi del cheapmatrix je identiƒçen fastmatrix zato je tudi prostorska in ƒçasovna poraba enaka. Razliƒçni je samo del spodaj zato bom samo zanj raƒçunal prostorsko in ƒçasovno porabo.
 ```python
 F-=H
 W_1.multiply(A,F,W_2)
@@ -141,12 +141,12 @@ W_1[:,:]=0
 ```
 Leva matrika: `m*n`
 Desna matrika: `n*o`
-»asovna zahtevnost: Imamo 32 seötevanj, ki vsako porabi `O(n*m)`oz `O(n*o)` in öe 7 mnoûenj. Z rekurzivno formulo tako dobimo `T(n)=7*T(n/2)+O(n^2)` in podobno kot prej vidimo da je Ëasovna zahtevnost `O(n^log2(7))`
-Prostroska zahtevnost:`O(1)` saj ne spreminjamo niËesar drugega kot vhodnih matrik.
+ƒåasovna zahtevnost: Imamo 32 se≈°tevanj, ki vsako porabi `O(n*m)`oz `O(n*o)` in ≈°e 7 mno≈æenj. Z rekurzivno formulo tako dobimo `T(n)=7*T(n/2)+O(n^2)` in podobno kot prej vidimo da je ƒçasovna zahtevnost `O(n^log2(7))`
+Prostroska zahtevnost:`O(1)` saj ne spreminjamo niƒçesar drugega kot vhodnih matrik.
 
-Zadnji del je spet identiËen kot pri fastmatrix.
+Zadnji del je spet identiƒçen kot pri fastmatrix.
 
-Celotna Ëasovna zahtevnost:`O(n^log2(7))`
+Celotna ƒçasovna zahtevnost:`O(n^log2(7))`
 Celotna prostroska zahtevnost:`O(1)`
 
 ## Testiranje
