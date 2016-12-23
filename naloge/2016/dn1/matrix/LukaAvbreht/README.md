@@ -58,7 +58,20 @@ Problem razdelimo na sedem delov, ki so vsak pol manjsi od svojega oredhodnika. 
 * b = 2  
 * a = 7  
 * d = 2  
+
+
 Vidimo, da pademo v opcijo, ko je `d < log_b(a)` torej je csovna zahtevnost algoritma enaka:
 
 `O(n^(log_2(7)))`
+
+
+[Več] (http://wiki.fmf.uni-lj.si/wiki/Strassenovo_mno%C5%BEenje_matrik)
+
+### Prostorska zahtevnost
+
+## CheapMatrix
+
+### Časovna zahtevnost
+
+### Prostorska zahtevnost
 
