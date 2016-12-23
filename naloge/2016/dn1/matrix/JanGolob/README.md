@@ -1,7 +1,7 @@
 # Poročilo
 *Jan Golob*
 
-Množimo matiki velikosti **m** x **k** in **k** x **n**
+Množimo matriki velikosti **m** x **k** in **k** x **n**
 ** g := max{m, n, k} **
 
 ## SlowMatrix
@@ -9,7 +9,7 @@ Uporablja naivno množenje matrik.
 
 ### Čas
 Za vsak element v ciljni matriki porabimo k množenj. V ciljni matriki je m vrstic in n stolpcev.
-Torej: Časovna zahtevnost je **T(k,n,m) = O(kmn) = O(g^3).**
+Torej:časovna zahtevnost je **T(k,n,m) = O(kmn) = O(g^3).**
 
 ### Prostor
 Poleg vhodnih in končne matrike, SlowMatrix še prostor za začasno vsoto (spremenljivka vs v kodi).
@@ -17,40 +17,40 @@ To je dodatnega **O(ln(_N_))** prostora.
 
 
 ## FastMatrix
-Rekurzivno uporablja [Strassenov algoritem](http://wiki.fmf.uni-lj.si/wiki/Strassenovo_mno%C5%BEenje_matrik) za bločne matrika. Ko naleti na liho dimenzijo matrike, jo osami in izračuna z algoritmom SlowMatrix
+Rekurzivno uporablja [Strassenov algoritem](http://wiki.fmf.uni-lj.si/wiki/Strassenovo_mno%C5%BEenje_matrik) za bločne matrike. Ko naleti na liho dimenzijo matrike, jo osami in izračuna z algoritmom SlowMatrix.
 
 ### Čas
-Na nekem nivoju rekurzije za (m, k, n) velike matrike pomnnožimo 7 podmatrik, ki jih dobivamo s seštevanjem in odštevanjem, ne smemo pozabiti pa tudi na množenje "osamljenih" stolpcev oziroma vrstic. Za seštevanje in odštevanje porabimo O(g^2). In pravtako porabimo O(g^2) za množenje osamljenih stolpcev in vrstic (glej časovno zahtevnost SlowMatrix, le da je eden izmed m, k, n enak 1).
+Na nekem nivoju rekurzije za (m, k, n) velike matrike, pomnnožimo 7 podmatrik, ki jih dobivamo s seštevanjem in odštevanjem, ne smemo pozabiti pa tudi na množenje "osamljenih" stolpcev oziroma vrstic. Za seštevanje in odštevanje porabimo O(g^2). In pravtako porabimo O(g^2) za množenje osamljenih stolpcev in vrstic (glej časovno zahtevnost SlowMatrix, le da je eden izmed m, k, n enak 1).
 Torej: T(g) = 7 x T(g/2) + O(g^2). Po Krovnem izreku sledi **T(g) = O(g^[log_2(7)])**
 
 ### Prostor
-Poleg vhodnih in končne matrike, FastMatrix porabi še 7 matrik velikosti m/2 x n/2 za izračun teh pa še 10 matrik iste velikosti. Spet ne smemo pozabiti prostor porabljen pri osamljenih vrsticah oz stolpcih, ki je O(ln(g)).
-Torej: Dodatno porabimo **17 x O(mn/4) + O(ln(g))**
+Poleg vhodnih in končne matrike, FastMatrix porabi še 7 matrik velikosti m/2 x n/2 za izračun teh pa še 10 matrik iste velikosti. Spet ne smemo pozabiti prostor porabljen pri osamljenih vrsticah oz. stolpcih, ki je O(ln(g)).
+Torej: dodatno porabimo **17 x O(mn/4) + O(ln(g))**
 
 ## CheapMatrix
-Rekurzivno poteka CheapMatrix podobno kot FastMatrix, le da se porabi največ še ena matrika prostora.
+Rekurzivno poteka CheapMatrix podobno, kot FastMatrix, le da se porabi največ še ena matrika prostora.
 
 ### Čas
-Algoritem je enak kot pri Fastmatrix, le da se shranjujjo stvari malce drugače. Zato po podobnem sklepu kot zgoraj pridemo do časovne zahtevosti **T(g) = O(g^[log_2(7)])**
+Algoritem je enak kot pri Fastmatrix, le da se shranjujejo stvari malce drugače. Zato po podobnem sklepu, kot zgoraj pridemo do časovne zahtevosti **T(g) = O(g^[log_2(7)])**
 
 ### Prostor
-Ko množimo naivno porabimo tako kot pri SlowMatrix O(log(g)) prostora, kar je ravno ena komponenta v matriki work
-Pri Strassenovem algoritmu pa si bomo označili kam si bomo spravili kateri vmesni produkt. Namesto seštevanja, pa bomo komponente A-G le začasno popravili (več o tem v komentarjih)
+Ko množimo, naivno porabimo tako, kot pri SlowMatrix O(log(g)) prostora, kar je ravno ena komponenta v matriki work.
+Pri Strassenovem algoritmu pa si bomo označili, kam si bomo spravili, kateri vmesni produkt. Namesto seštevanja, pa bomo komponente A-G le začasno popravili (več o tem v komentarjih).
 
 | self: |    |   | work: |    |
 |-------|----|---|-------|----|
 | P6    | P2 |   | P3    | P5 |
 | P4    | P1 |   | P7    | M  |
 
-Vmesne rezultate smo postavili v matriko self kot kaže tabela, zato, ker se te ne pojavljajo več v enačbah po tem, ko smo opravili z tisto podmatriko(da ne bi prišlo do napak(prištevanje, že popravljene matrike))
-Podmatrika M pa je delovna matrika za množenja pri katerih dobimo vmesne podmatrike P.
-Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi da porabimo še dodatnega **O(mn)** prostora.
+Vmesne rezultate smo postavili v matriko self, kot kaže tabela, zato, ker se te ne pojavljajo več v enačbah po tem, ko smo opravili s tisto podmatriko (da ne bi prišlo do napak(prištevanje, že popravljene matrike)).
+Podmatrika M pa je delovna matrika za množenja, pri katerih dobimo vmesne podmatrike P.
+Torej: vidimo, da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi, da porabimo še dodatnega **O(mn)** prostora.
 
 ## Testiranje:
 1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki. Vidimo da se to spremeni pri velikosti _.
-2. CheapMatrix je pribljižno 2krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
-3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno
-4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom, in razliko do poetnce števila 2. Pri velikih dimenzijah, ko je SlowMatrix zelo počanejša od CheapMatrix bi bilo bolje, da bi naši matriki razširili z ničlami do naslenje potence števila 2. ([Princip vidimo tukaj na 11-ti prosojnici.](http://www2.nauk.si/materials/377/out-279920/index.html#state=11))
+2. CheapMatrix je pribljižno 2-krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
+3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno.
+4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom, in razliko do potence števila 2. Pri velikih dimenzijah, ko je SlowMatrix zelo počanejša od CheapMatrix, bi bilo bolje, da bi naši matriki razširili z ničlami do naslenje potence števila 2. ([Princip vidimo tukaj na 11-ti prosojnici.](http://www2.nauk.si/materials/377/out-279920/index.html#state=11))
 
 ### Tabela časov
 Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 9) ter časom potrebnim za množenje matrik velikosti m x n in n x m:
