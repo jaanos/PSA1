@@ -10,7 +10,7 @@ Tukaj gre za naivno množenje oziroma po domače za množenje "na roke". Element
 
 *Časovna zahtevnost:* Ker potrebujemo *m x n* členov in za vsakega porabimo O(*k*) operacij (skalarno množenje), je skupna časovna zahtevnost O(*mkn*).
 
-*Prostorska zahtevnost:* Pri računanju *(i,j)*-tega člena vedno shranjujemo v eno spremenljivko, na koncu pa vse zapišemo v produktno matriko. Torej je prostorska zahtevnost O(1).
+*Prostorska zahtevnost:* Pri računanju *(i,j)*-tega člena vedno shranjujemo direktno v produktno matriko. Torej je prostorska zahtevnost O(1).
 
 ###FastMatrix
 
