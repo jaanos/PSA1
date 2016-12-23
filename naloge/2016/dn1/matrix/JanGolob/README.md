@@ -2,7 +2,6 @@
 *Jan Golob*
 
 Množimo matriki velikosti **m** x **k** in **k** x **n**
-
 **g := max{m, n, k}**
 
 ## SlowMatrix
