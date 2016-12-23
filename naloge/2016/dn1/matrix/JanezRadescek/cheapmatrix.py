@@ -55,10 +55,10 @@ class CheapMatrix(SlowMatrix):
         elif ujemanje%2 == 1:
             #self[:,:] = self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:]) + self.multiply(left[:,ujemanje-1], right[ujemanje-1,:])
 
-            #self[:,:] = left[:,:ujemanje-1] * right[:ujemanje-1,:] + left[:,ujemanje-1] * right[ujemanje-1,:]
+            self[:,:] = left[:,:ujemanje-1] * right[:ujemanje-1,:] + left[:,ujemanje-1] * right[ujemanje-1,:]
 
-            self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:])
-            self[:,:] += work.multiply( left[:,ujemanje-1], right[ujemanje-1,:] )
+            #self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:])
+            #self[:,:] += work.multiply( left[:,ujemanje-1], right[ujemanje-1,:] )
 
 
         #če so sode
