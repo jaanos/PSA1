@@ -37,7 +37,7 @@ s pomočjo sedmih produktov
 * *P3 = (C + D) E*,
 * *P4 = D (G - E)*,
 * *P5 = (A + D) (E + H)*,
-* *P6 = (B - D) (G + H)* in
+* *P6 = (B - D) (G + H)* 
 * *P7 = (A - C) (E + F)*.
 
 Produkt potem izračunamo kot  
@@ -71,7 +71,15 @@ Vidimo, da pademo v opcijo, ko je `d < log_b(a)` torej je csovna zahtevnost algo
 
 ## CheapMatrix
 
+V podrazredu CheapMatrix smo množenje implementirali na zelo podoben način kot v razredu FastMatrix, Z to razliko, da smo ciljni matriki (Rezultatu) Podali se delovno matriko, v katero smo shranjevali umesne vrednosti, ter jo uporabljali v rekurziji. Z tem smo algoritmu iz Fastmarixa zmanjšali prostorsko zahtevnost. 
+
 ### Časovna zahtevnost
+
+Prav tako kot v razredu FastMatrix je časovna zahtevnost algoritma enaka.
+
+`O(n^(log_2(7)))`
+
+Gre namreč za enak algortitem, le da je v tem primeru le ta prostorsko manj zahteven.
 
 ### Prostorska zahtevnost
 
