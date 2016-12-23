@@ -41,7 +41,7 @@ To seveda storimo rekurzivno. Na koncu vrnemo blok `[0:m, 0:n]`.
 
 *Časovna zahtevnost:* Časovna zahtevnost algoritma je `O(n^2.8)`, kjer je *n* dimenzija vhodne matrike. To dobimo takole: Označimo *n* z dimenzijo vhodnim matrik, kjer je *n = 2^x*. Potem očitno velja `T(x) = 7*T(x-1) + c^x`, kjer prvi del dobimo zaradi sedmih množenj, drugi pa pride iz seštevanja in odštevanja. Torej velja `T(x) = (7 + O(1))^x`, kar nam da po krovnem izreku `O(n^2.8)`.
 
-*Prostorska zahtevnost:* Pri izračunu produkta porabimo precej prostora, saj na vsakem koraku generiramo nove *P_i* matrike. Skupno tako porabimo `O(mn)` prostora, kjer pa so konstante precej velike, namreč na začetku porabimo `7*O(m//2 * n//2)`, na vsakem naslednjem pa `7*O(m//(2^i) * n//(2^i))`.
+*Prostorska zahtevnost:* Pri izračunu produkta porabimo precej prostora, saj na vsakem koraku generiramo nove *P_i* matrike, poleg tega pa na začetku naredimo matriki velikosti *2^n*, ki sta tako veliki, da lahko vanju vstavimo matriki left in right, kot je to narejeno v programu. Skupno tako porabimo `O(max(m,k,n))` prostora, kjer pa so konstante precej velike, namreč na začetku porabimo še `7*O((max(m,k,n)//2)^2)`, na vsakem naslednjem pa `7*O((max(m,k,n)//(2^i))^2)`.
 
 ###CheapMatrix
 
