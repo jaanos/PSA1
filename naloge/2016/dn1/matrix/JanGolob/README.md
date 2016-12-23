@@ -48,8 +48,10 @@ Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, k
 
 ## Testiranje:
 1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki.
+⋅⋅* Vidimo da se to spremeni pri velikosti
 2. CheapMatrix je pribljižno 2krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
 3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno
+4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom
 
 ### Tabela časov
 Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 9) ter časom potrebnim za množenje matrik velikosti m x n in n x m:
@@ -69,6 +71,8 @@ Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 
 | 31 | 31 | 31 | 0.091391306207103 | 0.69895400799675 | 0.3797532553614573 |
 | 32 | 32 | 32 | 0.10017875088199446 | 3.018772691312621 | 1.0332258547328355 |
 | 33 | 33 | 33 | 0.11169578139365832 | 2.845287262930574 | 1.0622249780837745 |
+| 63 | 63 | 63 | 0.8972396245376215 | 5.460229639290983 | 2.8196638799204603 |
+| 64 | 64 | 64 | 0.9880292501443257 | 20.53662639782762 | 7.745000320725268 |
 | 100 | 100 | 100 | 3.7262874981290963 | 30.22643417648443 | 14.785279565524178 |
 |   |   |   |      |      |       |
 | 28 | 32 | 32 | 0.10262481558297162 | 0.5537296072184567 | 0.27958861639119925 |
