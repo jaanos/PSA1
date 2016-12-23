@@ -60,11 +60,36 @@ Najprej izračunamo *A+D* in *E+H* kot *A+=D* in *E+=H* ter ju zmnožimo
 
 
 ## Analiza časovne in prostorske zahtevnosti
+KROVNI IZREK
+### SlowMatrix
+Časovna zahtevnost: Za izračun produkta porabimo *O(mnk)*, kjer je *n* x *m* velikost ciljne matrike, *k* pa dolžina vektorjev, ki jih množoimo.
+Prostorska zahtevnost: Ne porabimo nič dodatnega prostora, ker vmesne rezultate prištevamo direktno v ciljno matriko, torej O(1). 
+### FastMatrix
+Časovna zahtevnost: Časovna zahtevnost algoritma je *O(N^2.8)*, oz. *O(N^log_2(7))*, kjer je *N = max(m,n,k)* (vemo, da velja za Strassenov algoritem, uporabimo tudi krovni izrek).
+Prostorska zahtevnost: Obravnavamo najslabši (najpočasnejši) primer, torej *m*, *n* in *k* so vsi lihi. Po krovnem izreku iz formule *S(N) = S(N/2) + 33/4 O(N^2)* oz. po krovnem izreku *S(N) = O(N^2)*.
+### CheapMatrix
+Časovna zahtevnost: Ker ponovno računamo po Strassenovem algoritmu, je prostorska zahtevnost spet enaka *O(n^2.8)*.
+Prostorska zahtevnost: Najprej naredimo delovno matriko, ki je enake velikosti, kot ciljna matrika, torej *O(mn)*. Ostale operacije porabijo le konstanten čas (torej *O(1)*), ali pa imamo rekurzivne klice, torej največ *O(log(mnk))*.
 
 ## Primerjava dejanskih časov izvajanja
+Za primerjavo si bomo ogledali delovanje vseh treh algoritmov na kvadratnih matrikah velikosti *2^n*, kjer je *n = 0,1,...,10*.
+
+
+| Algoritem   | 1   | 2   | 4     | 8     | 16    | 32    | 64     | 128    | 256     | 512      |
+|-------------|-----|-----|-------|-------|-------|-------|--------|--------|---------|----------|
+| SlowMatrix  | 0.0 | 0.0 | 0.0   | 0.0   | 0.016 | 0.234 | 1.813  | 17.469 | 189.313 | 2080.521 |
+| FastMatrix  | 0.0 | 0.0 | 0.016 | 0.031 | 0.266 | 1.625 | 10.609 | 76.578 | 507.703 | 3556.875 |
+| CheapMatrix | 0.0 | 0.0 | 0.0   | 0.031 | 0.125 | 0.969 | 7.390  | 53.406 | 338.516 | 2600.891 |
+
+
+Oglejmo si še graf, kjer je:
+* SlowMatrix zelen,
+* FastMatrix rdeč,
+* CheapMatrix moder.
+
+![Graf](https://github.com/SlivnikN/PSA1/tree/master/naloge/2016/dn1/matrix/NinaSlivnik/graf.png)
+
+Vidimo, da je SlowMatrix najhitrejši, sledi mu CheapMatrix, najpočasnejši pa FastMatrix.
 
 
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
-
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.

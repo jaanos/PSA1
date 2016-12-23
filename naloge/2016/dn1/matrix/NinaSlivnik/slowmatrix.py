@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from matrix import AbstractMatrix
+from ..matrix import AbstractMatrix
 
 class SlowMatrix(AbstractMatrix):
     """

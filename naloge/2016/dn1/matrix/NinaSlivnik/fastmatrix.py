@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from slowmatrix import SlowMatrix
-from matrix import AbstractMatrix
+from .slowmatrix import SlowMatrix
 
 class FastMatrix(SlowMatrix):
     """
@@ -33,6 +32,8 @@ class FastMatrix(SlowMatrix):
 
         if leva == 1 or desna == 1 or skupna == 1:
             return SlowMatrix.multiply(self, left, right)
+
+        # Vhodni matriki razdelimo na blocne matrike (lihe stolpce in vrstice pustimo).
         a = left[0:leva2, 0:skupna2]
         b = left[0:leva2, skupna2:skupnasoda]
         c = left[leva2:levasoda, 0:skupna2]
@@ -42,6 +43,7 @@ class FastMatrix(SlowMatrix):
         g = right[skupna2:skupnasoda, 0:desna2]
         h = right[skupna2:skupnasoda, desna2:desnasoda]
 
+        # Za racunanje 7 produktov.
         p1 = FastMatrix(nrow=a.nrow(), ncol=f.ncol())
         p1.multiply(a, f-h)
         p2 = FastMatrix(nrow=a.nrow(), ncol=h.ncol())
@@ -57,11 +59,14 @@ class FastMatrix(SlowMatrix):
         p7 = FastMatrix(nrow=a.nrow(), ncol=f.ncol())
         p7.multiply(a-c, e+f)
 
+        # Vstavimo v ciljno matriko.
         self[0:leva2, 0:desna2] = p4 + p5 + p6 - p2
         self[0:leva2, desna2:desnasoda] = p1 + p2
         self[leva2:levasoda, 0:desna2] = p3 + p4
         self[leva2:levasoda, desna2:desnasoda] = p1 + p5 - p3 - p7
 
+
+        # Obravnavamo posebne primere, kjer crke predstavljajo: leva, srednja, desna. LSL je torej: leva je liho, srednja je sodo, desna je liho.
         # SSS
         if leva%2 == 0 and skupna%2 == 0 and desna%2 == 0:
             return self

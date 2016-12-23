@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from slowmatrix import SlowMatrix
+from .slowmatrix import SlowMatrix
 
 class CheapMatrix(SlowMatrix):
     """
@@ -114,6 +114,7 @@ class CheapMatrix(SlowMatrix):
         # Racunamo c22 = c22 + p5
         c22 += d21
 
+        # Obravnavamo posebne primere, kjer crke predstavljajo: leva, srednja, desna. LSL je torej: leva je liho, srednja je sodo, desna je liho.
         # SSS
         if leva % 2 == 0 and skupna % 2 == 0 and desna % 2 == 0:
             return self
