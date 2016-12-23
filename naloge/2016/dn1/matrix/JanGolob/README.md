@@ -49,3 +49,4 @@ Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, k
 
 | m | k | n | Slow | Fast | Cheap |
 |---|---|---|------|------|-------|
+| 2 | 2 | 2 | 6.457268703628472e-05 | 0.0010814855994355234 | 0.00038016634950501405 |
