@@ -5,22 +5,22 @@
 ### Razred `SlowMatrix`
 
 Razred `SlowMatrix` v metodi `multiply` implementira naivno množenje matrik - vrstice leve matrike skalarno množimo 
-z vrsticami desne matrike. Skalarni produkt računamo s pomočjo spremenljivke `temp`, katere vrednost po izračunu 
-zapišemo na (i, j)-to mesto ciljne matrike, kjer je `i` vrstice leve matrike in `j` stolpec desne.
+s stolpci desne matrike. Skalarni produkt računamo s pomočjo spremenljivke `temp`, katere vrednost po izračunu 
+zapišemo na (i, j)-to mesto ciljne matrike, kjer je `i` vrstica leve matrike in `j` stolpec desne.
 
 ### Razred `FastMatrix`
 
 Metoda `multiply` v razredu `FastMatrix` najprej preveri, če so matrike ustreznih dimeznij za množenje, nato pa si
 jih shrani v spremenljivke. V spremenljivke `ms`,`ns` in `ps` si shrani sodo število, ki je enako ustrezni dimenziji 
-matrike, če je matrika soda in za eno manjše od dimenzije matrike, če je matrika liha. Če je katera od dimenzij leve ali
+matrike, če je dimenzija matrike soda in za eno manjše od dimenzije matrike, če je dimenzija matrike liha. Če je katera od dimenzij leve ali
  desne matrike enaka 1, matrike ne moremo razdeliti na 4 podmatrike (torej ne moremo uporabiti Strassenovega algoritma) 
-in zato matrike zmnožimo z metodo `multiply` v razredu `SlowMatrix`. Sicer pa razdelimo podmatriko `left[0:ns][0:ms]`, 
+in zato matriki zmnožimo z metodo `multiply` v razredu `SlowMatrix`. Sicer pa razdelimo podmatriko `left[0:ns][0:ms]`, 
 ki ima same sode dimenzije, na štiri enako velike podmatrike (`A`, `B`, `C`, `D`), ki jih bomo uporabili pri množenju. 
 Podobno tudi `right[0:ms, 0:ps]` na `E`, `F`, `G` in `H`. Sledi rekurzivni izračun produktov `P1` do `P7`.
 Ta se nekoč konča, saj se dimenzije matrik, ki jih množimo na vsakem koraku razpolovijo, če pa je katera izmed dimenzij
 enaka 1, pa jih zmnožimo z metodo `multiply` v `SlowMatrix`. Nato obravnavamo še primere, če je katera izmed dimenzij 
 matrik `left` ali `right` liha (posebej izračunamo produkte z zadnjim stolpcem leve matrike, zadnjo vrstico leve 
-matrike in zadnjim stolpecm desne matrike). V tem primeru računamo produkte, kjer ima vsaj ena izmed matrik le eno 
+matrike in zadnjim stolpcem desne matrike). V tem primeru računamo produkte, kjer ima vsaj ena izmed matrik le eno 
 vrstico ali stolpec. Nazadnje še izračunamo potrebne vsote matrik `P1` do `P7` in jih zapišemo v ciljno matriko, ter
 prišejemo posebne produkte z zadnjim stolpcem leve matrike (lahko so 0).
 
@@ -48,8 +48,8 @@ T(n,m,p) ... časovna zahtevnost množenja matrik `n x m` in `m x p`.
 S(n,m,p) ... prostorska zahtevnost množenja matrik `n x m` in `m x p`.
 
 ### Časovna zahtevnost
-__SlowMatrix__: `O(mnp)` operacij - za izračun skalarnega produkta vrstice in stolpca je potrebnih `k` množenj in 
-`k - 1` seštevanj. Izračunati moramo `p * n` skalarnih produktov.
+__SlowMatrix__: `O(mnp)` operacij - za izračun skalarnega produkta vrstice in stolpca je potrebnih `m` množenj in 
+`m - 1` seštevanj. Izračunati moramo `p * n` skalarnih produktov.
 
 __FastMatrix__: 
 Najprej si shranimo dimenzije matrik in nekatera druga števila, kar porabi `O(1)` operacij.
