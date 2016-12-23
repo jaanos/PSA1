@@ -8,9 +8,9 @@ import random
 error = 0
 
 for l in range(20):
-    m = random.randint(1,30)
-    k = random.randint(1,30)
-    n = random.randint(1,30)
+    m = random.randint(1,60)
+    k = random.randint(1,60)
+    n = random.randint(1,60)
     #m, n, k = 17,4,4
 
     sez1 = []

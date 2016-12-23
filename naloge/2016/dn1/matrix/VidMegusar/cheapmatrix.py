@@ -33,10 +33,10 @@ class CheapMatrix(SlowMatrix):
         if lv <= 4 or ls <= 4 or ds <= 4:
             super().multiply(left,right)
 
-        #if lv < 5 and ls < 5 and ds < 5:
-         #   super().multiply(left,right)
 
         #lociti moramo primere glede na to ali sta stevili stolpcev in vrstic matrike lihi ali sodi
+        #paziti moramo tudi, da ne ustvarjamo novih matrik
+
         elif lv % 2 == 0 and ls % 2 == 0 and ds % 2 == 0:
             A = left[0:(lv//2),0:(ls//2)]
             B = left[0:(lv//2),(ls//2):ls]
@@ -47,6 +47,13 @@ class CheapMatrix(SlowMatrix):
             F = right[0:(dv//2),(ds//2):ds]
             G = right[(dv//2):dv,0:(ds//2)]
             H = right[(dv//2):dv,(ds//2):ds]
+
+            S1 = left[0:(lv//2),0:(ls//2)]
+            S2 = left[0:(lv//2),(ls//2):ls]
+            S3 = left[(lv//2):lv,0:(ls//2)]
+            S4 = left[(lv//2):lv,(ls//2):ls]
+
+
 
             P1 = A*(F - H)
             P2 = (A + B)*H

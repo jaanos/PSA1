@@ -28,8 +28,6 @@ class FastMatrix(SlowMatrix):
         if lv <= 4 or ls <= 4 or ds <= 4:
             super().multiply(left,right)
 
-        #if lv < 5 and ls < 5 and ds < 5:
-         #   super().multiply(left,right)
 
         #lociti moramo primere glede na to ali sta stevili stolpcev in vrstic matrike lihi ali sodi
         elif lv % 2 == 0 and ls % 2 == 0 and ds % 2 == 0:
