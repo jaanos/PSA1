@@ -50,9 +50,9 @@ class FastMatrix(SlowMatrix):
 
 
         else:
-            a = aaa / 2
-            b = bbb / 2
-            c = ujemanje / 2
+            a = aaa // 2
+            b = bbb // 2
+            c = ujemanje // 2
 
             #podmatrike
             A = left[:a,:c]
