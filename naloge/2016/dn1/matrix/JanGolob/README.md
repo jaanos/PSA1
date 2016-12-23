@@ -1,5 +1,5 @@
-# Poročilo
 *Jan Golob*
+# Poročilo
 
 Množimo matriki velikosti **m** x **k** in **k** x **n**.
 Upeljimo **g := max{m, n, k}**
