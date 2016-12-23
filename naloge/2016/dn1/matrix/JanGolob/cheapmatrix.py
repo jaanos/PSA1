@@ -71,6 +71,8 @@ class CheapMatrix(SlowMatrix):
             # P6 P2 |  P3 P5
             # P4 P1 |  P7 M
 
+
+
             # P1 = A * (F - H)
             # P2 = (A + B) * H
             # P3 = (C + D) * E
@@ -78,6 +80,7 @@ class CheapMatrix(SlowMatrix):
             # P5 = (A + D) * (E + H)
             # P6 = (B - D) * (G + H)
             # P7 = (A - C) * (E + F)
+            #Namesto, da bi ustvarili nove matrike, bomo le obstoječim matrikam, prišteli oz odšteli druge matrike, ter jih nato por
 
             F -= H
             P1.multiply(A, F, M)
