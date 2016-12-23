@@ -88,6 +88,15 @@ Algoritem kot je zahtevano porabi le: 2*velikost cilje matrike + O ( 1 ) prostor
 
 ## Primerjava časovnih zahtevnosti
 
+Iz grafov lahko vidimo, da je SlowMatrix za nizke dimenzije matrik najhitrejši, CheapMatrix pa je malo hitrejši
+kot FastMatrix. Opazimo lahko večje skoke takrat, ko preskočimo naslednjo potenco 2. Do skokov vmes pa pride odvisno od tega
+koliko lihih delov moramo ročno zmnožiti. Če za matriko dimenzije n potrebuje t časa, potem za matriko 
+dimenzije 2*n potebujemo 2^2.80 * t = 6.96 * t časa. 
+Rezultate lahko vidimo iz tabele, recimo: 
+- T(121) = 7.152 * T(61)
+- T(81) = 7.07 * T(41)
+- T(141) = 7.3 * T(71)
+
  ![Graf izmerjenih časov](Graf.png)
 
 | Dimenzija  n x n matrike | SlowMatrix | FastMatrix | CheapMatrix |
