@@ -41,7 +41,18 @@ V datoteki z algoritmom so bolj natančno opisane časovne zahtevnosti posamezni
 `T(m,k,n) = 7*T(m/2,k/2,n/2) + 9*O(m/2*k/2) + 9*O(k/2*n/2) + 20*O(m/2*n/2) + 8*O(m/2) + 8*O(n/2) + 2*O(k/2)`. 
 Če upoštevamo, da zadnje 3 člene linearne zahtevnosti lahko zanemarimo, in uvedemo *N* = max(*m,k,n*), se nam formula poenostavi v
 `T(N) = 7*T(N/2) + 38/4*O(N^2)`. Krovni izrek nam pove, da je skupna časovna zahtevnost `T(N) = O(N^log_2(7))`. Torej je tudi `T(m,k,n) = O(N^log_2(7))`. Če želimo bolj natančno časovno zahtevnost, pa jo izračunamo ročno iz poenostavljene enačbe `T(m,k,n) = 7*T(m/2,k/2,n/2) + O(mk) + O(kn) + O(mn)`. Ker je enačba simetrična glede na vse spremenljivke, lahko brez škode za splošnost predpostavimo *m* >= *k* >= *n*. Računamo:  
-`T(m,k,n) = 7*T(m/2,k/2,n/2) + O(mk) + O(kn) + O(mn) = 49*T(m/4,k/4,n/4) + 7*(O(m/2*k/2) + O(k/2*n/2) + O(m/2*n/2)) + O(mk) + O(kn) + O(mn) = ... = (O(mk) + O(kn) + O(mn))*(1 + 7/4 + (7/4)^2 + ... + (7/4)^(log_2(n)-1)) + (7^log_2(n))*T(m/n,k/n,1) = (O(mk) + O(kn) + O(mn))*((7/4)^log_2(n) - 1)*4/3 + (n^log_2(7))*O(m/n*k/n) = (O(mk) + O(kn) + O(mn))*((7/4)^log_2(n)) + (n^log_2(7))*O(m/n*k/n) = (O(mk) + O(kn) + O(mn))*(n^log_2(7))/n^2 + (n^log_2(7))*O(m/n*k/n) = O((m/n*k/n + k/n + m/n)*(n^log_2(7))) = O(m/n*k/n*(n^log_2(7))) =  O((mnk/n^3)*(n^log_2(7)))`.   
+```
+T(m,k,n) = 
+7*T(m/2,k/2,n/2) + O(mk) + O(kn) + O(mn) = 
+49*T(m/4,k/4,n/4) + 7*(O(m/2*k/2) + O(k/2*n/2) + O(m/2*n/2)) + O(mk) + O(kn) + O(mn) = ... =
+(O(mk) + O(kn) + O(mn))*(1 + 7/4 + (7/4)^2 + ... + (7/4)^(log_2(n)-1)) + (7^log_2(n))*T(m/n,k/n,1) = 
+(O(mk) + O(kn) + O(mn))*((7/4)^log_2(n) - 1)*4/3 + (n^log_2(7))*O(m/n*k/n) = 
+(O(mk) + O(kn) + O(mn))*((7/4)^log_2(n)) + (n^log_2(7))*O(m/n*k/n) = 
+(O(mk) + O(kn) + O(mn))*(n^log_2(7))/n^2 + (n^log_2(7))*O(m/n*k/n) = 
+O((m/n*k/n + k/n + m/n)*(n^log_2(7))) = 
+O(m/n*k/n*(n^log_2(7))) =  
+O((mnk/n^3)*(n^log_2(7)))  
+```
 Če označimo z *M* = min(*m,k,n*), se rezultat prepiše v `T(m,k,n) = O((mnk/M^3)*(M^log_2(7)))`. Poglejmo si še robne primere: če je *m* = *k* = *n*, dobimo enako kot prej `T(m,k,n) = O(M^log_2(7)) = O(N^log_2(7))`, če pa je *M* = 1, dobimo enako kot pri SlowMatrix `T(m,k,n) = O(mnk)`.
 
 *Prostorska zahtevnost*  
@@ -51,7 +62,16 @@ S `S(m,k,n)` označimo prostorsko zahtevnost množenja matrik. Spet obravnavamo 
 Vendar moramo paziti, da so lokalne spremenljivke, ki jih ustvari funkcija, shranjene v spominu samo toliko časa, dokler je aktiven klic te funkcije. To pomeni, da prvi rekurzivni klic za množenje hrani vse spremenljivke, dokler ne pridemo do dna rekurzije (takrat je največja poraba spomina). Ko pa se vračamo nazaj gor, se nerabljene spremenljivke sproti brišejo iz spomina. Torej preden drugič rekurzivno množimo, se spomin do konca počisti. Kljub temu, da imamo 7 rekurzivnih množenj, zato porabimo le toliko prostora, kot ga porabi eno rekurzivno množenje. Torej je prava formula  
 `S(m,k,n) = S(m/2,k/2,n/2) + 23*O(m/2*n/2) + 5*O(m/2*k/2) + 5*O(k/2*n/2) + 10*O(m/2) + 10*O(n/2)`.
 Spet lahko enačbo poenostavimo v `S(N) = S(N/2) + 33/4*O(N^2)`, kar nam po krovnem izreku tokrat da S(*N*) = O(*N*^2). Bolj natančno pa spet lahko računamo (*m* >= *k* >= *n*):  
-`S(m,k,n) = S(m/2,k/2,n/2) + O(mk) + O(kn) + O(mn) = S(m/4,k/4,n/4) + O(m/2*k/2) + O(k/2*n/2) + O(m/2*n/2) + O(mk) + O(kn) + O(mn) = ... = T(m/n,k/n,1) + (O(mk) + O(kn) + O(mn))*(1 + 1/4 + (1/4)^2 + ... + (1/4)^(log_2(n)-1)) = O(1) (običajno množenje) + (O(mk) + O(kn) + O(mn))*(1 - (1/4)^log_2(n))*4/3 = O(mk) + O(kn) + O(mn) = O(mk) = O(mkn/n)`.  
+```
+S(m,k,n) = 
+S(m/2,k/2,n/2) + O(mk) + O(kn) + O(mn) = 
+S(m/4,k/4,n/4) + O(m/2*k/2) + O(k/2*n/2) + O(m/2*n/2) + O(mk) + O(kn) + O(mn) = ... = 
+T(m/n,k/n,1) + (O(mk) + O(kn) + O(mn))*(1 + 1/4 + (1/4)^2 + ... + (1/4)^(log_2(n)-1)) = 
+O(1) (običajno množenje) + (O(mk) + O(kn) + O(mn))*(1 - (1/4)^log_2(n))*4/3 = 
+O(mk) + O(kn) + O(mn) = 
+O(mk) = 
+O(mkn/n)
+```
 Torej dobimo `S(m,k,n) = O(mkn/M)`. Pri *m* = *k* = *n* spet dobimo `S(m,k,n) = O(N^2)`, pri *M* = 1 pa formula ne da pravega rezultata. Pri izpeljavi smo namreč implicitno privzeli, da lahko *n* vsaj enkrat razpolovimo.
 
 __CheapMatrix__  
