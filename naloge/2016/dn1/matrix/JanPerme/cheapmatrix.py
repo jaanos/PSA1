@@ -61,27 +61,28 @@ class CheapMatrix(SlowMatrix):
             F+=H
             D_3+=W_1
             D_4+=W_1
-            W_1=W_1-W_1
+            W_1[:,:]=0
             #P2
             A+=B
             W_1.multiply(A,H,W_2)
             A-=B
             D_1-=W_1
             D_3+=W_1
-            W_1=W_1-W_1
+            W_1[:,:]=0
             #P3
             C+=D
             W_1.multiply(C,E,W_2)
             C-=D
             D_2+=W_1
             D_4-=W_1
-            W_1=W_1-W_1
+            W_1[:,:]=0
             #P4
             G-=E
             W_1.multiply(D,G,W_2)
             G+=E
             D_1+=W_1
-            W_1=W_1-W_1
+            D_2+=W_1
+            W_1[:,:]=0
             #P5
             A+=D
             E+=H
@@ -90,7 +91,7 @@ class CheapMatrix(SlowMatrix):
             E-=H
             D_1+=W_1
             D_4+=W_1
-            W_1=W_1-W_1
+            W_1[:,:]=0
             #P6
             B-=D
             G+=H
@@ -98,15 +99,15 @@ class CheapMatrix(SlowMatrix):
             B+=D
             G-=H
             D_1+=W_1
-            W_1=W_1-W_1
+            W_1[:,:]=0
             #P7
             A-=C
             E+=F
             W_1.multiply(A,E,W_2)
             A+=C
             E-=F
-            D_4+=W_1
-            W_1=W_1-W_1
+            D_4-=W_1
+            W_1[:,:]=0
             #obravnavamo primer, ce ima leva matrika liho stevilo stolpcev(in seveda desna isto stevilo vrstic)
             if (left.ncol())%2==1:
                 for i in range(2*(left.nrow()//2)): #2*(left.nrow()//2) da ne stejemo tistega zadnjega elementa na mestu(n,n) leve matrike 2-krat ce velja tudi (left.nrow()%2)==1:
