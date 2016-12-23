@@ -42,6 +42,7 @@ class CheapMatrix(SlowMatrix):
             in nato posebej obravnavali zadnje lihe vrstice in stolpce.
             """
 
+            #Oznake za lepšo kodo
             visina_l = left.nrow()//2
             sirina_l = left.ncol()//2
             visina_r = right.nrow()//2
@@ -67,84 +68,77 @@ class CheapMatrix(SlowMatrix):
             S3 = self[visina_l:2*visina_l, :sirina_r]
             S4 = self[visina_l:2*visina_l, sirina_r:2*sirina_r]
 
-            WORK_1.multiply(A,F,WORK_4) #A*F
-            WORK_2.multiply(A,H,WORK_3) #A*H
-            WORK_1 -= WORK_2 # P1 = A*F - A*H
-            WORK_3.multiply(B, H, WORK_4) #B*H
-            WORK_3 += WORK_2 #P2
+            F -= H
+            WORK_1.multiply(A,F, WORK_4) #Matrika P1
+            F += H
 
-            S2[:,:] = WORK_1 #P1
-            S2 += WORK_3 #P1 + P2
+            A += B
+            WORK_2.multiply(A, H, WORK_4) #Matrika P2
+            A -= B
 
-            WORK_4.multiply(A, E, S1) #A*E
-            S3.multiply(D, E, S1) #D*E
-            S4.multiply(D, H, S1) #D*H
+            S2 += WORK_1
+            S2 += WORK_2
 
-            WORK_2 += WORK_4
-            WORK_2 += S3
-            WORK_2 += S4 #WORK_2 = A*E + A*H + D*E + D*H = P5
-            S4[:,:] = WORK_1 #To je zadnjic ko bomo uporabili P1           
+            #Na mestu S2 v matriki je sedaj prava vrednost.
 
-            WORK_4.multiply(C, E, S1) # C*E
-            S3 += WORK_4 #S3 = D*E + C*E = P3
+            S4 += WORK_1
+            #Sedaj lahko na matriko P1 pozabimo.
+            
+            C += D
+            WORK_1.multiply(C, E, WORK_4) #Matrika P3
+            C -= D
 
-            S4 += WORK_2
-            S4 -= S3
-            S4 += WORK_4 # S4 = P1 + P5 - P3 + C*E (manjka še - A*E - A*F + C*F)
+            A += D
+            E += H
+            S1.multiply(A, E, WORK_4) #Matrika P5
+            A -= D
+            E -= H
 
-            WORK_4.multiply(A, E, S1)
-            S4 -= WORK_4
+            A -= C
+            E += F
+            WORK_3.multiply(A, E, WORK_4) #Matrika P7
+            A += C
+            E -= F
 
-            WORK_4.multiply(A,F, S1)
-            S4 -= WORK_4
+            S4 -= WORK_3
+            S4 -= WORK_1
+            S4 += S1
+            #Na mestu S4 je sedaj prava vrednost.
 
-            WORK_4.multiply(C, F, S1)
-            S4 += WORK_4 #S4 = P1 + P5 - P3 - P7
+            S1 -= WORK_2 # S1 = P5 - P2
 
             """
-            Trenutno stanje:
-            S1 = ??
-            S2 = Pravilna vrednost
-            S3 = P3
-            S4 = Pravilna vrednost
-            WORK_1 = P1
-            WORK_2 = P5
-            WORK_3 = P2
-            WORK_4 = C*F
+            Trenutno Stanje:
+            S1 = P5 - P2
+            S2 = Prava vrednost
+            S3 = Prazno
+            S4 = Prava vrednost
+            WORK_1 = P3
+            WORK_2 = P2
+            WORK_3 = P7
+            WORK_4 = random
             """
 
-            WORK_1.multiply(D, G, S1)
             S3 += WORK_1
+            #Na matriko P3 lahko sedaj pozabimo.
 
-            WORK_4.multiply(D, E, S1)
-            S3 -= WORK_4
+            G -= E
+            WORK_1.multiply(D, G, WORK_4) #Matrika P4
+            G += E
 
-            """
-            Trenutno stanje:
-            S1 = ??
-            S2 = Pravilna vrednost
-            S3 = Pravilna Vrednost
-            S4 = Pravilna vrednost
-            WORK_1 = D*G
-            WORK_2 = P5
-            WORK_3 = P2
-            WORK_4 = D*E
-            """
+            S3 += WORK_1
+            #Na mestu S3 je sedaj prava vrednost.
 
-            S1[:,:] = WORK_1
-            S1 -= WORK_4 #S1 = P4
-            S1 += WORK_2 #S1 = P4 + P5
-            S1 -= WORK_3 #S1 = P4 + P5 - P2
-            S1 -= WORK_1 #S1 = P4 + P5 - P2 - D*G
+            S1 += WORK_1 # S1 = P5 - P2 + P4
 
-            WORK_2.multiply(B,G, WORK_4)
-            S1 += WORK_2
+            B -= D
+            G += H
+            WORK_1.multiply(B, G, WORK_4) #Matrika P6
+            B += D
+            G -= H
 
-            WORK_2.multiply(B,H, WORK_4)
-            S1 += WORK_2
-
-            WORK_2.multiply(D, H, WORK_4)
-            S1 -= WORK_2
+            S1 += WORK_1
+            #Na mestu S1 je sedaj prava vrednost.
 
             if left.ncol() % 2 == 1:
                 """
@@ -221,4 +215,3 @@ def clear(matrix):
     for i in range(matrix.nrow()):
         for j in range(matrix.ncol()):
             matrix[i,j] = 0
-
