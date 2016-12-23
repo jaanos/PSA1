@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from slowmatrix import SlowMatrix
+from .slowmatrix import SlowMatrix
 
 class CheapMatrix(SlowMatrix):
     """
