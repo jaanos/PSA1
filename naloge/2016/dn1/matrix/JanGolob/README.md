@@ -45,7 +45,13 @@ Pri Strassenovem algoritmu pa si bomo označili kam si bomo spravili kateri vmes
 Vmesne rezultate smo postavili v matriko self kot kaže tabela, zato, ker se te ne pojavljajo več v enačbah po tem, ko smo opravili z tisto podmatriko(da ne bi prišlo do napak(prištevanje, že popravljene matrike))
 Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi da porabimo še dodatnega **O(mn)** prostora.
 
-## Tabela časov:
+## Testiranje:
+1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki.
+2. CheapMatrix je pribljižno 2krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
+3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno
+
+### Tabela časov
+Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 9) ter časom potrebnim za množenje matrik velikosti m x n in n x m:
 
 | m | k | n | Slow | Fast | Cheap |
 |---|---|---|------|------|-------|
@@ -62,5 +68,12 @@ Torej: Vidimo da poleg vhodnih in končne matrike potrebujemo še eno matriko, k
 | 31 | 31 | 31 | 0.091391306207103 | 0.69895400799675 | 0.3797532553614573 |
 | 32 | 32 | 32 | 0.10017875088199446 | 3.018772691312621 | 1.0332258547328355 |
 | 33 | 33 | 33 | 0.11169578139365832 | 2.845287262930574 | 1.0622249780837745 |
+| 100 | 100 | 100 | 3.7262874981290963 | 30.22643417648443 | 14.785279565524178 |
 |   |   |   |      |      |       |
-
+| 28 | 32 | 32 | 0.10262481558297162 | 0.5537296072184567 | 0.27958861639119925 |
+| 40 | 43 | 46 | 0.25838653809147083 | 3.1590536466462824 | 1.3148068164810027 |
+| 49 | 54 | 47 | 0.4310979494964613 | 4.014014411255318 | 1.877762192905557 |
+| 62 | 59 | 52 | 0.7738685881673764 | 4.823242746263553 | 2.378529795377279 |
+| 63 | 70 | 61 | 0.9405405289828757 | 4.460101776817979 | 2.3208834912014353 |
+| 72 | 73 | 75 | 1.385250914067008 | 19.98685325749963 | 7.976849622613273 |
+| 84 | 77 | 84 | 2.0269742778336095 | 21.580232632726812 | 8.84283093502107 |
