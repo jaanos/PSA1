@@ -57,7 +57,7 @@ Povsem preprosto se lahko prepričamo, da je SlowMatrix daleč najhitrejši nač
 
 Na spodnji sliki si lahko še ogledamo graf hitrosti algoritmov, ki sem jih izračunal za matrike dimenzij `m=k=n \in {10,20,30,40,50,80,120,140,200,400}`.
 
-![Slika časov](link here)
+![Slika časov](https://github.com/campovski/PSA1/blob/master/naloge/2016/dn1/matrix/MarcelCampa/graf.png)
 
 
 
