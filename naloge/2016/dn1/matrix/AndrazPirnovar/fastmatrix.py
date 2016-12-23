@@ -66,7 +66,7 @@ class FastMatrix(SlowMatrix):
 
             # Te matrike porabijo skupaj 7 * O((m/2)*(k/2)) prostora v tej iteraciji
             # Dodatni prostor pa porabijo začasne matrike pri seštevanju
-            # Prostorska zahtevnost: S(m,n,k) = 7 * S(m/2,n/2,k/2) + 5 * O((m/2)*(n/2)) + 5 * O((n/2)*(k/2))
+            # Prostorska zahtevnost: S(m,n,k) = S(m/2,n/2,k/2) + 5 * O((m/2)*(n/2)) + 5 * O((n/2)*(k/2))
 
             """Postopek se loči, če je n lih ali sod"""
 

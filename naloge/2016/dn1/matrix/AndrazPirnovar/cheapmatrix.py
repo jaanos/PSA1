@@ -153,7 +153,8 @@ class CheapMatrix(SlowMatrix):
 
             # Skupaj:
             # Časovna zahtevnost: 7*T(m/2,n/2,k/2) + O(n*k) + O(m*n) + O(m*k)
-            # Prostorska zahtevnost:7*S(m/2,n/2,k/2)
+            # Prostorska zahtevnost:S(m/2,n/2,k/2)   (ker se, ko se rekurzija enkrat izvede, prostor počisti, torej je
+            # zahtevan prostor samo za eno rekurzijo)
 
 
             """ Računanje preostalih delov"""
