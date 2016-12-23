@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 __all__ = ['SlowMatrix', 'FastMatrix', 'CheapMatrix']
 
-from slowmatrix import SlowMatrix
-from fastmatrix import FastMatrix
-from cheapmatrix import CheapMatrix
+from ... matrix.JureHostnik.slowmatrix import SlowMatrix
+from ... matrix.JureHostnik.fastmatrix import FastMatrix
+from ... matrix.JureHostnik.cheapmatrix import CheapMatrix
 
 from random import *
 from time import *
