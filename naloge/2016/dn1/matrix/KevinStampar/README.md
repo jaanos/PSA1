@@ -42,19 +42,15 @@ lowMatrix izvede m*n*p elementarnih množenj in enako število seštevanj.
 
 ####Prostor
 FastMatrix si v vsakem rekurzivnem koraku strassenovega algoritma ustvari novo delovno matirko velikosti mxn. Prav tako si ustvari 7 matrik velikosti m/2 x n/2. 
-Ko pa si mora matriko razdeliti in nato nadaljevati s strassenovim algoritmom, si ustvari 2 novi matriki, velikosti :
-																če število vrstic leve matrike ni deljivo z 2		m-1 x n in 1 x n
-																če število stolpcev leve matrike ni deljivo z 2		m x n , m x n
-																če število stolpcev desne matrike ni deljivo z 2	m x n-1 in m x 1
+Ko pa si mora matriko razdeliti in nato nadaljevati s strassenovim algoritmom, si ustvari 2 novi matriki, velikosti mxn v primeru da stolpci matrike A niso deljivi z 2. Oziroma (m-1)xn.
 
 ####Čas
-FastMatrix v vsakem rekurzivnem koraku(ki ni zadnji) strassenovega algoritma izvede 7 množenj matrik velikosti m/2xp/2 in p/2xn/2 kar se vse skupaj na koncu nabere za kar nekaj manj elementarnih množenj kot SlowMatrix
-in opravi 18 seštevanj matrik velikosti m/2xn/2 torej 18* m/2*n/2 elementarnih seštevanj. 
-Ko pa si mora matriko razdeliti in nato nadaljevati s strassenovim algoritmom pa izvede :
-															če število vrstic leve matrike ni deljivo z 2		Izvede eno naivno množenje enovrstične matrike dolžine m z matriko velikosti pxn/2 torej mxpxn/2 
-																													elementarnih množenj in seštevanj. In eno strassenovo množenje
-															če število stolpcev leve matrike ni deljivo z 2		m x n , m x n podobno
-															če število stolpcev desne matrike ni deljivo z 2	m x n-1 in m x 1 podobno
+FastMatrix v vsakem rekurzivnem koraku(ki ni zadnji) strassenovega algoritma izvede 7 množenj matrik velikosti m/2xp/2 in 
+p/2xn/2 kar se vse skupaj na koncu nabere za kar nekaj manj elementarnih množenj kot SlowMatrix in opravi 18 seštevanj matrik 
+velikosti m/2xn/2 torej 18* m/2*n/2 elementarnih seštevanj. 
+Ko pa si mora matriko razdeliti in nato nadaljevati s strassenovim algoritmom pa izvede eno naivno množenje enovrstične matrike 
+dolžine m z matriko velikosti pxn/2 torej mxpxn/2 elementarnih množenj in seštevanj. In eno strassenovo množenje.
+
 	
 ###CheapMatrix
 
