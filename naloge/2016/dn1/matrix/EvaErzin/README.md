@@ -85,6 +85,8 @@ Kot je razvidno iz spodnjega grafa in tabele, je metoda implementirana v razredu
 
 **Graf časov izvajanja algoritmov**
 
+![alt text](https://github.com/EvaErzin/PSA1/blob/dn/naloge/2016/dn1/matrix/EvaErzin/kvadratne.png)
+
 **Tabela časov izvajanja algoritmov**
 
 |dimenzija|SlowMatrix|FastMatrix|CheapMatrix|
