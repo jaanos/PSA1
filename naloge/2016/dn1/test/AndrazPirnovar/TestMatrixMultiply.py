@@ -95,4 +95,9 @@ class TestMatrixMultiply(unittest.TestCase):
             with self.subTest(matrike = matrike):
                 self.assertEqual(FastMatrix(matrike[0])*FastMatrix(matrike[1]),FastMatrix(matrike[2]))
 
+    def testCheapMatrix(self):
+
+        for matrike in self.testi:
+            with self.subTest(matrike = matrike):
+                self.assertEqual(CheapMatrix(matrike[0])*CheapMatrix(matrike[1]),CheapMatrix(matrike[2]))
 
