@@ -1,7 +1,7 @@
 # Poročilo
 *Jan Golob*
 
-Množimo matriki velikosti **m** x **k** in **k** x **n**
+Množimo matriki velikosti **m** x **k** in **k** x **n**.
 Upeljimo **g := max{m, n, k}**
 
 ## SlowMatrix
