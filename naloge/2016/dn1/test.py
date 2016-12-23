@@ -1,6 +1,8 @@
 from matrix.JanPerme import SlowMatrix
 from matrix.JanPerme import FastMatrix
 from matrix.JanPerme import CheapMatrix
+import numpy
+import time
 X = SlowMatrix([[ 1,  2,  3,  4],
                   [ 5,  6,  7,  8],
                  [ 9, 10, 11, 12],
@@ -19,3 +21,30 @@ X3=CheapMatrix([[1,2,3],[1,6,7],[1,4,5],[2,3,4]])
 Y3=CheapMatrix([[5,1,1],[1,6,1],[1,1,6]])
 print("------------CheapMatrix------------")
 print(X3*Y3)
+
+f = open('rcode.txt', 'r+')
+koda="$$\\begin{array}{rrr}velikost & slow & fast & cheap\\\\"
+for n in range(1,40,5):
+    a=numpy.random.random((n,n))
+    b=numpy.random.random((n,n))
+    X=SlowMatrix(a.tolist())
+    Y=SlowMatrix(b.tolist())
+    st=time.time()
+    X*Y
+    st=time.time()-st
+    X=FastMatrix(a.tolist())
+    Y=FastMatrix(b.tolist())
+    ft=time.time()
+    X*Y
+    ft=time.time()-ft
+    X=CheapMatrix(a.tolist())
+    Y=CheapMatrix(b.tolist())
+    ct=time.time()
+    X*Y
+    ct=time.time()-ct
+    koda+=str(n)+" & "+str(st)+" & "+str(ft)+" & "+str(ct)+"\\\\"
+koda+="\end{array}$$"
+print(koda)
+f.write(koda)
+    
+

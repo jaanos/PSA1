@@ -2,7 +2,8 @@
 
 *Jan Perme*
 
-## Kratek opis algoritmov
+## Algoritmi in èasovne zahtevnosti
+Pri raèunanju prostorske zahtevnosti upoštevam samo dodatni prostor, ki ga porabimo ne pa ze podanih matrik
 ### Slowmatrix
 Algoritem v slowmatrix.py je standardno množenje matrix in torej grem po vseh elementih vseh vrstic prve matrike in jih množi z vsemi elementi vseh stolpcev druge matrike.
 ```python
@@ -149,3 +150,6 @@ Celotna èasovna zahtevnost:`O(n^log2(7))`
 Celotna prostroska zahtevnost:`O(1)`
 
 ## Testiranje
+To so rezultati hitrosti za nxn matrike
+$$\begin{array}{rrr}velikost & slow & fast & cheap\\1 & 0.0 & 0.0 & 0.0\\6 & 0.0 & 0.015624523162841797 & 0.0\\11 & 0.015624046325683594 & 0.0625009536743164 & 0.0468752384185791\\16 & 0.046875953674316406 & 0.3593776226043701 & 0.3125028610229492\\21 & 0.0781242847442627 & 0.39063000679016113 & 0.3437516689300537\\26 & 0.1562511920928955 & 0.46875452995300293 & 0.42187952995300293\\31 & 0.2656264305114746 & 0.5625042915344238 & 0.5156300067901611\\36 & 0.42187929153442383 & 2.546895742416382 & 2.2656447887420654\end{array}$$
+Zanimivo je da CheapMatrix dela hitreje kot FastMatrix.Slowmatrix dela najhitreje ker imata CheapMatrix in FastMatrix velike konstante pri O(n^2).
