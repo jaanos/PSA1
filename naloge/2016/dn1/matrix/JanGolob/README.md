@@ -47,7 +47,8 @@ Podmatrika M pa je delovna matrika za množenja, pri katerih dobimo vmesne podma
 Torej: vidimo, da poleg vhodnih in končne matrike potrebujemo še eno matriko, ki je istih dimenzij kot končna. Sledi, da porabimo še dodatnega **O(mn)** prostora.
 
 ## Testiranje:
-1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki. Vidimo da se to spremeni pri velikosti _.
+1. Pri majhnih velikostih je SlowMatrix hitrejši od FastMatrix in CheapMatrix. Koeficienti pri časovni zahtevnosti teh 2 algoritmov so veliki.
+3. Pri spremembi (m, k, n) iz 256 na 512 vidimo da se časovna zahtevnost poveča pribljižno 11- krat za Slovmatrix in 7- krat za FastMatrix in CheapMatrix in ne pribljižno 8- krat za Slovmatrix in pribljižno 5 -krat za FastMatrix in CheapMatrix, kot bi se po zgornjem izračunu moralo. To je zaradi velikosti števil ki jih množimo.
 2. CheapMatrix je pribljižno 2-krat hitrejša od FastMatrix. Seštevanje je pri njej bolj časovno ugodno.
 3. CheapMatrix in FastMatrix naraščata skokovito pri potencah števila 2, medtem pa SlowMatrix narašča bolj zvezno.
 4. Vidimo da se pri nekvadratnih matrikah algoritem obnaša, kot SlowMatrix za množenje nad najmanjšim členom, in razliko do potence števila 2. Pri velikih dimenzijah, ko je SlowMatrix zelo počanejša od CheapMatrix, bi bilo bolje, da bi naši matriki razširili z ničlami do naslenje potence števila 2. ([Princip vidimo tukaj na 11-ti prosojnici.](http://www2.nauk.si/materials/377/out-279920/index.html#state=11))
@@ -62,7 +63,7 @@ Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 
 | 4 | 4 | 4 | 0.00022878402360537948 | 0.007767965960358357 | 0.003687912933780922 |
 | 5 | 5 | 5 | 0.00041565994569052293 | 0.008602279287562272 | 0.0033244242981462085 |
 | 7 | 7 | 7 | 0.0015903696893241233 | 0.030732750326070684 | 0.007177831469563169 |
-| 8 | 8 | 8 | 0.0015476063204259288 | 0.07114327866749341 | 0.029523829887318526 |
+| 8 | 8 | 8 | 0.0015612905984733476 | 0.05473925035814321 | 0.020341679317496628 |
 | 9 | 9 | 9 | 0.0021582672282922377 | 0.05923539096410016 | 0.03757061301289316 |
 | 15 | 15 | 15 | 0.009413072761872143 | 0.09451345977036074 | 0.048323034488657046 |
 | 16 | 16 | 16 | 0.011940815497444857 | 0.39406914836750834 | 0.16811905321901255 |
@@ -84,5 +85,3 @@ Spodaj je tabela časov za matrike z naključno generiranimi elementi (men 0 in 
 | 63 | 70 | 61 | 0.9405405289828757 | 4.460101776817979 | 2.3208834912014353 |
 | 72 | 73 | 75 | 1.385250914067008 | 19.98685325749963 | 7.976849622613273 |
 | 84 | 77 | 84 | 2.0269742778336095 | 21.580232632726812 | 8.84283093502107 |
-
-_Zaradi časovne učinkovitosti, bomo pri visokih dimenzijah računali le SlowMatrix in CheapMatrix_
