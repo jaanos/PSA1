@@ -19,6 +19,7 @@ def zahtevnostSM(n, m, k):                                                  # na
     return (povprecje)                                                      # vrnemo povprečje
 
 
+# Komentarji v naslednjih dveh algoritmih so enaki kot v prejšnjem.
 def zahtevnostFM(n, m, k):
     left = FastMatrix([[1 for j in range(m)] for i in range(n)])
     right = FastMatrix([[1 for j in range(k)] for i in range(m)])
@@ -51,4 +52,5 @@ def zahtevnostCM(n, m, k):
 # print(zahtevnostCM(x,y,z))
 
 
-# print("FM,500:" + str(zahtevnostFM(500,500,500)))
+
+

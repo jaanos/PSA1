@@ -33,7 +33,7 @@ Pri primerjavi časov dejanski dimenzij nas zanimajo primeri, ko so vhodi sodi i
 nadaljno primerjavo s `FastMatrix` in `CheapMatrix`), 
 ter kako se čas spreminja na podlagi velikosti dimenzij. 
 
-Tabela predstavlja izračunano povprečje 10ih poskusov za določene dimenzije. Koda za 
+Tabela predstavlja izračunano povprečje 10ih poskusov za določene dimenzije (enota: sekunda). Koda za 
 izračune se nahaja v mapi `test.SaraKorat.casovna_zahtevnost`.
 
 n|m|k|povprečje
@@ -305,8 +305,8 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
      porabimo `O(1)`.
     * Računanje sedmih produktov. Vsak produkt porabi prostor za vmesno matriko/matriki, ki jo/ju dobimo
      s seštevanjem/odštevanjem, na desni strani porabimo `O(M*K)` prostora, na levi strani
-     porabimo `O(N*M)`, množenje pa nam doda še `7*P(N, M, K)`. Skupno za produkte porabimo
-     `7*P(N, M, K) + O(L*M)`, pri čemer `L = max{K, N}`.
+     porabimo `O(N*M)`, rekurzivni klic pa nam doda še `P(N, M, K)`. Skupno za produkte porabimo
+     `P(N, M, K) + O(L*M)`, pri čemer `L = max{K, N}`.
     * Za izračun matrike sodih dimenzij porabimo `8` seštevanj/odštevanj, skupno `8*O(N*K)` prostora, ki
     ga porabijo vmesne matrike, iz katerih na koncu sestavimo novo matriko. 
     * Za izračun matrike lihih dimenzij poleg prostora za novo matriko, porabimo še prostor:
@@ -318,14 +318,14 @@ V primeru, da matrike niso (v celoti ali pa sploh ne) sodih dimenzij, ločimo (k
         Skupna prostorska zahtevnost:
         
         ```
-           P(n, m, k) = O(1) + O(M*K) + O(N*M) + 7*P(N, M, K) + 8*O(N*K) + O(1) + O(n) + O(k)
-           P(n, m, k) = 7*P(N, M, K) + O(M*K) + O(N*M) + O(N*K) + O(n) + O(k)
+           P(n, m, k) = O(1) + O(M*K) + O(N*M) + P(N, M, K) + 8*O(N*K) + O(1) + O(n) + O(k)
+           P(n, m, k) = P(N, M, K) + O(M*K) + O(N*M) + O(N*K) + O(n) + O(k)
            
            s = max{n, m, k}
            
-           P(s) = 7*P(s//2) + O(s^2) + O(s)
-           P(s) = 7*P(s//2) + O(s^2)
-           P(s) = O(s^(log_2 (7))
+           P(s) = P(s//2) + O(s^2) + O(s)
+           P(s) = P(s//2) + O(s^2)
+           P(s) = O(s^2)
          ```
         
 
@@ -344,56 +344,138 @@ n|m|k|povprečje
 101|101|101|14.352611
 200|200|200|95.032223
 201|201|201|97.741663
-500|500|500|
+500|500|500|816.303042
+
+Pri dimenzijah `10x10x10`, `10x11x10`, `11x11x10`, `10x11x11` in `11x11x11` naj
+bi bila časovna razlika med `10x10x10` in `11x11x11` večja (sode dimenzije naj
+bi porabile manj časa kot lihe, kljub temu da gre za isto časovno zahtevnost), 
+vendar se pri majhnih dimenzijah razlike v času ne poznajo. Empirično se s tako
+majhnimi dimenzijami ne da dokazati časovne razlike.
 
 --------------
 
-
 ## CheapMatrix
+
 
 ### Opis
 
+Algoritem je enak Strassenovemu, le da tokrat varčujemo s prostorom. Matriki left
+in right znova razdelimo na sode podmatrike (kot pri `FastMatrix`), isto definiramo
+sedem produktov `P1,...,P3`, le da seštevke/odštevke računamo z operatorjema `+=` in `-=`
+(ki nam omogočita, da pri seštevanju/odštevanju matrik ne dobimo nove matrike), 
+nato pa pri zmnožkih uporabimo delovno matriko, ki jo razdelimo na iste dimenzije
+kot je izhodna matrika, torej matrika `S` (self).   
 
+Delovna matrika:
+
+   D1 |  D2 
+   ---|---
+   D3 |  D4
+ 
+Delovna matrika nam omogoči, da ne ustvarjamo novih matrik (z množenjem), ampak uporabljamo njene
+(pod)matrike za prepis, ki nam ne zavzame dodatnega prostora. 
+
+Izhodna matrika:
+
+   S1 |  S2 
+   ---|---
+   S3 |  S4
+
+```
+    S1 = P4 + P5 + P6 - P2
+    S2 = P1 + P2
+    S3 = P3 + P4
+    S4 = P1 + P5 - P3 - P7
+```
+
+V primeru, ko so dimenzije matrik left in right lihe, uporabimo kodo iz algoritma `FastMatrix`, le
+da na isti način kot zgoraj zamenjamo način množenja in seštevanja/odštevanja (z delovno matriko
+in operatorjema `+=` in `-=`). Primer, ko je lih `k`:
+
+```
+    FastMatrix:
+    self[0:n, k - 1] = left * right[0:m, k - 1]  
+    
+    CheapMatrix:
+    self[0:n, k - 1].multiply(left, right[0:m, k - 1], work[0:n, k - 1])
+```
 
 ### Analiza zahtevnosti
 
+* __Časovna zahtevnost__ je ista kot v `FastMatrix`, torej `T(s) = O(s^(log_2 (7))`, kjer
+`s = max{n, m, k}`. Sprotne časovne zahtevnosti so zapisane v algoritmu.
+
+* __Prostorska zahtevnost__:
+    * Definiranje novih spremenljivk (`N`, `M`, `K`, `N2`,`M2`, `K2`) nam vzame konstanten 
+    prostor `O(1)`. 
+    * Če imamo eno od dimenzij matrik enako `1`, je prostorska zahtevnost
+    enaka časovni zahtevnosti v `SlowMatrix`.
+    * Za definiranje podmatrik (`A`, `B`, `C`, `D`,`E`, `F`, `G`, `H`)
+     porabimo `O(1)`.
+    * Računanje sedmih produktov. Za vsak `Pi` (`i=1,...,7`) za prištevanje/odštevanje
+    ne porabimo dodatnega prostora, saj operatorja `+=` in `-=` ne ustvarita nove matrike,
+    ampak matriko na levi strani le prepišeta. Rekurzivni klic nam porabi `P(N, M, K)` prostora,
+    nadaljne računanje v primeru lihih dimenzij, pa nam v vsakem primeru porabi konstanten prostor
+    `O(1)`. Skupno je prostorska zahtevnost torej:
+      
+         ```
+        P(n, m, k) = P(N, M, K) + O(1)
+         
+         s = max{n, m, k}
+         
+         P(s) = O(log(s))
+        ```
 
 ### Primerjava dejanskih časov pri vhodih različnih velikosti
 
 n|m|k|povprečje
 ---|---|---|---
-10|10|10|
-10|11|10|
-11|11|10|
-10|11|11|
-11|11|11|
-50|50|50|
-51|51|51|
-100|100|100|
-101|101|101|
-200|200|200|
-201|201|201|
-500|500|500|
+10|10|10|0.025674
+10|11|10|0.025708
+11|11|10|0.025694
+10|11|11|0.027634
+11|11|11|0.026813
+50|50|50|1.593188
+51|51|51|1.581271
+100|100|100|10.964154
+101|101|101|11.071894
+200|200|200|76.999634
+201|201|201|75.218695
+500|500|500|636.325036
 
 --------------
 
 
 ## Zaključki
 
+Tabela časovnih zahtevnosti (v sekundah) posameznih algoritmov pri različnih
+vhodnih podatkih:
+
 n|m|k|SlowMatrix|FastMatrix|CheapMatrix
 ---|---|---|---|---|---
-10|10|10|0.002727|0.035543|
-10|11|10|0.003522|0.035235|
-11|11|10|0.003561|0.035345|
-10|11|11|0.003613|0.035003|
-11|11|11|0.003698|0.035538|
-50|50|50|0.415034|2.015315|
-51|51|51|0.434669|2.063882|
-100|100|100|3.913663|14.177991|
-101|101|101|4.077199|14.352611|
-200|200|200|41.613351|
-201|201|201|
-500|500|500|
+10|10|10|0.002727|0.035543|0.025674
+10|11|10|0.003522|0.035235|0.025708
+11|11|10|0.003561|0.035345|0.025694
+10|11|11|0.003613|0.035003|0.027634
+11|11|11|0.003698|0.035538|0.026813
+50|50|50|0.415034|2.015315|1.593188
+51|51|51|0.434669|2.063882|1.581271
+100|100|100|3.913663|14.177991|10.964154
+101|101|101|4.077199|14.352611|11.071894
+200|200|200|41.613351|95.032223|76.999634
+201|201|201|42.350266|97.741663|75.218695
+500|500|500|1218.236100|816.303042|636.325036
+
+Iz primerjave rezultatov lahko vidimo, da je za matrike majhnih dimenzij občutno
+hitrejši algoritem `SlowMatrix`. Ker `CheapMatrix` porabi manj prostora kot
+`FastMatrix`, se algoritem hitreje izvede. Ker je časovna zahtevnost obeh
+algoritmov enaka, je prostorska zahtevnost tista, ki zmanjša/poveča čas izvedbe
+algoritma.
+
+Za matrike velikih velikosti (v našem primeru `500x500x500`) je `FastMatrix`
+veliko hitrejši od `SlowMatrix`, kljub temu da porabi veliko več prostora. V tem
+primeru je lepo vidno, kako zelo se pozna, da pri `FastMatrix` uporabljamo sedem
+množenj namesto osmih.  
 
 
 
