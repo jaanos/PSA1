@@ -150,8 +150,10 @@ Celotna èasovna zahtevnost:`O(n^log2(7))`
 Celotna prostroska zahtevnost:`O(1)`
 
 ## Testiranje
-To so rezultati hitrosti za nxn matrike
+To so rezultati hitrosti za nxn matrike:
+
 | n | Slow | Fast | Cheap |
+|---|------|------|-------|
 | 1 | 0.0 | 0.0 | 0.0|
 | 6 | 0.0 | 0.0 | 0.015624284744262695|
 | 11 | 0.0 | 0.07812619209289551 | 0.06249833106994629|
