@@ -33,14 +33,14 @@ class CheapMatrix(SlowMatrix):
             if BB == 1:
                 #primer ko je leva matrika sodo visokam desna pa liho siroka (Ma en stolpec vec desna)
                 work*=0
-                self[0:levaVrst,0:(desnaStol-1)].multiply(left,right[0:ujemanje,0:(desnaStol-1)],work[0:levaVrst,0:(desnaStol-1)])  #tuki sam locis primer in je sam vazn da je work zravn da dela
-                self[0:levaVrst,(desnaStol-1):desnaStol].multiply(left,right[0:ujemanje,(desnaStol-1):desnaStol],work[0:levaVrst,(desnaStol-1):desnaStol])
+                self[:,0:(desnaStol-1)].multiply(left,right[:,0:(desnaStol-1)],work[:,0:(desnaStol-1)])  #tuki sam locis primer in je sam vazn da je work zravn da dela
+                self[:,(desnaStol-1):desnaStol].multiply(left,right[:,(desnaStol-1):desnaStol],work[:,(desnaStol-1):desnaStol])
                 return self
             if AA == 1:
                 #Pol je leva matrika eno vrstico vec spodi
                 work*=0
-                self[0:(levaVrst-1),0:desnaStol].multiply(left[0:(levaVrst-1),0:ujemanje],right,work[0:(levaVrst-1),0:desnaStol])
-                self[(levaVrst-1):levaVrst,0:desnaStol].multiply(left[(levaVrst-1):levaVrst,0:ujemanje],right,work[(levaVrst-1):levaVrst,0:desnaStol])
+                self[0:(levaVrst-1),:].multiply(left[0:(levaVrst-1),:],right,work[0:(levaVrst-1),:])
+                self[(levaVrst-1):levaVrst,:].multiply(left[(levaVrst-1):levaVrst,:],right,work[(levaVrst-1):levaVrst,:])
                 return self
             # Priprava matrik (sekanje)
             A = left[0:levaVrst//2,0:ujemanje//2]
@@ -113,22 +113,22 @@ class CheapMatrix(SlowMatrix):
             return self
         if CC == 1:
             if BB == 1:
-                self[0:levaVrst,0:(desnaStol-1)].multiply(left[0:levaVrst,0:(ujemanje-1)],right[0:(ujemanje-1),0:(desnaStol-1)],work[0:levaVrst,0:(desnaStol-1)])
+                self[:,0:(desnaStol-1)].multiply(left[:,0:(ujemanje-1)],right[0:(ujemanje-1),0:(desnaStol-1)],work[:,0:(desnaStol-1)])
                 #To lahk nardimo ker mamo stolpec dolzine ena in je useen kako pomnozimo ker ne zasedemo nobenega dodatnega prostora
                 work*=0
-                work[0:levaVrst,0:(desnaStol-1)].multiply(left[0:levaVrst,(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:(desnaStol-1)],self[0:levaVrst,0:(desnaStol-1)])
-                self[0:levaVrst,0:(desnaStol-1)]+=work[0:levaVrst,0:(desnaStol-1)]
-                self[0:levaVrst,(desnaStol-1):desnaStol].multiply(left,right[0:(ujemanje),(desnaStol-1):desnaStol],work[0:levaVrst,(desnaStol-1):desnaStol])
+                work[:,0:(desnaStol-1)].multiply(left[:,(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:(desnaStol-1)],self[:,0:(desnaStol-1)])
+                self[:,0:(desnaStol-1)]+=work[:,0:(desnaStol-1)]
+                self[:,(desnaStol-1):desnaStol].multiply(left,right[0:(ujemanje),(desnaStol-1):desnaStol],work[:,(desnaStol-1):desnaStol])
                 return self
             if AA == 1:
-                self[0:(levaVrst-1),0:desnaStol].multiply(left[0:(levaVrst-1),0:(ujemanje-1)],right[0:(ujemanje-1),0:desnaStol],work[0:(levaVrst-1),0:desnaStol])
+                self[0:(levaVrst-1),:].multiply(left[0:(levaVrst-1),0:(ujemanje-1)],right[0:(ujemanje-1),:],work[0:(levaVrst-1),:])
                 work*=0
                 #to nesmem narest morm klicat mnozenje iz super classa na podmatriki
-                work[0:(levaVrst-1),0:desnaStol].multiply(left[0:(levaVrst-1),(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:desnaStol],self[0:(levaVrst-1),0:desnaStol])
-                self[0:(levaVrst-1),0:desnaStol]+=work[0:(levaVrst-1),0:desnaStol]
-                self[(levaVrst-1):levaVrst,0:desnaStol].multiply(left[(levaVrst-1):levaVrst,0:ujemanje],right,work[(levaVrst-1):levaVrst,0:desnaStol])
+                work[0:(levaVrst-1),:].multiply(left[0:(levaVrst-1),(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,:],self[0:(levaVrst-1),:])
+                self[0:(levaVrst-1),:]+=work[0:(levaVrst-1),:]
+                self[(levaVrst-1):levaVrst,:].multiply(left[(levaVrst-1):levaVrst,:],right,work[(levaVrst-1):levaVrst,:])
                 return self
-            self.multiply(left[0:levaVrst,0:(ujemanje-1)],right[0:(ujemanje-1),0:desnaStol],work)
-            work.multiply(left[0:levaVrst,(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,0:desnaStol],self)
+            self.multiply(left[:,0:(ujemanje-1)],right[0:(ujemanje-1),:],work)
+            work.multiply(left[:,(ujemanje-1):ujemanje],right[(ujemanje-1):ujemanje,:],self)
             self+=work
             return self
