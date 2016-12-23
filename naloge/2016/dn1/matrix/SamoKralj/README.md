@@ -1,7 +1,21 @@
 # Poročilo
 
-*Ime Priimek*
+Samo Kralj
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
+# SlowMatrix
 
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
+SlowMatrix ima implementirano navadno množenje matrik. Torej za (i,j) člen v matriki bo izračunal 
+skalarni produkt i-te vrstice in j-tega stolpca.
+
+## Časovna Zahtevnost:
+
+Če množimo matriki velikosti n x m in m x k, bo ciljna matrika velikosti n x k. Za vsak element v ciljni
+matriki pa opravimo m operacij. Skupna časovna zahtevnost bo torej O(n*k*m).
+
+## Prostorska Zahtevnost:
+
+Prostor, ki ga porabi je velikost ciljne matrike.
+
+# FastMatrix
+
+FastMatrix ima implementirano Strassenovo množenje matrik. 
