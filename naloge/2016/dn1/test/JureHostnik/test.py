@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-__all__ = ['SlowMatrix', 'FastMatrix', 'CheapMatrix']
-
-from ... matrix.JureHostnik.slowmatrix import SlowMatrix
-from ... matrix.JureHostnik.fastmatrix import FastMatrix
-from ... matrix.JureHostnik.cheapmatrix import CheapMatrix
-
 from random import *
 from time import *
 
@@ -16,6 +10,9 @@ def rand(nrow, ncol):
     return [[randint(-10, 10) for j in range(ncol)] for i in range(nrow)]
 
 def cas(left, right):
+    '''
+    Vrne čas, ki se porabi za produkt left * right.
+    '''
     t = clock()
     left * right
     return clock() - t
