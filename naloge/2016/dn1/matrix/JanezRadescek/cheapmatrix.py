@@ -24,11 +24,13 @@ class CheapMatrix(SlowMatrix):
 
 
 
-
+        work*=0
+        #aaa #vrstic leve matrike
+        #bbb #stolpcev desne
+        #ujemanje = #stolpcev leve = #vrstic desne
         aaa = self.nrow()
         bbb = self.ncol()
         ujemanje = left.ncol()
-        work *= 0
 
         #če imamo množenje z vektorjem zmnožimo na običajen način
         if (aaa == 1) or (bbb == 1) or (ujemanje == 1):
@@ -52,9 +54,11 @@ class CheapMatrix(SlowMatrix):
 
         elif ujemanje%2 == 1:
             #self[:,:] = self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:]) + self.multiply(left[:,ujemanje-1], right[ujemanje-1,:])
+
             #self[:,:] = left[:,:ujemanje-1] * right[:ujemanje-1,:] + left[:,ujemanje-1] * right[ujemanje-1,:]
-            self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:], work)
-            self += super(CheapMatrix, self).multiply( left[:,ujemanje-1], right[ujemanje-1,:] )
+
+            self.multiply(left[:,:ujemanje-1], right[:ujemanje-1,:])
+            self[:,:] += work.multiply( left[:,ujemanje-1], right[ujemanje-1,:] )
 
 
         #če so sode
