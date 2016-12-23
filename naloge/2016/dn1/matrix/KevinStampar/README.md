@@ -5,18 +5,18 @@
 
 ##Kratek opis algoritmov
 
-###SlowMatrix
+######SlowMatrix
 	Algoritem SlowMatrix deluje tako, da množenje izvede z izračunom skalarnih produktov vrstic prve in stolpcev druge.
 	Skalarni produkt računa kot (x1,x2,x3)(y1,y2,y3)= x1*y1 + (x2,x3)(y2,y3) = (x1*y1+x2*y2) +(x3)(y3) = (x1*y1+x2*y2+x3*y3)
 
 	
-###FastMatrix	
+######FastMatrix	
 	Algoritem FastMatrix deluje tako, da v primeru, ko je stevilo vrstic in stolpcev deljivo z 2, za množenje uporabi strassenov algoritem(opisan v 'dn1/README.md'). 
 	V primeru da je katero od stevil vrstic oziroma stolpcev nedeljivo z 2, pa matriko(matriki) razdeli na dva dela, kjer je en del enovrstična oziroma enostolpična matrika, na kateri izvrši naivno množenje,
 	na drugem delu pa izvrši strassenov algoritem.
 
 
-###CheapMatrix
+######CheapMatrix
 	Algoritem CheapMatrix deluje tako, da v primeru, ko je stevilo vrstic in stolpcev deljivo z 2, za množenje uporabi nekoliko spremenjen strassenov algoritem.
 	Spremenjen je tako, da si v vsakem koraku ne ustvari nove matrike, radi pa bi, prišparali na prostoru. 
 	To stori tako, da ne ustvari nove matrike za vsak P_i in nato uporabi seštevek P_i-jev, ampak jih računa v delovni matriki, katero potem prištevamo trenutni matriki. 
@@ -32,22 +32,22 @@
 	
 ###SlowMatrix
 
-	####Prostor
+	######Prostor
 	SlowMatrix potrebuje dodaten prostor le za definicijo treh novih spremenljivk. 
 	
-	####Čas
+	######Čas
 	SlowMatrix izvede m*n*p elementarnih množenj in enako število seštevanj.
 	
 ###FastMatrix
 
-	####Prostor
+	######Prostor
 	FastMatrix si v vsakem rekurzivnem koraku strassenovega algoritma ustvari novo delovno matirko velikosti mxn. Prav tako si ustvari 7 matrik velikosti m/2 x n/2. 
 	Ko pa si mora matriko razdeliti in nato nadaljevati s strassenovim algoritmom, si ustvari 2 novi matriki, velikosti :
 																	če število vrstic leve matrike ni deljivo z 2		m-1 x n in 1 x n
 																	če število stolpcev leve matrike ni deljivo z 2		m x n , m x n
 																	če število stolpcev desne matrike ni deljivo z 2	m x n-1 in m x 1
 	
-	####Čas
+	######Čas
 	FastMatrix v vsakem rekurzivnem koraku(ki ni zadnji) strassenovega algoritma izvede 7 množenj matrik velikosti m/2xp/2 in p/2xn/2 kar se vse skupaj na koncu nabere za kar nekaj manj elementarnih množenj kot SlowMatrix
 	in opravi 18 seštevanj matrik velikosti m/2xn/2 torej 18* m/2*n/2 elementarnih seštevanj. 
 	Ko pa si mora matriko razdeliti in nato nadaljevati s strassenovim algoritmom pa izvede :
