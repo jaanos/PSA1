@@ -11,7 +11,7 @@ __SlowMatrix__
 Matrike množimo na običajen način, *( i , j )* - ti element ciljne matrike izračunamo kot skalarni produkt *i* - te vrstice in *j* - tega stolpca vhodnih matrik.
 
 *Časovna zahtevnost*  
-Za izračun posameznega elementa porabimo O(*k*) operacij (skalarni produkt dveh vektorjev dolžine *k*), velikost ciljne matrike je  *m x n*, torej skupno porabimo O(*mnk*) operacij. 
+Do dimenzij vhodnih matrik dostopamo v času O(1). Za izračun posameznega elementa porabimo O(*k*) operacij (skalarni produkt dveh vektorjev dolžine *k*), velikost ciljne matrike je  *m x n*, torej skupno porabimo O(*mnk*) operacij. 
 
 *Prostorska zahtevnost*  
 Pri računanju skalarnih produktov vmesne produkte vedno prištevamo isti spremenljivki *temp*, ki jo nato zapišemo v ciljno matriko, torej ob večkratnem obhodu *for* zanke ne porabljamo nič novega prostora. 
