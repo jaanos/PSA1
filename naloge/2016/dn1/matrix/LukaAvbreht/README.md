@@ -123,6 +123,9 @@ Velikost matrik A in B |  SlowMatrix  |  FastMatrix |   CheapMatrix
     190x190 * 190x190 | 48.5989s | 74.7090s | 56.9132s
     220x220 * 220x220 | 82.8555s | 99.1345s | 84.9595s
     250x250 * 250x250 | 126.53s | 114.8632s | 101.556s
+    300x300 * 300x300 | 238.8838s | 423.1175s | 308.1845s
+    350x350 * 350x350 | 425.2465s | 484.1813s | 367.4054s
+    400x400 * 400x400 | 672.2815s | 635.0626s | 538.8132s
 
 
 Na vseh grafix X-os predstavlja velikost matrik (naprimer pri x je 15 gre za matriko velikosti 15x15), 
