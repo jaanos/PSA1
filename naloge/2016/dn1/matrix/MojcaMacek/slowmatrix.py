@@ -38,10 +38,10 @@ class SlowMatrix(AbstractMatrix):
         return self
         
 ##        raise NotImplementedError("Naredi sam!")
-A=[[1,2],[2,1]]
-B=[[1,2,1],[2,3,2]]
-C=[[1,1,1],[1,1,1]]
-D=[[1,1],[1,1]]
-print(SlowMatrix.multiply(C,A,B))
-print(SlowMatrix.multiply(D,A,B))
+#A=[[1,2],[2,1]]
+#B=[[1,2,1],[2,3,2]]
+#C=[[1,1,1],[1,1,1]]
+#D=[[1,1],[1,1]]
+#print(SlowMatrix.multiply(C,A,B))
+#print(SlowMatrix.multiply(D,A,B))
 
