@@ -156,22 +156,22 @@ class CheapMatrix(SlowMatrix):
             
 
             
-v1=CheapMatrix([[1],[1]])
+#v1=CheapMatrix([[1],[1]])
 
-m1=CheapMatrix([[1,2,3],[1,2,3]])
-m2=CheapMatrix([[1,1],[1,1],[1,1]])
-m3=CheapMatrix([[1,1],[1,1]])
-nula=CheapMatrix([[0]])
+#m1=CheapMatrix([[1,2,3],[1,2,3]])
+#m2=CheapMatrix([[1,1],[1,1],[1,1]])
+#m3=CheapMatrix([[1,1],[1,1]])
+#nula=CheapMatrix([[0]])
 #print(m2*m3)
-m4=CheapMatrix([[1,1]])
-m5=CheapMatrix([[1,1],[1,1]])
+#m4=CheapMatrix([[1,1]])
+#m5=CheapMatrix([[1,1],[1,1]])
 #print(m4*m5)
 
-m6=CheapMatrix([[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]])
-m7=CheapMatrix([[1,1],[1,1],[1,1],[1,1]])
+#m6=CheapMatrix([[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1],[1,1,1,1,1]])
+#m7=CheapMatrix([[1,1],[1,1],[1,1],[1,1]])
 
 
-iv1=CheapMatrix([[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]])
+#iv1=CheapMatrix([[1,1,1,1],[1,1,1,1],[1,1,1,1],[1,1,1,1]])
 
-m5=CheapMatrix([[1,1,1],[1,1,1],[1,1,1]])
-print(m5*m5)
+#m5=CheapMatrix([[1,1,1],[1,1,1],[1,1,1]])
+#print(m5*m5)
