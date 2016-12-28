@@ -23,69 +23,47 @@ class FastMatrix(SlowMatrix):
             return SlowMatrix.multiply(self,left,right)
         
 
-        l=min(n,m,p) #najvišja meja za stranico kvadrata
-        
         else:
-            if l%2==0: #sode kvadratne matrike istih stranic
-                A=left[0:l/2, 0:l/2]
-                B=left[0:l/2, l/2:l]
-                C=left[l/2:l, 0:l/2]
-                D=left[l/2:l, l/2:l]
-                E=right[0:l/2, 0:l/2]
-                F=right[0:l/2, l/2:l]
-                G=right[l/2:l, 0:l/2]
-                H=right[l/2:l, l/2:l]
+            m1=m-m%2
+            n1=n-n%2
+            p1=p-p%2
+        
+            A=left[0:p1/2, 0:n1/2]
+            B=left[0:p1/2, n1/2:n1]
+            C=left[p1/2:p1, 0:n1/2]
+            D=left[p1/2:p1, n1/2:n1]
+            E=right[0:n1/2, 0:m1/2]
+            F=right[0:n1/2, m1/2:m1]
+            G=right[n1/2:n1, 0:m1/2]
+            H=right[n1/2:n1, m1/2:m1]
 
-                P1=FastMatrix.multiply(AbstractMatrix(A, A, F-G))
-                P2=FastMatrix.multiply(AbstractMatrix(A, A+B, H))
-                P3=FastMatrix.multiply(AbstractMatrix(A, C+D, E))
-                P4=FastMatrix.multiply(AbstractMatrix(A, D, G-E))
-                P5=FastMatrix.multiply(AbstractMatrix(A, A+D, E+H))
-                P6=FastMatrix.multiply(AbstractMatrix(A, B-D, G+H))
-                P7=FastMatrix.multiply(AbstractMatrix(A, A-C, E+F))
-                
-                return [[P4+P5+P6-P2, P1+P2],[P3+P4, P1+P5-P3-P7]]
+            X=[([0, ] * (m1/2)), ]*(p1/2)
+
+            P1=FastMatrix.multiply(AbstractMatrix(X, A, F-G))
+            P2=FastMatrix.multiply(AbstractMatrix(X, A+B, H))
+            P3=FastMatrix.multiply(AbstractMatrix(X, C+D, E))
+            P4=FastMatrix.multiply(AbstractMatrix(X, D, G-E))
+            P5=FastMatrix.multiply(AbstractMatrix(X, A+D, E+H))
+            P6=FastMatrix.multiply(AbstractMatrix(X, B-D, G+H))
+            P7=FastMatrix.multiply(AbstractMatrix(X, A-C, E+F))
             
-            if l%2!=0:
-                l+=-1
-                A=left[0:l/2, 0:l/2]
-                B=left[0:l/2, l/2:l]
-                C=left[l/2:l, 0:l/2]
-                D=left[l/2:l, l/2:l]
-                E=right[0:l/2, 0:l/2]
-                F=right[0:l/2, l/2:l]
-                G=right[l/2:l, 0:l/2]
-                H=right[l/2:l, l/2:l]
-
-                P1=FastMatrix.multiply(AbstractMatrix(A, A, F-G))
-                P2=FastMatrix.multiply(AbstractMatrix(A, A+B, H))
-                P3=FastMatrix.multiply(AbstractMatrix(A, C+D, E))
-                P4=FastMatrix.multiply(AbstractMatrix(A, D, G-E))
-                P5=FastMatrix.multiply(AbstractMatrix(A, A+D, E+H))
-                P6=FastMatrix.multiply(AbstractMatrix(A, B-D, G+H))
-                P7=FastMatrix.multiply(AbstractMatrix(A, A-C, E+F))
-
-                DM =[[P4+P5+P6-P2, P1+P2],[P3+P4, P1+P5-P3-P7]]#delovna matrika
-                CM = AbstractMatrix([([0, ] * n), ]*k)#ciljna matrika
-                for i in range[0:n-1]:
-                    for j in range[0:n-1]:
-                        #vzeli bomo element (i,j) matrike DM in prišteli, kar manjka    
-                        CM[i,j]=DM[i,j]+ right[n-1,j]*left[i,n-1]
-                for j=n-1:#zadnji stolpec
-                    for i in range[0:n]:
-                        x=0
-                        for k in range[0:n]:
-                            x += right[k,n]*left[i,k]
-                        CM[i,j]=x
-                for i=n-1:#zadnja vrstica
-                    for j in range[0:n]:
-                        x=0
-                        for k in range[0:n]:
-                            x += left[n-1, k]*right[k, j]
-                        CM[i,j]=x
-                return CM
-
-                        
-
-
-       
+            DM =[[P4+P5+P6-P2, P1+P2],[P3+P4, P1+P5-P3-P7]]#delovna matrika
+            CM =[([0, ] * m), ]*p#ciljna matrika
+            for i in range(0,p1):
+                for j in range(0,m1):
+                    #uredili bomo del, kjer smo uporabili Strassena
+                    #vzeli bomo element (i,j) matrike DM in prišteli, kar manjka    
+                    CM[i][j]=DM[i][j]+ right[n][j]*left[i][n]
+            for j in range(m1,m):#zadnji stolpec, na roke
+                for i in range(0,p):
+                    x=0
+                    for k in range(0,n):
+                        x += right[k][m]*left[i][k]
+                    CM[i][j]=x
+            for i in range(p1,p):#zadnja vrstica, na roke
+                for j in range(0,m):
+                    x=0
+                    for k in range(0,n):
+                        x += left[p][k]*right[k][j]
+                    CM[i][j]=x
+            return CM
