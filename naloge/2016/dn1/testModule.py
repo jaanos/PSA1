@@ -1,9 +1,15 @@
-from time import process_time as pt
+try: # Python 3
+    from time import process_time as pt
+except ImportError: # Python 2
+    from time import time as pt
 
 import matrix.AndrazPirnovar as AndrazPirnovar
 import matrix.EvaErzin as EvaErzin
 import matrix.EvaZmazek as EvaZmazek
-import matrix.FilipKoprivec as FilipKoprivec
+try: # deluje samo v Python3
+    import matrix.FilipKoprivec as FilipKoprivec
+except SyntaxError:
+    pass
 import matrix.GasperDomenRomih as GasperDomenRomih
 import matrix.JanezRadescek as JanezRadescek
 import matrix.JanGolob as JanGolob
@@ -266,4 +272,4 @@ def testModule(m):
     except AttributeError:
         print("NAPAKA: %s.CheapMatrix ni definiran!" % m.__name__)
     except Exception as ex:
-        print("NAPAKA: %s.FastMatrix: %s" % (m.__name__, ex))
+        print("NAPAKA: %s.CheapMatrix: %s" % (m.__name__, ex))
