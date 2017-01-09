@@ -1,4 +1,4 @@
-# 2. domača naloga pri PSA1: maksimalna neodvisna množica v kartezičnem produktu poti in drevesa
+# 2. domača naloga pri PSA1: maksimalna neodvisna množica v kartezičnem produktu cikla in drevesa
 
 Vaša naloga je, da v programskem jeziku *Python 3* napišete algoritem, ki kot vhod dobi:
 
