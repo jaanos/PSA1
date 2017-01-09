@@ -5,11 +5,11 @@ Vaša naloga je, da v programskem jeziku *Python 3* napišete algoritem, ki kot 
 - neusmerjeno drevo *T* z *n* vozlišči, in
 - dvodimenzionalno tabelo tež *w* dimenzij *k*×*n* (*k* ≥ 2),
 
-poišče pa najtežjo neodvisno množico v kartezičnem produktu cikla *C*<sub>*k*</sub> in drevesa *T*, kjer so teže vozlišč podane v tabeli *w*. Algoritem naj teče v času, ki je polinomski v *n* in eksponenten v *k* (tj., za fiksen *k* dobite polinomski algoritem).
+poišče pa najtežjo neodvisno množico v kartezičnem produktu cikla *Cₖ* in drevesa *T*, kjer so teže vozlišč podane v tabeli *w*. Algoritem naj teče v času, ki je polinomski v *n* in eksponenten v *k* (tj., za fiksen *k* dobite polinomski algoritem).
 
-Cikel *C*<sub>*k*</sub> je neusmerjen graf z vozlišči 0, 1, ..., *k*-1, kjer sta vozlišči *i* in *j* sosedni natanko tedaj, ko velja *i*-*j* ≡ ±1 (mod *k*). *Neodvisna množica* *S* v grafu *G* je taka množica vozlišč grafa *G*, da nobeni dve vozlišči iz *S* nista sosedni v *G*. *Kartezični produkt* *G* ▫ *H* grafov *G* in *H* je graf, katerega vozlišča so urejeni pari (*u*, *v*), kjer je *u* vozlišče iz *G* in *v* vozlišče iz *H*, vozlišči (*u*, *v*) in (*x*, *y*) pa sta sosedni v *G* ▫ *H*, če bodisi velja *u* = *x* ter sta *v* in *y* sosedni v *H*, ali pa sta *u* in *x* sosedni v *G* in velja *v* = *y*.
+Cikel *Cₖ* je neusmerjen graf z vozlišči 0, 1, ..., *k*-1, kjer sta vozlišči *i* in *j* sosedni natanko tedaj, ko velja *i*-*j* ≡ ±1 (mod *k*). *Neodvisna množica* *S* v grafu *G* je taka množica vozlišč grafa *G*, da nobeni dve vozlišči iz *S* nista sosedni v *G*. *Kartezični produkt* *G* ▫ *H* grafov *G* in *H* je graf, katerega vozlišča so urejeni pari (*u*, *v*), kjer je *u* vozlišče iz *G* in *v* vozlišče iz *H*, vozlišči (*u*, *v*) in (*x*, *y*) pa sta sosedni v *G* ▫ *H*, če bodisi velja *u* = *x* ter sta *v* in *y* sosedni v *H*, ali pa sta *u* in *x* sosedni v *G* in velja *v* = *y*.
 
-Drevo *T* na vhodu naj bo predstavljeno s seznamom sosednosti, torej kot seznam *n* seznamov, pri čemer seznam *T*[*u*] \(0 ≤ *u* ≤ *n*-1) vsebuje indekse vozlišč, ki so sosedna *u*. Če velja *v* ∊ *G*[*u*], naj seveda velja tudi *u* ∊ *G*[*v*]. Teža *w*[*i*][*u*] \(0 ≤ *i* ≤ *k*-1, 0 ≤ *u* ≤ *n*-1) predstavlja težo vozlišča (*i*, *u*) v kartezičnem produktu *C*<sub>*k*</sub> ▫ *T*.
+Drevo *T* na vhodu naj bo predstavljeno s seznamom sosednosti, torej kot seznam *n* seznamov, pri čemer seznam *T*[*u*] \(0 ≤ *u* ≤ *n*-1) vsebuje indekse vozlišč, ki so sosedna *u*. Če velja *v* ∊ *G*[*u*], naj seveda velja tudi *u* ∊ *G*[*v*]. Teža *w*[*i*][*u*] \(0 ≤ *i* ≤ *k*-1, 0 ≤ *u* ≤ *n*-1) predstavlja težo vozlišča (*i*, *u*) v kartezičnem produktu *Cₖ* ▫ *T*.
 
 Algoritem naj vrne par (*c*, *s*), kjer je *c* cena najdene neodvisne množice, *s* pa seznam parov (*i*, *u*) (0 ≤ *i* ≤ *k*-1, 0 ≤ *u* ≤ *n*-1), ki predstavljajo vozlišča v najdeni neodvisni množici.
 
