@@ -15,4 +15,6 @@ Imenik *vaje* vsebuje kodo v Pythonu, ki smo jo srečali na vajah.
 
 Imenik *naloge* vsebuje gradivo za domače naloge (po letih) skupaj z oddanimi nalogami.
 
-Trenutno je na voljo [1. domača naloga](naloge/2016/dn1/). Rok za oddajo je **18. december 2016**.
+Trenutno je na voljo [2. domača naloga](naloge/2016/dn2/). Rok za oddajo je **17. februar 2017** oziroma najmanj **3 dni** pred pristopom k ustnemu izpitu.
+
+Oddaje za [1. domačo nalogo](naloge/2016/dn1/) so v veji *dn1-2016-oddaje*.

@@ -92,7 +92,7 @@ Poročilo imate lahko kar v datoteki `README.md` v mapi z vašimi programi (v ob
 
 ## Rok za oddajo
 
-Svojo nalogo oddajte (odprite *pull request*) do **nedelje, 18. decembra**.
+Svojo nalogo oddajte (odprite *pull request*) do **petka, 23. decembra**.
 
 **Nalogo delajte samostojno!**
 
