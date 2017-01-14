@@ -105,7 +105,7 @@ class BinaryHeap:
         Glede na vrednosti v starem in novem vnosu
         slednjega bodisi spusti ali dvigne do ustreznega mesta.
 
-        Časovna zahtevnost O(log(i) + log(n-i))
+        Časovna zahtevnost O(log(i) + log(n/i))
         """
         star = self.seznam[i]
         self.seznam[i] = vnos
