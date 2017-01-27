@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from time import time
 
 def maxCycleTreeIndependentSet(T, w):
     """
@@ -23,15 +24,11 @@ def maxCycleTreeIndependentSet(T, w):
     memo = dict()
 
     vrstni_red = uredi_po_plasteh(T)
-    cnt = [0]
 
     def find_best_set(prepovedani, cikel, drevo):
-        if cikel <= 0:
-            print(cikel, drevo, len(memo), cnt)
         if cikel == k:
             return 0, []
         elif (frozenset(prepovedani), cikel, drevo) in memo:
-            cnt[0] += 1
             return memo[frozenset(prepovedani), cikel, drevo]
         elif drevo == len(vrstni_red):
             return find_best_set(prepovedani, cikel + 1, 0)
@@ -56,10 +53,89 @@ def maxCycleTreeIndependentSet(T, w):
             memo[(frozenset(prepovedani), cikel, drevo)] = best, best_solution
             return best, best_solution
 
-    resitev = find_best_set(set(), 0, 0)
-    print(len(memo), cnt)
+    memo2 = dict()
+    
+    def find_best(z_v, prejsni_v, tren_v, drevo_i, cikel_i):
+        if cikel_i == k:
+            return 0, []
+        elif (frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i) in memo2:
+            return memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)]
+        elif drevo_i == len(vrstni_red):
+            return find_best(z_v, tren_v, set(), 0, cikel_i + 1)
+        else:
+            v = vrstni_red[drevo_i]
+            if cikel_i == k - 1:
+                nova_tren = tren_v.copy()
+                best, best_sol = find_best(z_v, prejsni_v, nova_tren, drevo_i + 1, cikel_i)
+                if v not in prejsni_v and v not in z_v:
+                    znak = True
+                    for u in T[v]:
+                        if u in tren_v:
+                            znak = False
+                            break
+                    if znak:
+                        nova_tren2 = tren_v.copy()
+                        nova_tren2.add(v)
+                        b2, best_sol2 = find_best(z_v, prejsni_v, nova_tren2, drevo_i + 1, cikel_i)
+                        b2 += w[cikel_i][v]
+                        if b2 > best:
+                            best = b2
+                            best_sol = best_sol2 + [[cikel_i, v]]
+                memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)] = best, best_sol
+                return best, best_sol
+            elif cikel_i == 0:
+                nova_tren = tren_v.copy()
+                nova_zv = z_v.copy()
+                best, best_sol = find_best(nova_zv, prejsni_v, nova_tren, drevo_i + 1, cikel_i)
+                if v not in prejsni_v:
+                    znak = True
+                    for u in T[v]:
+                        if u in tren_v:
+                            znak = False
+                            break
+                    if znak:
+                        nova_tren2 = tren_v.copy()
+                        nova_tren2.add(v)
+                        nova_zv = z_v.copy()
+                        nova_zv.add(v)
+                        b2, best_sol2 = find_best(nova_zv, prejsni_v, nova_tren2, drevo_i + 1, cikel_i)
+                        b2 += w[cikel_i][v]
+                        if b2 > best:
+                            best = b2
+                            best_sol = best_sol2 + [[cikel_i, v]]
+                memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)] = best, best_sol
+                return best, best_sol
+            else:
+                nova_tren = tren_v.copy()
+                best, best_sol = find_best(z_v, prejsni_v, nova_tren, drevo_i + 1, cikel_i)
+                if v not in prejsni_v:
+                    znak = True
+                    for u in T[v]:
+                        if u in tren_v:
+                            znak = False
+                            break
+                    if znak:
+                        nova_tren2 = tren_v.copy()
+                        nova_tren2.add(v)
+                        b2, best_sol2 = find_best(z_v, prejsni_v, nova_tren2, drevo_i + 1, cikel_i)
+                        b2 += w[cikel_i][v]
+                        if b2 > best:
+                            best = b2
+                            best_sol = best_sol2 + [[cikel_i, v]]
+                memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)] = best, best_sol
+                return best, best_sol
+
+    cas = time()
+    resitev = find_best(set(), set(), set(), 0, 0)
+    time1 = time() - cas
+    cas = time()
+    res2 = find_best_set(set(),0,0)
+    time2 = time() - cas
+    print('Izboljšan algoritem reši nalogo v {0}'.format(time1))
+    print(resitev, len(memo2))
+    print('Prejsni algoritem resi nalogo v {0}'.format(time2))
+    print(res2, len(memo))
     return resitev
-                    
 
 def uredi_po_plasteh(T):
 
