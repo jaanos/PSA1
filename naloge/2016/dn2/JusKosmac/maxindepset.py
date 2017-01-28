@@ -1,38 +1,28 @@
 # -*- coding: utf-8 -*-
-from pripomocki import *
+from .pripomocki import *
 import itertools
 
 def maxCycleTreeIndependentSet(T, w):
-##    """
-##    Najtežja neodvisna množica
-##    v kartezičnem produktu cikla C_k in drevesa T z n vozlišči,
-##    kjer ima tabela tež w dimenzije k×n (k >= 2).
-##
-##    Vrne par (c, s), kjer je c teža najdene neodvisne množice,
-##    s pa je seznam vozlišč v neodvisni množici,
-##    torej seznam parov oblike (i, u) (0 <= i <= k-1, 0 <= u <= n-1).
-##    """
-##    n = len(T)
-##    assert all(len(r) == n for r in w), \
-##        "Dimenzije tabele tež ne ustrezajo številu vozlišč v drevesu!"
-##    assert all(all(u in T[v] for v in a) for u, a in enumerate(T)), \
-##        "Podani graf ni neusmerjen!"
-##    k = len(w)
-##    assert k >= 2, "k mora biti vsaj 2!"
-##    if n == 0:
-##        return (0, [])
+    """
+    Najtežja neodvisna množica
+    v kartezičnem produktu cikla C_k in drevesa T z n vozlišči,
+    kjer ima tabela tež w dimenzije k×n (k >= 2).
 
+    Vrne par (c, s), kjer je c teža najdene neodvisne množice,
+    s pa je seznam vozlišč v neodvisni množici,
+    torej seznam parov oblike (i, u) (0 <= i <= k-1, 0 <= u <= n-1).
+    """
+    n = len(T)
+    assert all(len(r) == n for r in w), \
+        "Dimenzije tabele tež ne ustrezajo številu vozlišč v drevesu!"
+    assert all(all(u in T[v] for v in a) for u, a in enumerate(T)), \
+        "Podani graf ni neusmerjen!"
     k = len(w)
+    assert k >= 2, "k mora biti vsaj 2!"
+    if n == 0:
+        return (0, [])
+
     D = pripraviDrevo(T,k)
-    postorder = []
-    def postvisit(u, v=None):
-        postorder.append(u)
-        return True
-    
-    DFS(D, [0], previsit=nothing, postvisit=postvisit)
-    for x in enumerate(D):
-        print(x)
-    print(postorder)
 
     memo = {}
 
@@ -43,12 +33,13 @@ def maxCycleTreeIndependentSet(T, w):
             return True
         return False
 
-    for u in postorder:
+    def postvisit(u, v=None):
+        memo[u] = {}
         mn, stars, otroci = D[u]
         if len(otroci) == 0: #leaf
             v = mn.copy().pop()
-            memo[(u,frozenset())] = 0
-            memo[(u,frozenset([v]))] = w[v[0]][v[1]]
+            memo[u][frozenset()] = (0, [])
+            memo[u][frozenset([v])] = (w[v[0]][v[1]], [v])
         elif len(otroci) == 1:
             ot = otroci[0]
             mn1, stars1, otroci1 = D[ot]
@@ -56,31 +47,34 @@ def maxCycleTreeIndependentSet(T, w):
                 v = (mn - mn1).pop()
                 for x in powerset(mn1):
                     x = frozenset(x)
-                    memo[(u,x)] = memo[(ot,x)]
+                    memo[u][x] = memo[ot][x]
                     flag = True
                     for i in x:
                         if soseda(i,v):
-                            memo[(u,x|frozenset([v]))] = None
+                            memo[u][x|frozenset([v])] = (None, [])
                             flag = False
                     if flag:
-                        if memo[(ot,x)] is None:
-                            memo[(u,x|frozenset([v]))] = None
+                        if memo[ot][x][0] is None:
+                            memo[u][x|frozenset([v])] = (None, [])
                         else:
-                            memo[(u,x|frozenset([v]))] = memo[(ot,x)] + w[v[0]][v[1]]
+                            memo[u][x|frozenset([v])] = (memo[ot][x][0] + w[v[0]][v[1]], memo[ot][x][1] + [v])
             else: #forget node
                 v = (mn1 - mn).pop()
                 for x in powerset(mn):
                     x = frozenset(x)
-                    a = memo[(ot,x)]
-                    b = memo[(ot,x|frozenset([v]))]
+                    a, c = memo[ot][x]
+                    b, d = memo[ot][x|frozenset([v])]
                     if a is not None and b is not None:
-                        memo[(u,x)] = max(a,b)
+                        if a >= b:
+                            memo[u][x] = (a, c)
+                        else:
+                            memo[u][x] = (b, d)
                     elif a is not None and b is None:
-                        memo[(u,x)] = a
+                        memo[u][x] = (a, c)
                     elif a is None and b is not None:
-                        memo[(u,x)] = b
+                        memo[u][x] = (b, d)
                     else:
-                        memo[(u,x)] = None
+                        memo[u][x] = (None, [])
         else: #join node
             a = otroci[0]
             b = otroci[1]
@@ -89,23 +83,27 @@ def maxCycleTreeIndependentSet(T, w):
                 teza =  0
                 for i in x:
                     teza += w[i[0]][i[1]]
-                if memo[(a,x)] is not None and memo[(b,x)] is not None:
-                    memo[(u,x)] = memo[(a,x)] + memo[(b,x)] - teza
+                if memo[a][x][0] is not None and memo[b][x][0] is not None:
+                    memo[u][x] = (memo[a][x][0] + memo[b][x][0] - teza, list(set(memo[a][x][1] + memo[b][x][1])))
                 else:
-                    memo[(u,x)] = None
+                    memo[u][x] = (None, [])
+                    
+        for i in otroci:
+            del memo[i]
+            
+        return True
 
+    DFS(D, [0], previsit=nothing, postvisit=postvisit)
+    
     maxi = 0
-    print(len(memo))
-##    for x in sorted(memo.keys()):
-##        print(x,memo[x])
-    for x in memo.values():
+    rez = 0
+    for x, y in memo[0].values():
         if x is not None and x > maxi:
             maxi = x
-    print(maxi)
-    for a,b in memo.items():
-        if b == maxi:
-            print(a)
-            
+            rez = (x, sorted(y))
+    return rez
+    
+
 def treeDecomposition(T, k):
     D = [0]*len(T)
 
