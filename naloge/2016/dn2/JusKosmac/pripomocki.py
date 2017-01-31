@@ -272,3 +272,34 @@ def powerset(iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
+def iterDFS(G, roots = None, previsit = nothing, postvisit = nothing):
+    """
+    Rekurzivno iskanje v globino.
+    Argumenti so enaki kot pri funkciji DFS.
+    Časovna zahtevnost: O(m) + O(n) klicev funkcij previsit in postvisit
+    """
+    s = Stack()
+    n = len(G)
+    visited = [False] * n
+    if roots is None:
+        roots = range(n)
+    v, it = None, iter(roots)
+    while True:
+        try:
+            u = next(it)
+        except StopIteration:
+            if v is None:
+                return True
+            u = v
+            v, it = s.pop()
+            if not postvisit(u, v):
+                return False
+            continue
+        if visited[u]:
+            continue
+        visited[u] = True
+        if not previsit(u, v):
+            return False
+        s.push((v, it))
+        v, it = u, iter(G[u][2])
