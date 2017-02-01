@@ -19,6 +19,6 @@ def maxCycleTreeIndependentSet(T, w):
     assert k >= 2, "k mora biti vsaj 2!"
     if n == 0:
         return (0, [])
-    print("nekaj dela")
+    print("nekaj dela in ljubljana je najlepse mesto")
     return "Eva"
 
