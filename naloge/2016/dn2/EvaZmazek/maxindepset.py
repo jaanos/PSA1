@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 def maxCycleTreeIndependentSet(T, w):
+    T = [[1, 2], [0], [0]]
+    w = [[1, 1, 1, 1],
+         [2, 2, 2, 2],
+         [3, 3, 3, 3],
+         [4, 4, 4, 4]]
     """
     Najtežja neodvisna množica
     v kartezičnem produktu cikla C_k in drevesa T z n vozlišči,
@@ -20,5 +25,17 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
     print("nekaj dela in ljubljana je najlepse mesto")
+
+    celotenGraf = [[]*n]*k
+    for nadstropje in range(k):
+        for vozlisce in range(n):
+            for sosed in T[vozlisce]:
+                celotenGraf[nadstropje][vozlisce] += [(sosed, nadstropje)]
+            a = (nadstropje + 1) % k
+            b = (nadstropje -1 ) % k
+            celotenGraf[nadstropje][vozlisce] += [(vozlisce, a)]
+            celotenGraf[nadstropje][vozlisce] += [(vozlisce, b)]
+    print(celotenGraf)
+
     return "Eva"
 
