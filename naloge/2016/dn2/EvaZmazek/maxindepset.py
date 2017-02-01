@@ -26,16 +26,23 @@ def maxCycleTreeIndependentSet(T, w):
         return (0, [])
     print("nekaj dela in ljubljana je najlepse mesto")
 
-    celotenGraf = [[]*n]*k
+    # pripravimo si graf (oz matriko sosedov, kjer i-ti stolpec
+    # in j-ta vrstica predstavljata seznam sosedov i-tega
+    # elementa v drevesu in j -tega elementa v ciklu),
+    # zadnja vrednost pa pove, če je element v grafu ali ne
+
+    celotenGraf = []
     for nadstropje in range(k):
+        vozlisca = []
         for vozlisce in range(n):
-            for sosed in T[vozlisce]:
-                celotenGraf[nadstropje][vozlisce] += [(sosed, nadstropje)]
             a = (nadstropje + 1) % k
-            b = (nadstropje -1 ) % k
-            celotenGraf[nadstropje][vozlisce] += [(vozlisce, a)]
-            celotenGraf[nadstropje][vozlisce] += [(vozlisce, b)]
-    print(celotenGraf)
+            b = (nadstropje - 1) % k
+            sosedje = [(vozlisce, a, 1)]
+            sosedje += [(vozlisce, b, 1)]
+            for sosed in T[vozlisce]:
+                sosedje += [(sosed, nadstropje, 1)]
+            vozlisca += [sosedje]
+        celotenGraf += [vozlisca]
 
     return "Eva"
 
