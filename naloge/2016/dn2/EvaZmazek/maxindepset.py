@@ -19,4 +19,6 @@ def maxCycleTreeIndependentSet(T, w):
     assert k >= 2, "k mora biti vsaj 2!"
     if n == 0:
         return (0, [])
-    raise NotImplementedError("Naredi sam!")
+    print("nekaj dela")
+    return "Eva ma rada Nejčota"
+
