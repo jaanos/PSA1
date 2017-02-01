@@ -20,5 +20,5 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
     print("nekaj dela")
-    return "Eva ma rada Nejčota"
+    return "Eva"
 
