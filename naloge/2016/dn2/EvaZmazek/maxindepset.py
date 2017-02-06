@@ -52,6 +52,14 @@ def maxCycleTreeIndependentSet(T, w):
 
     print(vzorciZaCikel(7))
 
+    def slovarZdruzljivih(vzorci):
+        slovar = dict()
+        for vzorec in vzorci:
+            slovar[vzorec] = [j for j in vzorci if vzorec & j == 0]
+        return slovar
+
+    print(slovarZdruzljivih(vzorciZaCikel(6)[1]))
+
 
     def nothing(u, v=None):
         """
