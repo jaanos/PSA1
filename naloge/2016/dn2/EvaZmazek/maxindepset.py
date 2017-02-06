@@ -29,20 +29,26 @@ def maxCycleTreeIndependentSet(T, w):
     vrednostiVozlisc = [[(None, None)] * n for i in range(k)]
 
     def vzorciZaCikel(k):
+        # časovna zahtevnost: eksponentna v k
         if k == 0:
-            return []
+            return [], []
         if k == 1:
-            return [[0], [1]]
+            return [[0], [1]], [0, 1]
         if k == 2:
-            return [[0, 0], [0, 1], [1, 0], [1, 1]]
+            return [[0, 0], [0, 1], [1, 0]], [0, 1, 2]
         if k == 3:
-            return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
+            return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0]], [0, 1, 2, 4]
         vzorci = []
-        for i in vzorciZaCikel(k - 3):
+        stevilo = []
+        for i in vzorciZaCikel(k - 3)[0]:
             vzorci += [[1, 0] + i + [0]]
-        for j in vzorciZaCikel(k - 1):
+        for j in vzorciZaCikel(k - 1)[0]:
             vzorci += [[0] + j]
-        return vzorci
+        for i in vzorciZaCikel(k - 3)[1]:
+            stevilo += [2 ** (k) + i * 2]
+        for j in vzorciZaCikel(k - 1)[1]:
+            stevilo += [j]
+        return vzorci, stevilo
 
     print(vzorciZaCikel(7))
 
