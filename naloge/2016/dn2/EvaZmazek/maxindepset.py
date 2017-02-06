@@ -40,27 +40,21 @@ def maxCycleTreeIndependentSet(T, w):
     def postvisit(u, v):
         for cikel in range(k):
             potomciPotomcev = 0
-            for sin in T[u]:
-                if sin == v:
-                    continue
-                for vnuk in T[sin]:
-                    if vnuk == u:
-                        continue
-                    if vrednostiVozlisc[cikel][vnuk][0] > potomciPotomcev:
-                        potomciPotomcev = vrednostiVozlisc[cikel][vnuk][0]
-                    if vrednostiVozlisc[cikel][vnuk][1] > potomciPotomcev:
-                        potomciPotomcev = vrednostiVozlisc[cikel][vnuk][1]
             potomci = 0
             for sin in T[u]:
                 if sin == v:
                     continue
                 print("vrednostiVozlisc:", vrednostiVozlisc[cikel][sin])
-                if vrednostiVozlisc[cikel][sin][0] > potomci:
-                    potomci = vrednostiVozlisc[cikel][sin][0]
-                if vrednostiVozlisc[cikel][sin][1] > potomci:
-                    potomci = vrednostiVozlisc[cikel][sin][1]
+                if max(vrednostiVozlisc[cikel][sin][0], vrednostiVozlisc[cikel][sin][1]) > 0:
+                    potomci += max(vrednostiVozlisc[cikel][sin][0], vrednostiVozlisc[cikel][sin][1])
+                for vnuk in T[sin]:
+                    if vnuk == u:
+                        continue
+                    if max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1]) > 0:
+                        potomci += max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1])
 
             vrednostiVozlisc[cikel][u] = (potomciPotomcev + w[cikel][u], potomci)
+            print(vrednostiVozlisc)
         return True
 
 
