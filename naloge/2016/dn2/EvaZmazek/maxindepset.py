@@ -43,12 +43,24 @@ def maxCycleTreeIndependentSet(T, w):
         for j in vzorciZaCikel(k - 1)[0]:
             vzorci += [[0] + j]
         for i in vzorciZaCikel(k - 3)[1]:
-            stevilo += [2 ** (k) + i * 2]
+            stevilo += [2 ** (k - 1) + i * 2]
         for j in vzorciZaCikel(k - 1)[1]:
             stevilo += [j]
         return vzorci, stevilo
 
-#    print(vzorciZaCikel(7))
+
+    def vsotaVzorca(vzorec, u):  # dolzina vzorca = k (zapisanjega v obliki vzorca, ta je v obliki stevilke)
+        vzorcek = []
+        for i in range(k):
+            vzorcek += [(vzorec // (2 ** (i))) % 2]
+        vsota = 0
+        for i in range(k):
+            if vzorcek[i] == 1:
+                vsota += w[k - i - 1][u]
+        return vsota
+
+        #    print(vzorciZaCikel(7))
+
 
     def slovarZdruzljivih(vzorci):
         slovar = dict()
@@ -56,7 +68,7 @@ def maxCycleTreeIndependentSet(T, w):
             slovar[vzorec] = [j for j in vzorci if vzorec & j == 0]
         return slovar
 
-    print(slovarZdruzljivih(vzorciZaCikel(6)[1]))
+        #    print(slovarZdruzljivih(vzorciZaCikel(6)[1]))
 
 
     def nothing(u, v=None):
@@ -66,13 +78,15 @@ def maxCycleTreeIndependentSet(T, w):
         """
         return True
 
-    vrednostiVozlisc = [[(None,None)]*n for i in range(k)]
-    vrednostiVozliscSedem = [[None]*len(vzorciZaCikel(k)[1]) for i in range(n)]
-    globinaDrevesa = [None]*n
 
-#    print(vrednostiVozliscSedem)
+    vrednostiVozlisc = [[(None, None)] * n for i in range(k)]
+    vrednostiVozliscSedem = [[None] * len(vzorciZaCikel(k)[1]) for i in range(n)]
+    globinaDrevesa = [None] * n
 
-    def postvisit(u,v):
+
+    #    print(vrednostiVozliscSedem)
+
+    def postvisit(u, v):
         for cikel in range(k):
             potomciPotomcev = 0
             potomci = 0
@@ -92,16 +106,15 @@ def maxCycleTreeIndependentSet(T, w):
             print(vrednostiVozlisc)
         return True
 
-    def postvisitSedem(u,v):
+
+    def postvisitSedem(u, v):
         vzorci = vzorciZaCikel(k)[1]
         l = len(vzorci)
-        print("stevilo vzorcev:", l)
+        ##        print("stevilo vzorcev:", l)
         for indexVzorca in range(l):
             vzorec = vzorci[indexVzorca]
-            vsota = 0
-            for i in reversed(range(k)):
-                vsota += (vzorec % 2**(i+1)) * w[k-i-1][u]
-            print(vsota)
+            vsota = vsotaVzorca(vzorec, u)
+            ##            print(vsota)
             vrednostiVozliscSedem[u][indexVzorca] = vsota
             for sin in T[u]:
                 if sin == v:
@@ -114,14 +127,14 @@ def maxCycleTreeIndependentSet(T, w):
                         if vrednostiVozliscSedem[sin][indexMoznega] > maximum:
                             maximum = vrednostiVozliscSedem[sin][indexMoznega]
                         print("mozni:", vzorci[indexMoznega], vrednostiVozliscSedem[sin][indexMoznega])
-                print(vrednostiVzorcev)
+                print("vrednostiVzorcev:", vrednostiVzorcev)
                 vrednostiVozliscSedem[u][indexVzorca] += maximum
-        #vrednostiVozliscSedem[u] = (max ce vzamemo prvi vzorec, max ce vzamemo drugi vzorec, max ce vzamemo tretji vzorec, ..., max ce vzamemo zadnji vzorec)
+        # vrednostiVozliscSedem[u] = (max ce vzamemo prvi vzorec, max ce vzamemo drugi vzorec, max ce vzamemo tretji vzorec, ..., max ce vzamemo zadnji vzorec)
 
         return True
 
 
-    def DFS(G, roots=None, previsit=nothing, postvisit=postvisit):
+    def DFS(G, roots=None, previsit=nothing, postvisit=nothing):
         """
         Rekurzivno iskanje v globino.
         Graf G je podan kot seznam seznamov sosedov za vsako vozlišče.
@@ -214,11 +227,13 @@ def maxCycleTreeIndependentSet(T, w):
     print(DFS(T, roots=None, previsit=nothing, postvisit=postvisitSedem))
 
     print(celotenGraf(T, w))
-    return "Eva"
+
+    print(vsotaVzorca(18, 0))
+    
+    return max(vrednostiVozliscSedem[0][k] for k in range(len(vzorciZaCikel(k)[0])))
 
 
-
-    # print("nekaj dela in ljubljana je najlepse mesto")
+        # print("nekaj dela in ljubljana je najlepse mesto")
     #
     # # pripravimo si graf (oz matriko sosedov, kjer i-ti stolpec
     # # in j-ta vrstica predstavljata seznam sosedov i-tega
