@@ -28,6 +28,24 @@ def maxCycleTreeIndependentSet(T, w):
 
     vrednostiVozlisc = [[(None, None)] * n for i in range(k)]
 
+    def vzorciZaCikel(k):
+        if k == 0:
+            return []
+        if k == 1:
+            return [[0], [1]]
+        if k == 2:
+            return [[0, 0], [0, 1], [1, 0], [1, 1]]
+        if k == 3:
+            return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [0, 1, 1], [1, 0, 0], [1, 0, 1], [1, 1, 0], [1, 1, 1]]
+        vzorci = []
+        for i in vzorciZaCikel(k - 3):
+            vzorci += [[1, 0] + i + [0]]
+        for j in vzorciZaCikel(k - 1):
+            vzorci += [[0] + j]
+        return vzorci
+
+    print(vzorciZaCikel(7))
+
 
     def nothing(u, v=None):
         """
@@ -51,7 +69,7 @@ def maxCycleTreeIndependentSet(T, w):
                     if vnuk == u:
                         continue
                     if max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1]) > 0:
-                        potomci += max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1])
+                        potomciPotomcev += max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1])
 
             vrednostiVozlisc[cikel][u] = (potomciPotomcev + w[cikel][u], potomci)
             print(vrednostiVozlisc)
