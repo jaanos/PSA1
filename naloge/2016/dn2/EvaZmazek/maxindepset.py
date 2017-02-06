@@ -26,8 +26,6 @@ def maxCycleTreeIndependentSet(T, w):
         return (0, [])
 
 
-    vrednostiVozlisc = [[(None, None)] * n for i in range(k)]
-
     def vzorciZaCikel(k):
         # časovna zahtevnost: eksponentna v k
         if k == 0:
@@ -50,7 +48,7 @@ def maxCycleTreeIndependentSet(T, w):
             stevilo += [j]
         return vzorci, stevilo
 
-    print(vzorciZaCikel(7))
+#    print(vzorciZaCikel(7))
 
     def slovarZdruzljivih(vzorci):
         slovar = dict()
@@ -68,8 +66,13 @@ def maxCycleTreeIndependentSet(T, w):
         """
         return True
 
+    vrednostiVozlisc = [[(None,None)]*n for i in range(k)]
+    vrednostiVozliscSedem = [[None]*len(vzorciZaCikel(k)[1]) for i in range(n)]
+    globinaDrevesa = [None]*n
 
-    def postvisit(u, v):
+#    print(vrednostiVozliscSedem)
+
+    def postvisit(u,v):
         for cikel in range(k):
             potomciPotomcev = 0
             potomci = 0
@@ -87,6 +90,34 @@ def maxCycleTreeIndependentSet(T, w):
 
             vrednostiVozlisc[cikel][u] = (potomciPotomcev + w[cikel][u], potomci)
             print(vrednostiVozlisc)
+        return True
+
+    def postvisitSedem(u,v):
+        vzorci = vzorciZaCikel(k)[1]
+        l = len(vzorci)
+        print("stevilo vzorcev:", l)
+        for indexVzorca in range(l):
+            vzorec = vzorci[indexVzorca]
+            vsota = 0
+            for i in reversed(range(k)):
+                vsota += (vzorec % 2**(i+1)) * w[k-i-1][u]
+            print(vsota)
+            vrednostiVozliscSedem[u][indexVzorca] = vsota
+            for sin in T[u]:
+                if sin == v:
+                    continue
+                vrednostiVzorcev = []
+                maximum = 0
+                for indexMoznega in range(l):
+                    if vzorci[indexMoznega] in slovarZdruzljivih(vzorci)[vzorec]:
+                        vrednostiVzorcev += [indexMoznega, vrednostiVozliscSedem[sin][indexMoznega]]
+                        if vrednostiVozliscSedem[sin][indexMoznega] > maximum:
+                            maximum = vrednostiVozliscSedem[sin][indexMoznega]
+                        print("mozni:", vzorci[indexMoznega], vrednostiVozliscSedem[sin][indexMoznega])
+                print(vrednostiVzorcev)
+                vrednostiVozliscSedem[u][indexVzorca] += maximum
+        #vrednostiVozliscSedem[u] = (max ce vzamemo prvi vzorec, max ce vzamemo drugi vzorec, max ce vzamemo tretji vzorec, ..., max ce vzamemo zadnji vzorec)
+
         return True
 
 
@@ -180,7 +211,7 @@ def maxCycleTreeIndependentSet(T, w):
         return celotenGraf
 
 
-    print(DFS(T, roots=None, previsit=nothing, postvisit=postvisit))
+    print(DFS(T, roots=None, previsit=nothing, postvisit=postvisitSedem))
 
     print(celotenGraf(T, w))
     return "Eva"
