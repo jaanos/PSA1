@@ -79,7 +79,7 @@ def maxCycleTreeIndependentSet(T, w):
         """
         return True
 
-    vrednostiVozliscSedem = [[None] * len(vzorciZaCikel(k)[1]) for i in range(n)]
+    vrednostiVozliscSedem = [[(None, [])] * len(vzorciZaCikel(k)[1]) for i in range(n)]
 
     #    print(vrednostiVozliscSedem)
 
@@ -87,26 +87,24 @@ def maxCycleTreeIndependentSet(T, w):
     def postvisitSedem(u, v):
         vzorci = vzorciZaCikel(k)[1]
         l = len(vzorci)
-        ##        print("stevilo vzorcev:", l)
         for indexVzorca in range(l):
             vzorec = vzorci[indexVzorca]
             vsota = vsotaVzorca(vzorec, u)
-            ##            print(vsota)
-            vrednostiVozliscSedem[u][indexVzorca] = vsota
+            vrednostiVozliscSedem[u][indexVzorca] = (vsota, [vzorec])
             for sin in T[u]:
                 if sin == v:
                     continue
-                vrednostiVzorcev = []
                 maximum = 0
+                sezna = []
                 for indexMoznega in range(l):
                     if vzorci[indexMoznega] in slovarZdruzljivih(vzorci)[vzorec]:
-                        vrednostiVzorcev += [indexMoznega, vrednostiVozliscSedem[sin][indexMoznega]]
-                        if vrednostiVozliscSedem[sin][indexMoznega] > maximum:
-                            maximum = vrednostiVozliscSedem[sin][indexMoznega]
-                            ##                        print("mozni:", vzorci[indexMoznega], vrednostiVozliscSedem[sin][indexMoznega])
-                            ##                print("vrednostiVzorcev:", vrednostiVzorcev)
-                vrednostiVozliscSedem[u][indexVzorca] += maximum
-        # vrednostiVozliscSedem[u] = (max ce vzamemo prvi vzorec, max ce vzamemo drugi vzorec, max ce vzamemo tretji vzorec, ..., max ce vzamemo zadnji vzorec)
+                        if vrednostiVozliscSedem[sin][indexMoznega][0] > maximum:
+                            maximum = vrednostiVozliscSedem[sin][indexMoznega][0]
+                            sezna = vrednostiVozliscSedem[sin][indexMoznega][1]
+                vrednost, seznamcek = vrednostiVozliscSedem[u][indexVzorca]
+                vrednost += maximum
+                seznamcek += [sezna]
+                vrednostiVozliscSedem[u][indexVzorca] = (vrednost, seznamcek)
 
         return True
 
