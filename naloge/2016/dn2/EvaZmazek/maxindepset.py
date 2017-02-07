@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 
 def maxCycleTreeIndependentSet(T, w):
-    T = [[1, 2], [0], [0]]
-    w = [[1, 1, 1],
-         [2, 2, 2],
-         [3, 3, 3],
-         [4, 4, 4]]
+    Tp = [[1], [0, 2], [1]]
+    wp = [[1, 1, 1],
+             [2, 2, 2],
+             [3, 3, 3],
+             [4, 4, 4]]
+
+    T = [[1, 2], [0, 3, 4], [0, 5], [1, 6, 7], [1, 8], [2, 9, 10], [3], [3], [4, 11], [5], [5, 12], [8], [10, 13], [12]]
+    w = [[6, 7, 3, 6, 8, 7, 5, 4, 5, 8, 7, 6, 2, 5],[3, 6, 2, 5, 8, 5, 9, 1, 5, 8, 3, 7, 3, 3],[8, 3, 2, 5, 7, 9, 4, 3, 7, 8, 0, 9, 3, 8],[5, 7, 3, 7, 2, 9, 4, 2, 6, 0, 9, 1, 5, 0]]
     """
     Najtežja neodvisna množica
     v kartezičnem produktu cikla C_k in drevesa T z n vozlišči,
@@ -26,7 +29,7 @@ def maxCycleTreeIndependentSet(T, w):
         return (0, [])
 
     def vzorciZaCikel(k):
-        # časovna zahtevnost: eksponentna v k
+        #časovna zahtevnost: eksponentna v k
         if k == 0:
             return [], []
         if k == 1:
@@ -37,40 +40,40 @@ def maxCycleTreeIndependentSet(T, w):
             return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0]], [0, 1, 2, 4]
         vzorci = []
         stevilo = []
-        for i in vzorciZaCikel(k - 3)[0]:
-            vzorci += [[1, 0] + i + [0]]
+        for i in vzorciZaCikel(k-3)[0]:
+            vzorci += [[1,0] + i + [0]]
             vzorci += [[0] + i + [0, 1]]
-        for j in vzorciZaCikel(k - 2)[0]:
+        for j in vzorciZaCikel(k-2)[0]:
             vzorci += [[0] + j + [0]]
-        for i in vzorciZaCikel(k - 3)[1]:
-            stevilo += [2 ** (k - 1) + i * 2, i * 4 + 1]
-        for j in vzorciZaCikel(k - 2)[1]:
-            stevilo += [j * 2]
+        for i in vzorciZaCikel(k-3)[1]:
+            stevilo += [2**(k-1) + i*2, i*4 + 1]
+        for j in vzorciZaCikel(k-2)[1]:
+            stevilo += [j*2]
         return vzorci, stevilo
 
-    def vsotaVzorca(vzorec, u):  # dolzina vzorca = k (zapisanjega v obliki vzorca, ta je v obliki stevilke)
+    def vsotaVzorca(vzorec, u): #dolzina vzorca = k (zapisanjega v obliki vzorca, ta je v obliki stevilke)
         vzorcek = []
         for i in range(k):
-            vzorcek += [(vzorec // (2 ** (i))) % 2]
-            ##            print(vzorcek)
+            vzorcek += [(vzorec//(2**(i)))%2]
+##            print(vzorcek)
         vsota = 0
         utezi = []
         for i in range(k):
             if vzorcek[i] == 1:
-                vsota += w[k - i - 1][u]
-                utezi += [w[k - i - 1][u]]
-                ##        print(vzorcek, "utezi:", utezi)
+                vsota += w[k-i-1][u]
+                utezi += [w[k-i-1][u]]
+##        print(vzorcek, "utezi:", utezi)
         return vsota
 
-        #    print(vzorciZaCikel(7))
+#    print(vzorciZaCikel(7))
 
     def slovarZdruzljivih(vzorci):
         slovar = dict()
         for vzorec in vzorci:
-            slovar[vzorec] = [j for j in vzorci if vzorec & j == 0]
+            slovar[vzorec] = [j for j in vzorci if vzorec&j == 0]
         return slovar
 
-        #    print(slovarZdruzljivih(vzorciZaCikel(6)[1]))
+#    print(slovarZdruzljivih(vzorciZaCikel(6)[1]))
 
     def nothing(u, v=None):
         """
@@ -79,18 +82,19 @@ def maxCycleTreeIndependentSet(T, w):
         """
         return True
 
-    vrednostiVozliscSedem = [[(None, [])] * len(vzorciZaCikel(k)[1]) for i in range(n)]
+    vrednostiVozliscSedem = [[None]*len(vzorciZaCikel(k)[1]) for i in range(n)]
+    seznamVozliscSedem = [[[None]*len(vzorciZaCikel(k)[1]) for i in range(n)]]
 
-    #    print(vrednostiVozliscSedem)
+##    print(vrednostiVozliscSedem)
 
 
-    def postvisitSedem(u, v):
+    def postvisitSedem(u,v):
         vzorci = vzorciZaCikel(k)[1]
         l = len(vzorci)
         for indexVzorca in range(l):
             vzorec = vzorci[indexVzorca]
             vsota = vsotaVzorca(vzorec, u)
-            vrednostiVozliscSedem[u][indexVzorca] = (vsota, [vzorec])
+            vrednostiVozliscSedem[u][indexVzorca] = (vsota, [(u, indexVzorca)])
             for sin in T[u]:
                 if sin == v:
                     continue
@@ -103,10 +107,11 @@ def maxCycleTreeIndependentSet(T, w):
                             sezna = vrednostiVozliscSedem[sin][indexMoznega][1]
                 vrednost, seznamcek = vrednostiVozliscSedem[u][indexVzorca]
                 vrednost += maximum
-                seznamcek += [sezna]
-                vrednostiVozliscSedem[u][indexVzorca] = (vrednost, seznamcek)
+                seznamcek += sezna
+                vrednostiVozliscSedem[u][indexVzorca] = (vrednost, sorted(seznamcek))
 
         return True
+
 
     def DFS(G, roots=None, previsit=nothing, postvisit=nothing):
         """
@@ -149,104 +154,16 @@ def maxCycleTreeIndependentSet(T, w):
                 return False
         return True
 
-    print(DFS(T, roots=None, previsit=nothing, postvisit=postvisitSedem))
 
-    print(vsotaVzorca(5, 0))
+    DFS(T, roots=None, previsit=nothing, postvisit=postvisitSedem)
 
-    print(vzorciZaCikel(4))
+##    print(vsotaVzorca(5, 0))
 
-    print(slovarZdruzljivih(vzorciZaCikel(4)[1]))
+##    print(vzorciZaCikel(4))
+
+##    print(slovarZdruzljivih(vzorciZaCikel(4)[1]))
 
     vrednost, seznamVzorcevZaVsakoVozlisceTree = max(vrednostiVozliscSedem[0][k] for k in range(len(vzorciZaCikel(k)[0])))
-
-    uporabljeneTocke = []
-    for vozlisceDrevesa, vzorec in seznamVzorcevZaVsakoVozlisceTree:
-        vzorcek = []
-        for i in range(k):
-            vzorcek += [(vzorec//(2**(i)))%2]
-        for i in range(k):
-            if vzorcek[i] == 1:
-                uporabljeneTocke += [(k-i-1, vozlisceDrevesa)]
-
-    return (vrednost, uporabljeneTocke)
-
-
-    # def postvisit(u, v):
-    #     for cikel in range(k):
-    #         potomciPotomcev = 0
-    #         potomci = 0
-    #         for sin in T[u]:
-    #             if sin == v:
-    #                 continue
-    #             print("vrednostiVozlisc:", vrednostiVozlisc[cikel][sin])
-    #             if max(vrednostiVozlisc[cikel][sin][0], vrednostiVozlisc[cikel][sin][1]) > 0:
-    #                 potomci += max(vrednostiVozlisc[cikel][sin][0], vrednostiVozlisc[cikel][sin][1])
-    #             for vnuk in T[sin]:
-    #                 if vnuk == u:
-    #                     continue
-    #                 if max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1]) > 0:
-    #                     potomciPotomcev += max(vrednostiVozlisc[cikel][vnuk][0], vrednostiVozlisc[cikel][vnuk][1])
-    #
-    #         vrednostiVozlisc[cikel][u] = (potomciPotomcev + w[cikel][u], potomci)
-    #         print(vrednostiVozlisc)
-    #     return True
-
-    # def celotenGrafzVrednostmi(T, w):
-    #     # pripravimo si graf (oz matriko sosedov, kjer i-ti stolpec
-    #     # in j-ta vrstica predstavljata seznam sosedov i-tega
-    #     # elementa v drevesu in j -tega elementa v ciklu),
-    #     # zadnja vrednost pa pove, če je element v grafu ali ne
-    #
-    #     n = len(T)
-    #     k = len(w)
-    #     celotenGraf = []
-    #     for nadstropje in range(k):
-    #         vozlisca = []
-    #         for vozlisce in range(n):
-    #             sosedje = dict()
-    #             a = (nadstropje + 1) % k
-    #             b = (nadstropje - 1) % k
-    #             sosedje[(vozlisce, a)] = 1
-    #             sosedje[(vozlisce, b)] = 1
-    #             for sosed in T[vozlisce]:
-    #                 sosedje[(sosed, nadstropje)] = 1
-    #             vozlisca += [sosedje]
-    #         celotenGraf += [vozlisca]
-    #     return celotenGraf
-
-
-    # def celotenGraf(T, w):
-    #     # pripravimo si graf (oz matriko sosedov, kjer i-ti stolpec
-    #     # in j-ta vrstica predstavljata seznam sosedov i-tega
-    #     # elementa v drevesu in j -tega elementa v ciklu),
-    #     # zadnja vrednost pa pove, če je element v grafu ali ne
-    #
-    #     n = len(T)
-    #     k = len(w)
-    #     celotenGraf = []
-    #     for nadstropje in range(k):
-    #         vozlisca = []
-    #         for vozlisce in range(n):
-    #             sosedje = []
-    #             a = (nadstropje + 1) % k
-    #             b = (nadstropje - 1) % k
-    #             sosedje += [(vozlisce, a)]
-    #             sosedje += [(vozlisce, b)]
-    #             for sosed in T[vozlisce]:
-    #                 sosedje += [(sosed, nadstropje)]
-    #             vozlisca += [sosedje]
-    #         celotenGraf += [vozlisca]
-    #     return celotenGraf
-
-
-    print(DFS(T, roots=None, previsit=nothing, postvisit=postvisitSedem))
-
-    print(celotenGraf(T, w))
-
-    print(vsotaVzorca(18, 0))
-
-    vrednost, seznamVzorcevZaVsakoVozlisceTree = max(
-        vrednostiVozliscSedem[0][k] for k in range(len(vzorciZaCikel(k)[0])))
 
     print(vzorciZaCikel(4))
 
@@ -257,7 +174,6 @@ def maxCycleTreeIndependentSet(T, w):
         print(indexVzorec, vzorcek)
         for i in range(k):
             if vzorcek[i] == 1:
-                uporabljeneTocke += [(k - i - 1, vozlisceDrevesa)]
+                uporabljeneTocke += [(k-i-1, vozlisceDrevesa)]
 
     return (vrednost, uporabljeneTocke)
-
