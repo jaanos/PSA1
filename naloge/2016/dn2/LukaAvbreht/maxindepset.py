@@ -27,7 +27,7 @@ def maxCycleTreeIndependentSet(T, w):
     memo = dict()
     Graf_resitev = set()
 
-
+    zacetni = all_valid_cycles(k)
 
 
 
