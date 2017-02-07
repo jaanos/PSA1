@@ -33,4 +33,14 @@ def list_primernih_otrok(parent):
     return res
 
 
-
+def are_neighbours(a,b,T):  # aLso returns false if you compere by
+        """Returns True if two nodes are neighbours, otherwise returns False"""
+        x,u = a[0],a[1]
+        y,v = b[0],b[1]
+        Cikelsos = abs((x-y)%k)
+        if u == v and Cikelsos <= 1:
+            return True
+        Drevosos = u in T[v]
+        if Cikelsos == 0 and Drevosos:
+            return True
+        return False
