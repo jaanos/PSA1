@@ -12,6 +12,7 @@ def primeren_otrok(parent,child):
 
 def list_primernih_otrok(parent):
     """Returns the list of all valid children of a parent as a list of binary numbers(strings)"""
+    assert valid_cycle(parent) == True, "Parent is not the valid cycle"
     if parent[0] == '1':
         res = ['0']
         k = 1
@@ -61,3 +62,7 @@ def are_neighbours(a,b,T):  # aLso returns false if you compere by
 print(valid_cycle('11000101'))
 print(valid_cycle('101000101'))
 print(valid_cycle('0101000101'))
+tre = list_primernih_otrok('0101000101')
+print(tre)
+for i in tre:
+    print(valid_cycle(i))
