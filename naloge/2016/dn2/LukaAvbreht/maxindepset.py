@@ -24,8 +24,26 @@ def maxCycleTreeIndependentSet(T, w):
         return (0, [])
     # raise NotImplementedError("Naredi sam!")
 
+    def vrednost_cikla_na_nivoju(cikel,nivo):
+        res = 0
+        nivo = int(nivo)
+        for i in cikel:
+            if i == '1':
+                res+= w[int(i),nivo]
+        return res
+
+    vsi_mozni_cikli = all_valid_cycles(n)
+
     memo = dict()
     Graf_resitev = set()
+
+    def max_value_of_tree_with_root_n(n,valid_cycles):
+        def recursive_tree_funct(n,cycle_type):
+            if(n,cycle_type) in memo:
+                return memo[(n,cycle_type)]
+            if len(T[n]) == 1: # means that n is a leaf of a tree
+                return vrednost_cikla_na_nivoju(cycle_type,n)
+
 
     zacetni = all_valid_cycles(k)
 
