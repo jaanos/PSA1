@@ -21,7 +21,11 @@ def maxCycleTreeIndependentSet(T, w):
         return (0, [])
 
     def vzorciZaCikel(k):
-        #časovna zahtevnost: eksponentna v k
+        """
+        Opis funkcije:
+        časovna zahtevnost: eksponentna v k
+        Prostorska zahtevnost:
+        """
         if k == 0:
             return [], []
         if k == 1:
@@ -43,7 +47,13 @@ def maxCycleTreeIndependentSet(T, w):
             stevilo += [j*2]
         return vzorci, stevilo
 
-    def vsotaVzorca(indexVzorca, u): #dolzina vzorca = k (zapisanjega v obliki vzorca, ta je v obliki stevilke)
+    def vsotaVzorca(indexVzorca, u):
+        """
+        Opis funkcije:
+        dolzina vzorca = k (zapisanjega v obliki vzorca, ta je v obliki stevilke)
+        Časovna zahtevnost:
+        Prostorska zahtevnost:
+        """
         vsota = 0
         vzorcek = vzorciZaCikel(k)[0][indexVzorca]
         for i in range(k):
@@ -52,6 +62,12 @@ def maxCycleTreeIndependentSet(T, w):
         return vsota
 
     def slovarZdruzljivih(vzorci):
+        """
+        za množico vzorcev ustvari slovar združljivih vzorcev (vzorci so podani s tevili, ki jih vzorci
+        predstavljajo, če na njih gledamo kot na dvojiški zapis števila).
+        Časovna zahtevnost:
+        Prostorska zahtevnost:
+        """
         slovar = dict()
         for vzorec in vzorci:
             slovar[vzorec] = [j for j in vzorci if vzorec&j == 0]
@@ -149,7 +165,13 @@ def maxCycleTreeIndependentSet(T, w):
 
     return (vrednost, uporabljeneTocke)
 
-
+"""
+Od tu naprej sta dva primera:
+1. primer: pot
+2. primer: primer iz navodil naloge. Rešitev se razlikuje v enem vozlišču, ki ga jaz ne vzamem,
+            ker je utež na njem enaka 0, in je zato vseeno, če ga vzamemo ali ne. V testni rešitvi
+            v navodilih, ga vzamemo!!!!!!
+"""
 T = [[1], [0, 2], [1]]
 w = [[1, 1, 1],
      [2, 2, 2],
