@@ -63,25 +63,6 @@ def are_neighbours(a,b,T):  # aLso returns false if you compere by
 
 def all_valid_cycles(n):
     """Returns the list of all valid cycles of length n"""
-    res = ['1','0']
-    k = 2
-    for i in range(n-1):
-        tren = list()
-        dif = 0
-        for j in range(k):
-            if res[j][-1]=='1':
-                tren.append(res[j]+'0')
-                dif += 1
-            else:
-                tren.append(res[j]+'1')
-                tren.append(res[j]+'0')
-            k = k*2-dif
-        res = tren
-    return res
+    return list_primernih_otrok('0'*n)
 
-#print(all_valid_cycles(4))
 
-print(list_primernih_otrok('0100'))
-
-for i in list_primernih_otrok('0100'):
-    print(valid_cycle(i))
