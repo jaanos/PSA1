@@ -23,14 +23,27 @@ def list_primernih_otrok(parent):
         if i =='1':
             for j in range(k):
                 tren.append(res[j]+'0')
-            res = tren
         else:
+            dif = 0
             for j in range(k):
-                tren.append(res[j]+'1')
-                tren.append(res[j]+'0')
-            k = k*2
-            res = tren
+                if res[j][-1]=='1':
+                    tren.append(res[j]+'0')
+                    dif += 1
+                else:
+                    tren.append(res[j]+'1')
+                    tren.append(res[j]+'0')
+            k = k*2-dif
+        res = tren
     return res
+
+def valid_cycle(cycle):
+    """Returns True if a cycle is valid and False othervise (Cycle is valid ifi it has an independent subgroup of ones)"""
+    for i in range(len(cycle)-1):
+        if cycle[i] == '1':
+            if cycle[i-1] != '0' or cycle[i+1] != '0':
+                return False
+    return True
+
 
 
 def are_neighbours(a,b,T):  # aLso returns false if you compere by
@@ -44,3 +57,7 @@ def are_neighbours(a,b,T):  # aLso returns false if you compere by
         if Cikelsos == 0 and Drevosos:
             return True
         return False
+
+print(valid_cycle('11000101'))
+print(valid_cycle('101000101'))
+print(valid_cycle('0101000101'))
