@@ -9,18 +9,6 @@ __author__ = "Filip Koprivec"
 BitMask = NewType("BitMask", int)
 
 
-def generate_bitmasks_with_exp(n: int) -> List[BitMask]:
-    waiting = [BitMask(1)]
-    valid = [BitMask(0)]
-    for j in range(1, n):
-        temp = []
-        for k in valid:
-            temp.append(BitMask(k | 2 ** j))
-        valid.extend(waiting)
-        waiting = temp
-    return valid + waiting
-
-
 def are_compatible(x: BitMask, y: BitMask) -> bool:
     return x & y == 0
 
