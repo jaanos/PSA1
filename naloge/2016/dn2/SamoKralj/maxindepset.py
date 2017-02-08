@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from time import time
+from random import randint
 
 def maxCycleTreeIndependentSet(T, w):
     """
@@ -95,6 +96,34 @@ def vrednost(mask, w, k, vozlisce):
         if zapis[i] == 1:
             vozlisca_grafa += ((i, vozlisce),)
     return teza, vozlisca_grafa
+
+def generateTreeGraph(nodes, oznaka_start):
+    """
+    Generira povezave drevesa z nodes + 1 vozlisci
+    """
+    if nodes == 0:
+        return []
+    else:
+        povezave = []
+        dodaj = oznaka_start + 1
+        while nodes > 0:
+            u = randint(1, nodes)
+            povezave.append([oznaka_start, dodaj])
+            povezave.extend(generateTreeGraph(u - 1, dodaj))
+            dodaj += u
+            nodes -= u
+        return povezave
+
+def generateTree(stevilo_vozlisc):
+    """
+    Generira drevo z stevilo_vozlisc vozlisci.
+    """
+    povezave = generateTreeGraph(stevilo_vozlisc - 1, 0)
+    G = [[] for i in range(stevilo_vozlisc)]
+    for u, v in povezave:
+        G[u].append(v)
+        G[v].append(u)
+    return G
         
     
     
