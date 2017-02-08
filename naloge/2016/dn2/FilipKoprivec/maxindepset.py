@@ -63,6 +63,13 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     # As the set of bitmasks is under BB (BB alows that first and last bit are both set, while bitmasks do not).
     # We also have B = O(phi^k) = approx = O(1.618^k)
 
+    # If we limit the len of bitmasks even more, we find out, that B(i) = F(i+2) - F(i-2) // Assuming F(0) = 0, F(1) = 1
+    # We don't want sequences that start with 1 and end with one, by simply writing the recurrence with 3 indexes
+    # (instead of 2), we can se, that F(i-4) sequences are "undesirable", to get B(i) = F(i+2) - F(i-2) we simply shift
+    # starting point as before
+    # We can rearrange this to get B(i) = B(i-1) + B(i-2) and we get fibonacci sequence, but with a different starting
+    # point, so we are still in the same complexity class.
+
     bitmasks = generate_bitmasks(k)  # Cost: O(B), memory: O(B) for saving all bitmasks
     # Let T be the number of all transitions, we know T = O(B^2), but can be a bit smaller,
     # but not much, as at least half valid states are compatible from every state
