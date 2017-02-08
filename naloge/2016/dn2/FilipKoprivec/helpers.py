@@ -73,6 +73,19 @@ def generate_bitmasks_with_multiplication(n: int) -> List[BitMask]:
     return valid + temp
 
 
+def generate_product_with_bitmask(bitmask: BitMask, ind: int) -> List[Tuple[int, int]]:
+    rtr = []  # type: List[Tuple[int, int]]
+    on_check_mask = 1
+    bit_ind = 0
+    mask = int(bitmask)  # For type checking
+    while on_check_mask <= mask:
+        if mask & on_check_mask:
+            rtr.append((bit_ind, ind))
+        bit_ind += 1
+        on_check_mask *= 2
+    return rtr
+
+
 def test_bitmask(bitmask: int, l: int) -> bool:
     s_mask = (bin(bitmask)[2:]).zfill(l)
     if len(s_mask) == 1:

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+
+from collections import deque
+
 from typing import Dict
 from typing import Tuple, List
-from .helpers import generate_bitmasks, make_transitions, BitMask, extract_levels
+from .helpers import generate_bitmasks, make_transitions, BitMask, extract_levels, generate_product_with_bitmask
 
 __author__ = "Filip Koprivec"
 
@@ -28,7 +31,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
     def calculate_weight(bitmask: BitMask, j: int) -> int:
         su = 0
-        for i in range(n):
+        for i in range(k):
             if 1 << i & bitmask:
                 su += w[i][j]
         return su
@@ -44,33 +47,84 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     transitions = make_transitions(bitmasks)
 
     # DP[i,b]
-    DP = {}  # type: Dict[Tuple[int, BitMask], int]
+    # max wight where i is parent and is assigned bitmask b
+    # Also saves which bitmask is assigned to specific child
+    DP = {}  # type: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]]
 
     MIN_INF = float("-inf")
 
     # level_i = len(levels) - 1
     for vertex in levels[-1]:
         for mask in bitmasks:
-            DP[(vertex, mask)] = calculate_weight(mask, vertex)
+            #                                                    # no mask down from me
+            temp = []  # type: List[BitMask]
+            DP[(vertex, mask)] = calculate_weight(mask, vertex), temp
 
     for level_i in range(len(levels) - 2, -1, -1):
         vertexes = levels[level_i]
         for vertex in vertexes:
             for my_mask in bitmasks:  # bitmask on me
                 my_cost = calculate_weight(my_mask, vertex)
-                DP[(vertex, my_mask)] = my_cost  # My cost
                 if not children[vertex]:
-                    # We could set ma = 0, but no restraint is given on weights
+                    DP[(vertex, my_mask)] = my_cost, []
                     continue
 
+                submasks = []  # type: List[BitMask]
                 cur = 0
                 for child in children[vertex]:
                     ma = MIN_INF
+                    cur_mask = None
                     for compatible_mask in transitions[my_mask]:
-                        ma = max(DP[(child, compatible_mask)], ma)
-                    cur += ma  # type: ignore
-                DP[(vertex, my_mask)] += cur
+                        dp, _ = DP[(child, compatible_mask)]
+                        if dp > ma:
+                            ma = dp
+                            cur_mask = compatible_mask
+                    cur += int(ma)
+                    assert cur_mask is not None
+                    submasks.append(cur_mask)
 
-    ma = max(DP[(0, mask)] for mask in bitmasks)
+                DP[(vertex, my_mask)] = my_cost + cur, submasks
 
-    return ma, []
+    m, obj = calculate_graph(DP, children, bitmasks)
+
+    su = 0
+    for i, j in obj:
+        su += w[i][j]
+    assert su == m
+
+    return m, obj
+
+    # return int(ma), []
+
+
+def calculate_graph(DP: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]], children: List[List[int]],
+                    bitmasks: List[BitMask]) -> Tuple[int, List[Tuple[int, int]]]:
+    def get_best_on_index(ind: int) -> Tuple[int, BitMask]:
+        ma = float("-inf")
+        best_mask = None
+        for mask in bitmasks:
+            val, children = DP[(ind, mask)]
+            if val > ma:
+                ma = DP[(0, mask)][0]
+                best_mask = mask
+
+        assert best_mask is not None
+
+        return int(ma), best_mask
+
+    calculated_zero_max, best_starting_mask = get_best_on_index(0)
+
+    rtr = []  # type: List[Tuple[int, int]]
+
+    queue = deque([(0, best_starting_mask)])
+
+    while queue:
+        ind, best_mask = queue.popleft()
+        rtr.extend(generate_product_with_bitmask(best_mask, ind))
+
+        _, children_masks = DP[(ind, best_mask)]
+
+        for j in range(len(children[ind])):
+            queue.append((children[ind][j], children_masks[j]))
+
+    return int(calculated_zero_max), rtr
