@@ -73,6 +73,8 @@ def generate_bitmasks_with_multiplication(n: int) -> List[BitMask]:
     return valid + temp
 
 
+# Cost: time: k (for full length of bitmask))
+# Memory: k (creates list of pairs, but at most k/2 pairs)
 def generate_product_with_bitmask(bitmask: BitMask, ind: int) -> List[Tuple[int, int]]:
     rtr = []  # type: List[Tuple[int, int]]
     on_check_mask = 1
@@ -129,15 +131,22 @@ def time_generation(N: int = 30) -> None:
 generate_bitmasks = generate_bitmasks_with_multiplication
 
 
+# Does an iterative DFS to transform graph in a bit more usable
+# Cost: time, memory: O(n)
 def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], List[int], List[List[int]]]:
     # Not asymptotically optimal, but in amortized case fast enough
     stack = []
+    # Vertices in level[i] -> vertices on depth i in tree, size: n
     levels = []  # type: List[List[int]]
+    # Level of vertex i, just for easier backtracking, size: n
     level_of = [0 for _ in range(len(graph))]
+    # For DFS
     visited = [False for _ in range(len(graph))]
 
-    # modified graph, tuple of (Parent, [Children]) for each vertex
+    # Memory: O(n) (we have all edges (twice), but O(E) = O(V) = O(n))
+    # List of children for each vertex in graph
     children = [[] for j in range(len(graph))]  # type: List[List[int]]
+    # Pointer to parent for each vertex in graph
     parents = [0 for j in range(len(graph))]
 
     it = iter([0])
@@ -146,6 +155,7 @@ def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], 
 
     cur_level = -1
 
+    # Set level and append to parent list, set correct parent for child
     def previsit(u: int, v: Optional[int]) -> None:
         nonlocal cur_level
         cur_level += 1
@@ -154,14 +164,16 @@ def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], 
         else:
             levels[cur_level].append(u)
         parents[u] = v  # type: ignore
-        if v is not None:
+        if v is not None:  # Root of tree
             children[v].append(u)
         level_of[u] = cur_level
 
+    # Decrease level on postvisit
     def postvisit() -> None:
         nonlocal cur_level
         cur_level -= 1
 
+    # Standard DFS, cost: O(N) + filling the return arrays -> O(n)
     while 1:
         try:
             u = next(it)
