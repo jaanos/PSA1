@@ -43,7 +43,7 @@ def generate_bitmasks_with_multiplication(n: int) -> List[BitMask]:
     valid = [BitMask(0)]
     val = 1
     for j in range(1, n - 1):
-        val *= 2  # not mush faster than val = 1 << j
+        val *= 2  # not much faster than val = 1 << j
         temp = []
         for k in valid:
             temp.append(BitMask(k | val))
