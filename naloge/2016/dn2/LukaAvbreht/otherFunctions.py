@@ -62,7 +62,16 @@ def are_neighbours(a,b,T):  # aLso returns false if you compere by
     return False
 
 def all_valid_cycles(n):
-    """Returns the list of all valid cycles of length n"""
-    return list_primernih_otrok('0'*n)
+    """
+    Returns the dictonary, with all posible paterns of length n as:
+
+    Patern : list(all posible children of that kind of patern)
+
+    """
+    keys = list_primernih_otrok('0'*n)
+    res = dict()
+    for i in keys:
+        res[i] = list_primernih_otrok(i)
+    return res
 
 
