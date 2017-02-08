@@ -1,7 +1,9 @@
 # Poročilo
 
-*Ime Priimek*
+*Luka Avbreht*
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
+V nalogi implementiramo algoritem za iskanje najtežje neodvisne množice v kartezičnem produktu drevesa in cikls.
 
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
+Problem si predstavljamo kot drevo na katerem je vsako vozlisce cikel. Na to vsak cikel oznacimo z nizom enic in nicel, 
+ki predstavljajo zaporedje izbranih in neizbranih vozlisc v ciklu, ter s pomocjo njih dolocimo mozne oblike potomcev v 
+drevesu, Ter tako, ko zacnemo v deblu drevesa 

@@ -51,26 +51,22 @@ def maxCycleTreeIndependentSet(T, w):
 
         #Computation of largest subgroup
         res = 0
-        nodes = tuple()
+        nodes = list()
 
         for patern in vsi_mozni_cikli[cycle]:
             weight, index = vrednost_cikla_na_nivoju(ind_voz,patern)
+            index = list(index)
             for voz in T[ind_voz]:
                 if voz > ind_voz:  # So we only look at children
                     tr_weight, tr_index = recursive_max_subgroup(voz,patern)
                     weight += tr_weight
-                    index += tr_index
+                    index += list(tr_index)
             if weight > res:
                 res = weight
                 nodes = index
-        memo[(ind_voz,cycle)] = (res,nodes)
-        return (res,nodes)
+        memo[(ind_voz,cycle)] = (res,frozenset(nodes))
+        return (res,frozenset(nodes))
     cycle = '0'*k
     res  = recursive_max_subgroup(0,cycle)
-    graf = list()
-    for i in res[1]:
-        graf.append(i)
+    graf = list(res[1])
     return (res[0],graf)
-
-
-
