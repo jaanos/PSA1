@@ -52,113 +52,11 @@ def maxCycleTreeIndependentSet(T, w):
                         best_solution.append(par)
             memo[(frozenset(prepovedani), cikel, drevo)] = best, best_solution
             return best, best_solution
-
-    memo2 = dict()
-    
-    def find_best(z_v, prejsni_v, tren_v, drevo_i, cikel_i):
-        if cikel_i == k:
-            return 0, []
-        elif (frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i) in memo2:
-            return memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)]
-        elif drevo_i == len(vrstni_red):
-            return find_best(z_v, tren_v, set(), 0, cikel_i + 1)
-        else:
-            v = vrstni_red[drevo_i]
-            if cikel_i == k - 1:
-                nova_tren = tren_v.copy()
-                best, best_sol = find_best(z_v, prejsni_v, nova_tren, drevo_i + 1, cikel_i)
-                if v not in prejsni_v and v not in z_v:
-                    znak = True
-                    for u in T[v]:
-                        if u in tren_v:
-                            znak = False
-                            break
-                    if znak:
-                        nova_tren2 = tren_v.copy()
-                        nova_tren2.add(v)
-                        b2, best_sol2 = find_best(z_v, prejsni_v, nova_tren2, drevo_i + 1, cikel_i)
-                        b2 += w[cikel_i][v]
-                        if b2 > best:
-                            best = b2
-                            best_sol = best_sol2 + [[cikel_i, v]]
-                memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)] = best, best_sol
-                return best, best_sol
-            elif cikel_i == 0:
-                nova_tren = tren_v.copy()
-                nova_zv = z_v.copy()
-                best, best_sol = find_best(nova_zv, prejsni_v, nova_tren, drevo_i + 1, cikel_i)
-                if v not in prejsni_v:
-                    znak = True
-                    for u in T[v]:
-                        if u in tren_v:
-                            znak = False
-                            break
-                    if znak:
-                        nova_tren2 = tren_v.copy()
-                        nova_tren2.add(v)
-                        nova_zv = z_v.copy()
-                        nova_zv.add(v)
-                        b2, best_sol2 = find_best(nova_zv, prejsni_v, nova_tren2, drevo_i + 1, cikel_i)
-                        b2 += w[cikel_i][v]
-                        if b2 > best:
-                            best = b2
-                            best_sol = best_sol2 + [[cikel_i, v]]
-                memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)] = best, best_sol
-                return best, best_sol
-            else:
-                nova_tren = tren_v.copy()
-                best, best_sol = find_best(z_v, prejsni_v, nova_tren, drevo_i + 1, cikel_i)
-                if v not in prejsni_v:
-                    znak = True
-                    for u in T[v]:
-                        if u in tren_v:
-                            znak = False
-                            break
-                    if znak:
-                        nova_tren2 = tren_v.copy()
-                        nova_tren2.add(v)
-                        b2, best_sol2 = find_best(z_v, prejsni_v, nova_tren2, drevo_i + 1, cikel_i)
-                        b2 += w[cikel_i][v]
-                        if b2 > best:
-                            best = b2
-                            best_sol = best_sol2 + [[cikel_i, v]]
-                memo2[(frozenset(z_v), frozenset(prejsni_v), frozenset(tren_v), drevo_i, cikel_i)] = best, best_sol
-                return best, best_sol
-
-    cas = time()
-    resitev = find_best(set(), set(), set(), 0, 0)
-    time1 = time() - cas
     cas = time()
     res2 = find_best_set(set(),0,0)
     time2 = time() - cas
-    print('Izboljšan algoritem reši nalogo v {0}'.format(time1))
-    print(resitev, len(memo2))
     print('Prejsni algoritem resi nalogo v {0}'.format(time2))
-    print(res2, len(memo))
-    return resitev
-
-def uredi_po_plasteh(T):
-
-    ozina = len(T)*[None]
-    ozina[0] = 0
-    obiskani = len(T) - 1
-
-    iskanje = [0]
-    while obiskani > 0:
-        nova_plast = []
-        for v in iskanje:
-            for u in T[v]:
-                if ozina[u] is None:
-                    ozina[u] = ozina[v] + 1
-                    nova_plast.append(u)
-                    obiskani -= 1
-        iskanje = nova_plast
-
-    vrstni_red = [(k, i) for i,k in enumerate(ozina)]
-    vrstni_red.sort()
-    vrstni_red = [i for k,i in vrstni_red]
-    return vrstni_red
-
+    return res2
 
 def maxCycleTreeIndependentSet2(T, w):
     """
@@ -186,24 +84,28 @@ def maxCycleTreeIndependentSet2(T, w):
 
     vrstni_red = uredi_po_plasteh(T)
 
-    print(vrstni_red)
-    print(mask)
-
     def find_max(koren, indeks_vozlisca):
         if (koren, indeks_vozlisca) in memo:
             return memo[koren, indeks_vozlisca]
         else:
             maksimum = 0
+            vozlisca = tuple()
             v = vrstni_red[indeks_vozlisca]
             for vzorec in mask[koren]:
-                teza = vrednost(vzorec, w, k, v)
+                teza, vozl = vrednost(vzorec, w, k, v)
                 for i in range(indeks_vozlisca + 1, len(vrstni_red)):
                     if vrstni_red[i] in T[v]:
-                        teza += find_max(vzorec, i)
+                        teza_dodaj, vozl_dodaj = find_max(vzorec, i)
+                        teza += teza_dodaj
+                        vozl += vozl_dodaj
                 if teza > maksimum:
                     maksimum = teza
-            memo[koren, indeks_vozlisca] = maksimum
-            return maksimum
+                    vozlisca = vozl
+                if teza == maksimum and len(vozl) > len(vozlisca):
+                    maksimum = teza
+                    vozlisca = vozl
+            memo[koren, indeks_vozlisca] = (maksimum,vozlisca)
+            return maksimum, vozlisca
     return find_max(0,0)
 
 def generiraj_bitmask(k):
@@ -241,11 +143,39 @@ def binarno(n, k):
     return [0]*(k - len(vrni)) + list(reversed(vrni))
 
 def vrednost(mask, w, k, vozlisce):
+    """
+    Vrne tezo cikla na vozliscu drevesa vozlisce in bitmasko mask.
+    """
     zapis = binarno(mask, k)
     teza = 0
+    vozlisca_grafa = tuple()
     for i in range(k):
         teza += zapis[i]*w[i][vozlisce]
-    return teza
+        if zapis[i] == 1:
+            vozlisca_grafa += ((i, vozlisce),)
+    return teza, vozlisca_grafa
+
+def uredi_po_plasteh(T):
+
+    ozina = len(T)*[None]
+    ozina[0] = 0
+    obiskani = len(T) - 1
+
+    iskanje = [0]
+    while obiskani > 0:
+        nova_plast = []
+        for v in iskanje:
+            for u in T[v]:
+                if ozina[u] is None:
+                    ozina[u] = ozina[v] + 1
+                    nova_plast.append(u)
+                    obiskani -= 1
+        iskanje = nova_plast
+
+    vrstni_red = [(k, i) for i,k in enumerate(ozina)]
+    vrstni_red.sort()
+    vrstni_red = [i for k,i in vrstni_red]
+    return vrstni_red
         
     
     
