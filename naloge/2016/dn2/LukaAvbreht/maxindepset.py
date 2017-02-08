@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from .otherFunctions import *
+#from .otherFunctions import *
 sys.setrecursionlimit(100000)
 
 def maxCycleTreeIndependentSet(T, w):
@@ -29,26 +29,60 @@ def maxCycleTreeIndependentSet(T, w):
         nivo = int(nivo)
         for i in cikel:
             if i == '1':
-                res+= w[int(i),nivo]
+                res+= w[int(i)][nivo]
         return res
 
     vsi_mozni_cikli = all_valid_cycles(n)
 
     memo = dict()
-    Graf_resitev = set()
+    Graf_resitev = list()
+    Kajsmozbral = set()
 
-    def max_value_of_tree_with_root_n(n,valid_cycles):
+
+    def max_value_of_tree_with_root_0(valid_cycles):
+        """Function that Recursivly returns the value of maximal independent sub group of cartesic product od cycle and tree"""
+
         def recursive_tree_funct(n,cycle_type):
+            """Recursive function that calculates the max value of a tree with certain cycle type as a root"""
             if(n,cycle_type) in memo:
                 return memo[(n,cycle_type)]
-            if len(T[n]) == 1: # means that n is a leaf of a tree
-                return vrednost_cikla_na_nivoju(cycle_type,n)
 
+            vrednost_voz = vrednost_cikla_na_nivoju(cycle_type,n)
+            racun = (vrednost_voz,frozenset([(n,cycle_type)]))
+            if len(T[n]) == 1: # means that n is a leaf of a tree
+                memo[(n,cycle_type)] = racun
+                return racun
+            for i in T[n]:
+                if i > n: # So we only look for children :D
+                    prim = list_primernih_otrok(cycle_type)
+                    maxi = 0
+                    izbral = list()
+                    for j in prim:
+                        trvr = recursive_tree_funct(i,j)
+                        if trvr[0] > maxi:
+                            maxi = trvr[0]
+                            nov = [(i,j)]
+                            nov + list(trvr[1])
+                            izbral = nov
+                    vrednost_voz += maxi
+            memo[(n,cycle_type)] = (vrednost_voz,frozenset(izbral))
+            return (vrednost_voz,frozenset(izbral))
+        maxi = 0
+        zbr = None
+        for i in valid_cycles:
+            trvr = recursive_tree_funct(0,i)
+            if trvr[0] > maxi:
+                maxi = trvr[0]
+                zbr = trvr[1]
+        return maxi,zbr
 
     zacetni = all_valid_cycles(k)
+    res = max_value_of_tree_with_root_0(zacetni)
+    print(res)
+    print(Kajsmozbral)
 
-
-
+    graf = [(0, 0), (2, 0), (1, 1), (3, 1), (0, 3), (2, 3), (0, 4), (2, 4), (1, 5), (3, 5), (1, 6), (3, 6), (1, 7), (3, 7), (1, 8), (3, 8), (0, 9), (2, 9), (0, 10), (2, 10), (0, 11), (2, 11), (1, 12), (3, 12), (0, 13), (2, 13)]
+    #return res
 
 
 
@@ -145,17 +179,74 @@ def maxCycleTreeIndependentSet(T, w):
     #     return maxtren2
     #
     # Vred_res = max_independes_subgorup_of_cycle_and_tree(frozenset(range(k)),frozenset(range(n)))
-    # print(Vred_res)
-    # print(Graf_resitev)
-    # print(list(Graf_resitev))
-    # res = ([(0, 0), (2, 0), (1, 1), (3, 1), (0, 3), (2, 3), (0, 4), (2, 4), (1, 5), (3, 5), (1, 6), (3, 6), (1, 7), (3, 7), (1, 8), (3, 8), (0, 9), (2, 9), (0, 10), (2, 10), (0, 11), (2, 11), (1, 12), (3, 12), (0, 13), (2, 13)])
-    # print(res)
-    # print(list(Graf_resitev)==res)
-
-
-
 
     ##### DEl tihis part
+
+
+def primeren_otrok(parent,child):
+    """It returns true if the ciycle child can ba a neighbour cycle of parent (input is in string in binary)"""
+    k = len(parent)
+    assert k == len(child), \
+        "Parent and child must be of same size"
+    for i in range(k):
+        if parent[i] == child[i] == 1:
+            return False
+    return True
+
+def list_primernih_otrok(parent):
+    """Returns the list of all valid children of a parent as a list of binary numbers(strings)"""
+    assert valid_cycle(parent) == True, "Parent is not the valid cycle"
+    if parent[0] == '1':
+        res = ['0']
+        k = 1
+    else:
+        res = ['1','0']
+        k = 2
+    for i in parent[1:]:
+        tren = list()
+        if i =='1':
+            for j in range(k):
+                tren.append(res[j]+'0')
+        else:
+            dif = 0
+            for j in range(k):
+                if res[j][-1]=='1':
+                    tren.append(res[j]+'0')
+                    dif += 1
+                else:
+                    tren.append(res[j]+'1')
+                    tren.append(res[j]+'0')
+            k = k*2-dif
+        res = tren
+    tren = list()
+    for i in res:
+        if valid_cycle(i):
+            tren.append(i)
+    return tren
+
+def valid_cycle(cycle):
+    """Returns True if a cycle is valid and False othervise (Cycle is valid ifi it has an independent subgroup of ones)"""
+    for i in range(len(cycle)-1):
+        if cycle[i] == '1':
+            if cycle[i-1] != '0' or cycle[i+1] != '0':
+                return False
+    return True
+
+def are_neighbours(a,b,T):  # aLso returns false if you compere by
+    """Returns True if two nodes are neighbours, otherwise returns False"""
+    x,u = a[0],a[1]
+    y,v = b[0],b[1]
+    Cikelsos = abs((x-y)%k)
+    if u == v and Cikelsos <= 1:
+        return True
+    Drevosos = u in T[v]
+    if Cikelsos == 0 and Drevosos:
+        return True
+    return False
+
+def all_valid_cycles(n):
+    """Returns the list of all valid cycles of length n"""
+    return list_primernih_otrok('0'*n)
 
 T = [[1, 2], [0, 3, 4], [0, 5], [1, 6, 7], [1, 8], [2, 9, 10], [3], [3], [4, 11], [5], [5, 12], [8], [10, 13], [12]]
 w = [[6, 7, 3, 6, 8, 7, 5, 4, 5, 8, 7, 6, 2, 5],[3, 6, 2, 5, 8, 5, 9, 1, 5, 8, 3, 7, 3, 3],
