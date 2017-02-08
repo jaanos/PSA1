@@ -97,15 +97,19 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
                 submasks = []  # type: List[BitMask]
                 cur = 0
+                # Dynamic programming
+                # For each children
                 for child in children[vertex]:
                     # At most n vertices will be checked at all (looking from for vertex in vertices)
                     ma = MIN_INF
                     cur_mask = None
+                    # Get max by compatible mask
                     for compatible_mask in transitions[my_mask]:  # At most O(B), if my_mask = 0, we need to check all
                         dp, _ = DP[(child, compatible_mask)]
                         if dp > ma:
                             ma = dp
                             cur_mask = compatible_mask
+                    # And sum all children
                     cur += int(ma)
                     assert cur_mask is not None
                     submasks.append(cur_mask)
