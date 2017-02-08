@@ -48,6 +48,21 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
     # Generate possible transitions, let B be the number of bitmasks, rough estimate is that B = O(2**k)
     # But for better estimates let B be the number of bitmasks
+
+    # More thorough analysis of B:
+    # Consider all sequences ob bits ({0,1}) with length k, so that no two adjacent bits are set, call them BB
+    # and let A(n) be number of such bits
+    # Also consider subformula for it, A(n,0) and A(n,1) are number of sequences of length n, ending with 0 or 1,
+    # clearly A(n) = A(n, 0) + A(n, 1)
+    # We can se that A(n+1, 0) = A(n, 0) + A(n, 1) = A(n), (by setting last bit to 0), also
+    # A(n+1, 1) = A(n, 0) = A(n-1, 0) + A(n-1, 1) = A(n-1)
+    # From here we have recurrence A(n+2) = A(n+1) + A(n) with A(1) = 2 and A(2) = 3
+    # We have A, as shifted fibonacci numbers A(n) = F(n+2) // if we use F(1) = F(2) = 1
+    # So we have asymptotically A = O(phi^n), where phi denotes golden_ratio
+    # We therefore have: len(BB(n)) = O(phi^n)
+    # As the set of bitmasks is under BB (BB alows that first and last bit are both set, while bitmasks do not).
+    # We also have B = O(phi^k) = approx = O(1.618^k)
+
     bitmasks = generate_bitmasks(k)  # Cost: O(B), memory: O(B) for saving all bitmasks
     # Let T be the number of all transitions, we know T = O(B^2), but can be a bit smaller,
     # but not much, as at least half valid states are compatible from every state
@@ -120,20 +135,20 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
     # Computation cost:
     # Preparations cost + Outer loop
-    # Time: O(n + B^2) + O(n^2 + B^2) = O(n^2 * B^2) = approx = O(n^2 * 2^(2k)) = O(n^2 * 4^k)
-    # Space: O(B^2) + O(B*n)
+    # Time: O(n + B^2) + O(n^2 + B^2) = O(n^2 * B^2) = approx = O(n^2 * phi^(2k)) = approx = O(n^2 * 2.618^k)
+    # Space: O(B^2) + O(B*n) = approx = O(phi^2k) + O(phi^k*n)
 
     # Backtrack path
-    # Cost: O(n*k), space: O(n*k)
+    # Cost: O(n*k + B), space: O(n*k)
     m, obj = calculate_graph(DP, children, bitmasks)
 
     # Total cost:
-    # Time: O(n^2 * B^2) = approx = O(n^2 * 2^(2k)) = O(n^2 * 4^k)
-    # Space: O(B^2) + O(B*n) = approx = O(4^k) + O(2^k*n)
+    # Time: O(n^2 * B^2) = approx = O(n^2 * phi^(2k)) = approx = O(n^2 * 2.618^k)
+    # Space: O(B^2) + O(B*n) = approx = O(phi^2k) + O(phi^k*n)
     return m, obj
 
 
-# Cost: time: O(n*k), space: O(n*k)
+# Cost: time: O(n*k + B), space: O(n*k)
 def calculate_graph(DP: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]], children: List[List[int]],
                     bitmasks: List[BitMask]) -> Tuple[int, List[Tuple[int, int]]]:
 
@@ -152,6 +167,9 @@ def calculate_graph(DP: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]], ch
 
     # Get best mask on level 0
     # Cost: O(B)
+    # We pay this cost, because we have to check for the best bitmask we want to use on root
+    # We could go around (but still pay for it), by adding another root and setting its bitmask on zero, so that
+    # DP will do this work
     calculated_zero_max, best_starting_mask = get_best_on_index(0)
 
     # Return all vertices in best graph
