@@ -13,8 +13,28 @@ def are_compatible(x: BitMask, y: BitMask) -> bool:
     return x & y == 0
 
 
+# Cost: time: O(B^2), memory: O(T), where B = len(bitmasks) and T is length of returned list
+# Could make time cost lower ((B^2)/2) using symmetry, but for now leave it
 def make_transitions(bitmasks: List[BitMask]) -> Dict[BitMask, List[BitMask]]:
     return {j: [i for i in bitmasks if are_compatible(j, i)] for j in bitmasks}
+
+"""
+Analysis on length of returned list:
+We are generating all pairs (one element of pair is always key) of bitmasks, that selected vertices form an independent
+set in graph, but we are only looking for at special graph, namely product of complete graph of size 2 with cycle of length n
+(as we only care for two levels of independence(we are in tree)),
+more precisely, size of L is size of set of all independent sets in graph Y(n) = K(2) x C(2); where x denotes
+cartesian product. That is precisely prismgraph (Y(n)) explained in (http://mathworld.wolfram.com/PrismGraph.html)
+And according to OEIS on http://oeis.org/A051927, we can easily compute Y(n) by simple python function:
+Y = lambda k: round((1 + 2**0.5)**k + (-1)**k + (1 - 2**0.5)**k)
+We can therefore asymptotically bound T as O( (1+sqrt(2))^k ) = approx = O(2.4142^k)
+Which is a bit smaller than O(phi^2) = approx = O(2.6180^k)
+"""
+
+
+def Y(k):
+    sq = 2 ** 0.5
+    return round((1 + sq)**k + (-1)**k + (1 - sq)**k)
 
 
 def generate_bitmasks_with_shift(n: int) -> List[BitMask]:

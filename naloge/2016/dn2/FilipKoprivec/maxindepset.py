@@ -34,6 +34,10 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     # For analysis, assume: len(bitmask) as "usable" length of bitmask (maximum over all most significant bits set)
     # We can easily see, that it will be bounded by k and so int(bitmask) <= 2**k
 
+    # let sq2 denote square root of 2 (sq2 = 2**0.5 = approx = 1.414)
+    # let sq21 denote sq2 + 1 (2**0.5 + 1 = approx = 2.414)
+    # let phi denote golden ratio ( (1 + 5**0.5)/2 = approx = 1.618)
+
     def calculate_weight(bitmask: BitMask, j: int) -> int:  # Cost: O(len(bitmask)) = O(k), memory: O(1)
         su = 0
         for i in range(k):
@@ -58,7 +62,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     # A(n+1, 1) = A(n, 0) = A(n-1, 0) + A(n-1, 1) = A(n-1)
     # From here we have recurrence A(n+2) = A(n+1) + A(n) with A(1) = 2 and A(2) = 3
     # We have A, as shifted fibonacci numbers A(n) = F(n+2) // if we use F(1) = F(2) = 1
-    # So we have asymptotically A = O(phi^n), where phi denotes golden_ratio
+    # So we have asymptotically A = O(phi^n)
     # We therefore have: len(BB(n)) = O(phi^n)
     # As the set of bitmasks is under BB (BB alows that first and last bit are both set, while bitmasks do not).
     # We also have B = O(phi^k) = approx = O(1.618^k)
@@ -71,8 +75,8 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     # point, so we are still in the same complexity class.
 
     bitmasks = generate_bitmasks(k)  # Cost: O(B), memory: O(B) for saving all bitmasks
-    # Let T be the number of all transitions, we know T = O(B^2), but can be a bit smaller,
-    # but not much, as at least half valid states are compatible from every state
+    # Let T be the number of all transitions, we know O(T) = O(B^2), but more precise analysis of make_translations
+    # establishes, that O(T) = O(sq21^k) = approx = O(2.4142^k)
     transitions = make_transitions(bitmasks)  # Cost: O(B^2), memory: O(T)
 
     # DP[i,b]
@@ -87,7 +91,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
     # Preparations cost:
     # Time: O(n) + O(B) + O(B^2) = O(n + B^2)
-    # Memory: O(n) + O(B) + O(T) = O(B^2)
+    # Memory: O(n) + O(B) + O(T) = O(T)
     # But not so much memory, as BitMasks are ints
 
     MIN_INF = float("-inf")
@@ -104,13 +108,14 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
         vertexes = levels[level_i]
         for vertex in vertexes:  # Check each vertex  # So together we have n operations here
 
-            # After loop reforming -> O(n (children) * B (my_mask) * B (compatible_mask[my_mask]))
-            # small_dp_cost = n*B^2 operations
+            # After loop reforming -> O(n (children) * T)
+            # small_dp_cost = n * T operations
 
             # list submasks holds at most n children at any time: memory O(n)
 
             # Check all bitmasks
-            # We need to check B things
+            # We only check all bitmasks in transitions.values(), not all possible pairwise combinations ob bitmasks
+            # This is certain lower than O(B^2), but is more precisely O(T)
             for my_mask in bitmasks:  # bitmask on me
                 my_cost = calculate_weight(my_mask, vertex)
                 if not children[vertex]:  # Leaf of tree, all costs constant
@@ -138,20 +143,20 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
                 DP[(vertex, my_mask)] = my_cost + cur, submasks
 
-    # full cost of loops: Outer loop : n * small_dp_cost = n^2*B^2 => O(n^2 * B^2)
+    # full cost of loops: Outer loop : n * small_dp_cost = n^2*T => O(n^2 * T)
 
     # Computation cost:
-    # Preparations cost + Outer loop
-    # Time: O(n + B^2) + O(n^2 + B^2) = O(n^2 * B^2) = approx = O(n^2 * phi^(2k)) = approx = O(n^2 * 2.618^k)
-    # Space: O(B^2) + O(B*n) = approx = O(phi^2k) + O(phi^k*n)
+    # Preparations cost +  Outer loop
+    # Time: O(n + B^2)  +  O(n^2 * T) = O(n^2 * T) = approx = O(n^2 * 2.414^k)
+    # Space: O(T)       +  O(B*n) = approx = O(2.414^k) + O(phi^k*n)
 
     # Backtrack path
     # Cost: O(n*k + B), space: O(n*k)
     m, obj = calculate_graph(DP, children, bitmasks)
 
     # Total cost:
-    # Time: O(n^2 * B^2) = approx = O(n^2 * phi^(2k)) = approx = O(n^2 * 2.618^k)
-    # Space: O(B^2) + O(B*n) = approx = O(phi^2k) + O(phi^k*n)
+    # Time: O(n^2 * T) = O(n^2 * sq21^k) = approx = O(n^2 * 2.414^k)
+    # Space: O(T) + O(B*n) = O(sq21^k) + O(phi^k*n) = O(sq21^k + phi^k*n) = approx = O(2.414^k + 1.618^k*n)
     return m, obj
 
 
