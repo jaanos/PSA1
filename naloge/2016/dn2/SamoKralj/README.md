@@ -64,6 +64,7 @@ Za prvo merjenje sem generiral naključna drevesa T s k vozlišči in algoritem 
 | 200 | 21.95483 |
 
 Za merjenje zahtevnosti v dolžini cikla, pa sem si generiral drevesa T z 50 vozlišči in uporabil algoritem na kartezičnem produktu T x Ci (Cikel dolžine i).
+
 | Dolžina cikla | Porabljen čas |
 |----|-----------|
 | 2  | 0.00256   |
@@ -79,3 +80,6 @@ Za merjenje zahtevnosti v dolžini cikla, pa sem si generiral drevesa T z 50 voz
 | 12 | 21.19055  |
 | 13 | 53.78827  |
 | 14 | 134.73871 |
+
+
+

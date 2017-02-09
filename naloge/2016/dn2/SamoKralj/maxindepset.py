@@ -26,6 +26,8 @@ def maxCycleTreeIndependentSet(T, w):
 
     mask = generiraj_bitmask(k)
 
+    G = MakeDirectedTreeGraph([e[:] for e in T], 0)
+
     def find_max(koren, indeks_vozlisca):
         if (koren, indeks_vozlisca) in memo:
             return memo[koren, indeks_vozlisca]
@@ -35,11 +37,10 @@ def maxCycleTreeIndependentSet(T, w):
             v = indeks_vozlisca
             for vzorec in mask[koren]:
                 teza, vozl = vrednost(vzorec, w, k, v)
-                for i in range(indeks_vozlisca + 1, len(T)):
-                    if i in T[v]:
-                        teza_dodaj, vozl_dodaj = find_max(vzorec, i)
-                        teza += teza_dodaj
-                        vozl += vozl_dodaj
+                for u in G[v]:
+                    teza_dodaj, vozl_dodaj = find_max(vzorec, u)
+                    teza += teza_dodaj
+                    vozl += vozl_dodaj
                 if teza > maksimum:
                     maksimum = teza
                     vozlisca = vozl
@@ -97,34 +98,12 @@ def vrednost(mask, w, k, vozlisce):
             vozlisca_grafa += ((i, vozlisce),)
     return teza, vozlisca_grafa
 
-def generateTreeGraph(nodes, oznaka_start):
-    """
-    Generira povezave drevesa z nodes + 1 vozlisci
-    """
-    if nodes == 0:
-        return []
-    else:
-        povezave = []
-        dodaj = oznaka_start + 1
-        while nodes > 0:
-            u = randint(1, nodes)
-            povezave.append([oznaka_start, dodaj])
-            povezave.extend(generateTreeGraph(u - 1, dodaj))
-            dodaj += u
-            nodes -= u
-        return povezave
-
-def generateTree(stevilo_vozlisc):
-    """
-    Generira drevo z stevilo_vozlisc vozlisci.
-    """
-    povezave = generateTreeGraph(stevilo_vozlisc - 1, 0)
-    G = [[] for i in range(stevilo_vozlisc)]
-    for u, v in povezave:
-        G[u].append(v)
-        G[v].append(u)
-    return G
-        
+def MakeDirectedTreeGraph(T, u):
+    for v in T[u]:
+        T[v].remove(u)
+        T = MakeDirectedTreeGraph(T, v)
+    return T
+    
     
     
 
