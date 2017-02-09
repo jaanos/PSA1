@@ -109,8 +109,10 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
         vertexes = levels[level_i]
         for vertex in vertexes:  # Check each vertex  # So together we have n operations here
 
-            # After loop reforming -> O(n (children) * T)
-            # small_dp_cost = n * T operations
+            # And with subloop children checking, we will count each vertex twice, first as parent, and then as child
+            # of his parent, so running time is linear in n
+
+            # After loop reforming -> O(T) + cost of children
 
             # list submasks holds at most n children at any time: memory O(n)
 
@@ -128,7 +130,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
                 # Dynamic programming
                 # For each children
                 for child in children[vertex]:
-                    # At most n vertices will be checked at all (looking from for vertex in vertices)
+                    # Check all my children
                     ma = MIN_INF
                     cur_mask = None
                     # Get max by compatible mask
@@ -144,11 +146,11 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
                 DP[vertex][my_mask] = my_cost + cur, submasks
 
-    # full cost of loops: Outer loop : n * small_dp_cost = n^2*T => O(n^2 * T)
+    # full cost of loops: n*T => O(n * T)
 
     # Computation cost:
     # Preparations cost +  Outer loop
-    # Time: O(n + B^2)  +  O(n^2 * T) = O(n^2 * T) = approx = O(n^2 * 2.414^k)
+    # Time: O(n + B^2)  +  O(n * T) = O(n + B^2) + O(n * T) = approx = O(n * 2.414^k) + O(1.618^(2k))
     # Space: O(T)       +  O(B*n) = approx = O(2.414^k) + O(phi^k*n)
 
     # Backtrack path
@@ -156,7 +158,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     m, obj = calculate_graph(DP, children, bitmasks)
 
     # Total cost:
-    # Time: O(n^2 * T) = O(n^2 * sq21^k) = approx = O(n^2 * 2.414^k)
+    # Time: O(n * T) = O(n^2 * sq21^k) = approx = O(n * 2.414^k)
     # Space: O(T) + O(B*n) = O(sq21^k) + O(phi^k*n) = O(sq21^k + phi^k*n) = approx = O(2.414^k + 1.618^k*n)
     return m, obj
 
