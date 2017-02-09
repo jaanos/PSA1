@@ -9,7 +9,7 @@ from .helpers import generate_bitmasks, make_transitions, BitMask, extract_level
 __author__ = "Filip Koprivec"
 
 
-def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[int, List[Tuple[int, int]]]:
+def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_sum: bool = False) -> Tuple[int, List[Tuple[int, int]]]:
     """
     Najtežja neodvisna množica
     v kartezičnem produktu cikla C_k in drevesa T z n vozlišči,
@@ -160,6 +160,13 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     # Total cost:
     # Time: O(n * T) = O(n^2 * sq21^k) = approx = O(n * 2.414^k)
     # Space: O(T) + O(B*n) = O(sq21^k) + O(phi^k*n) = O(sq21^k + phi^k*n) = approx = O(2.414^k + 1.618^k*n)
+
+    # Ignore this in analysis
+    if assert_sum:
+        su = sum(w[i][j] for i, j in obj)
+        assert su == m
+        print("Assert OK")
+
     return m, obj
 
 
