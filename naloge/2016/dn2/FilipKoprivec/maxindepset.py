@@ -79,10 +79,11 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
     # establishes, that O(T) = O(sq21^k) = approx = O(2.4142^k)
     transitions = make_transitions(bitmasks)  # Cost: O(B^2), memory: O(T)
 
-    # DP[i,b]
+    # DP[i][b]
     # max weight of subtree with parent i that is assigned bitmask b
     # Also saves which bitmask is assigned to specific child
-    DP = {}  # type: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]]  # Cost: O(1),
+    # Cost: O(n)
+    DP = [dict() for _ in range(n)]  # type: List[Dict[BitMask, Tuple[int, List[BitMask]]]]
     # memory: assuming good behaved dictionary, will store up to n*B, entries, where each entry will consist of
     # int(max value) and bitmask used for obtaining this value for each child of i
 
@@ -102,7 +103,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
         for mask in bitmasks:
             #                                                    # no mask down from me
             temp = []  # type: List[BitMask]
-            DP[(vertex, mask)] = calculate_weight(mask, vertex), temp
+            DP[vertex][mask] = calculate_weight(mask, vertex), temp
 
     for level_i in range(len(levels) - 2, -1, -1):  # Go by depth in tree
         vertexes = levels[level_i]
@@ -119,7 +120,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
             for my_mask in bitmasks:  # bitmask on me
                 my_cost = calculate_weight(my_mask, vertex)
                 if not children[vertex]:  # Leaf of tree, all costs constant
-                    DP[(vertex, my_mask)] = my_cost, []
+                    DP[vertex][my_mask] = my_cost, []
                     continue
 
                 submasks = []  # type: List[BitMask]
@@ -132,7 +133,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
                     cur_mask = None
                     # Get max by compatible mask
                     for compatible_mask in transitions[my_mask]:  # At most O(B), if my_mask = 0, we need to check all
-                        dp, _ = DP[(child, compatible_mask)]
+                        dp, _ = DP[child][compatible_mask]
                         if dp > ma:
                             ma = dp
                             cur_mask = compatible_mask
@@ -141,7 +142,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
                     assert cur_mask is not None
                     submasks.append(cur_mask)
 
-                DP[(vertex, my_mask)] = my_cost + cur, submasks
+                DP[vertex][my_mask] = my_cost + cur, submasks
 
     # full cost of loops: Outer loop : n * small_dp_cost = n^2*T => O(n^2 * T)
 
@@ -161,16 +162,16 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]]) -> Tuple[
 
 
 # Cost: time: O(n*k + B), space: O(n*k)
-def calculate_graph(DP: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]], children: List[List[int]],
+def calculate_graph(DP: List[Dict[BitMask,Tuple[int, List[BitMask]]]], children: List[List[int]],
                     bitmasks: List[BitMask]) -> Tuple[int, List[Tuple[int, int]]]:
 
     def get_best_on_index(ind: int) -> Tuple[int, BitMask]:
         ma = float("-inf")
         best_mask = None
         for mask in bitmasks:
-            val, children = DP[(ind, mask)]
+            val, children = DP[ind][mask]
             if val > ma:
-                ma = DP[(0, mask)][0]
+                ma = DP[0][mask][0]
                 best_mask = mask
 
         assert best_mask is not None
@@ -199,7 +200,7 @@ def calculate_graph(DP: Dict[Tuple[int, BitMask], Tuple[int, List[BitMask]]], ch
         # Cost: time, memory: O(k)
         rtr.extend(generate_product_with_bitmask(best_mask, ind))
 
-        _, children_masks = DP[(ind, best_mask)]
+        _, children_masks = DP[ind][best_mask]
 
         # For each children, across whole while loop at most n (the runtime of while loop)
         for j in range(len(children[ind])):
