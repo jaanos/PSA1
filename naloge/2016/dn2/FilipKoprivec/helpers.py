@@ -32,9 +32,9 @@ Which is a bit smaller than O(phi^2) = approx = O(2.6180^k)
 """
 
 
-def Y(k):
+def Y(k: int) -> int:
     sq = 2 ** 0.5
-    return round((1 + sq)**k + (-1)**k + (1 - sq)**k)
+    return int(round((1 + sq)**k + (-1)**k + (1 - sq)**k))
 
 
 def generate_bitmasks_with_shift(n: int) -> List[BitMask]:
