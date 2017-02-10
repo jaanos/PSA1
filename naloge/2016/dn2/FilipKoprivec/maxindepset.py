@@ -126,7 +126,8 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
                     DP[vertex][my_mask] = my_cost, []
                     continue
 
-                submasks = []  # type: List[BitMask]
+                # Save optimal submasks for children
+                optimal_submasks = []  # type: List[BitMask]
                 cur = 0
                 # Dynamic programming
                 # For each children
@@ -143,9 +144,9 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
                     # And sum all children
                     cur += int(ma)
                     assert cur_mask is not None
-                    submasks.append(cur_mask)
+                    optimal_submasks.append(cur_mask)
 
-                DP[vertex][my_mask] = my_cost + cur, submasks
+                DP[vertex][my_mask] = my_cost + cur, optimal_submasks
 
     # full cost of loops: n*T => O(n * T)
 
