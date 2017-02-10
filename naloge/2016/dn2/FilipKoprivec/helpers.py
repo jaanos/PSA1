@@ -141,13 +141,11 @@ generate_bitmasks = generate_bitmasks_with_multiplication
 
 # Does an iterative DFS to transform graph in a bit more usable
 # Cost: time, memory: O(n)
-def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], List[int], List[List[int]]]:
+def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], List[List[int]]]:
     # Not asymptotically optimal, but in amortized case fast enough
     stack = []
     # Vertices in level[i] -> vertices on depth i in tree, size: n
     levels = []  # type: List[List[int]]
-    # Level of vertex i, just for easier backtracking, size: n
-    level_of = [0 for _ in range(len(graph))]
     # For DFS
     visited = [False for _ in range(len(graph))]
 
@@ -174,7 +172,6 @@ def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], 
         parents[u] = v  # type: ignore
         if v is not None:  # Root of tree
             children[v].append(u)
-        level_of[u] = cur_level
 
     # Decrease level on postvisit
     def postvisit() -> None:
@@ -199,7 +196,7 @@ def extract_levels(graph: List[List[int]]) -> Tuple[List[List[int]], List[int], 
         stack.append((v, it))
         v, it = u, iter(graph[u])
 
-    return levels, level_of, parents, children
+    return levels, parents, children
 
 
 def main(n: int = 4, N: int = 20) -> None:

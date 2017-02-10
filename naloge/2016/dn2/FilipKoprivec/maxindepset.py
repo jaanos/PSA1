@@ -38,17 +38,10 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
     # let sq21 denote sq2 + 1 (2**0.5 + 1 = approx = 2.414)
     # let phi denote golden ratio ( (1 + 5**0.5)/2 = approx = 1.618)
 
-    def calculate_weight(bitmask: BitMask, j: int) -> int:  # Cost: O(len(bitmask)) = O(k), memory: O(1)
-        su = 0
-        for i in range(k):
-            if 1 << i & bitmask:
-                su += w[i][j]
-        return su
-
     # Calculate levels
 
     # Cost: time, memory O(n)
-    levels, levels_of, parents, children = extract_levels(T)
+    levels, parents, children = extract_levels(T)
 
     # Generate possible transitions, let B be the number of bitmasks, rough estimate is that B = O(2**k)
     # But for better estimates let B be the number of bitmasks
@@ -96,6 +89,14 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
     # But not so much memory, as BitMasks are ints
 
     MIN_INF = float("-inf")
+
+    def calculate_weight(bitmask: BitMask, j: int) -> int:  # Cost: O(len(bitmask)) = O(k), memory: O(1)
+        # return sum(w[i][j] for i in range(k) if 1 << i & bitmask)
+        su = 0
+        for i in range(k):
+            if 1 << i & bitmask:
+                su += w[i][j]
+        return su
 
     # level_i = len(levels) - 1
     # Check lowest level, in time analysis, just merge it with next loop
