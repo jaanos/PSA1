@@ -56,6 +56,8 @@ def maxCycleTreeIndependentSet(T, w):
         return compatible
 
     def getCycleWeight(v, subset):
+        """ Vrne vsoto uteži podmnožice cikla na mestu 'v' v drevesu, kjer je '1' v binarnem zapisu spremenljivke
+        'subset'. """
         weight = 0
         binary = bin(subset)[2:]
         if len(binary) < k:
@@ -65,28 +67,53 @@ def maxCycleTreeIndependentSet(T, w):
                 weight += w[i][v]
         return weight
 
-    subsets = getSubsets(k)
-    compatible = getCompatibileSubsets(subsets)
-    vozlisce_max = [None]*n
-
+    subsets = getSubsets(k)  # Ustvari vse možne podmnožice
+    compatible = getCompatibileSubsets(subsets)  # Ustvari slovar vseh kompatibilnih podmnožic za vse podmnožice
+    # Za vsako vozlišče imamo slovar, kjer je ključ neka neodvisna podmnožica cikla in vrednost največje teža, ki jo
+    # lahko dobimo s tako podmnožico cikla
+    vozlisce_max = []
     for i in range(n):
-        vozlisce_max[i] = dict()
+        vozlisce_max.append(dict())
 
     def postvisit(u, v=None):
-        sinovi_u = T[u][:]
+        sinovi_u = T[u][:]      # Kopija povezav iz vozlišča u
         if v is not None:
-            sinovi_u.remove(v)
+            sinovi_u.remove(v)  # Če nismo v korenu drevesa, odstranimo očeta, da lahko iteriramo le po sinovih
         for subset in subsets:
             tempWeight = getCycleWeight(u, subset)
+            son_used = []  # Katere elemente smo uporabili na ciklu za vsakega sina
+            # Za dano neodvisno podmnožico cikla, prištejemo največje vrednosti sinov pri kompatibilnih podmnožicah
             for s in sinovi_u:
                 maxSon = - float("inf")
+                son = None
                 for c in compatible[subset]:
-                    maxC = vozlisce_max[s][c]
+                    maxC = vozlisce_max[s][c][0]
                     if maxC > maxSon:
                         maxSon = maxC
+                        son = c
                 tempWeight += maxSon
-            vozlisce_max[u][subset] = tempWeight
+                son_used.append((s, son))
+            vozlisce_max[u][subset] = (tempWeight, son_used)
         return True
 
     DFS(T, roots=[0], postvisit=postvisit)
-    return max(vozlisce_max[0].values())
+    maxWeight = - float("inf")
+    rootCycle = None
+    for subset in vozlisce_max[0].keys():
+        weight = vozlisce_max[0][subset][0]
+        if weight > maxWeight:
+            maxWeight = weight
+            rootCycle = subset
+    cycles = [None] * n
+    cycles[0] = rootCycle
+    vertices = []
+    for v in range(0,n):
+        for u, cycle in vozlisce_max[v][cycles[v]][1]:
+            cycles[u] = cycle
+        binary = bin(cycles[v])[2:]
+        if len(binary) < k:
+            binary = '0' * (k - len(binary)) + binary
+        for i, b in enumerate(binary):
+            if b == '1':
+                vertices.append((i, v))
+    return maxWeight, vertices
