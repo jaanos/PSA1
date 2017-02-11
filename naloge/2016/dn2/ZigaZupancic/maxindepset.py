@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from .dfs import DFS
 def maxCycleTreeIndependentSet(T, w):
     """
     Najtežja neodvisna množica
@@ -55,5 +55,38 @@ def maxCycleTreeIndependentSet(T, w):
                     compatible[subset].append(s)
         return compatible
 
+    def getCycleWeight(v, subset):
+        weight = 0
+        binary = bin(subset)[2:]
+        if len(binary) < k:
+            binary = '0' * (k - len(binary)) + binary
+        for i, b in enumerate(binary):
+            if b == '1':
+                weight += w[i][v]
+        return weight
+
     subsets = getSubsets(k)
     compatible = getCompatibileSubsets(subsets)
+    vozlisce_max = [None]*n
+
+    for i in range(n):
+        vozlisce_max[i] = dict()
+
+    def postvisit(u, v=None):
+        sinovi_u = T[u][:]
+        if v is not None:
+            sinovi_u.remove(v)
+        for subset in subsets:
+            tempWeight = getCycleWeight(u, subset)
+            for s in sinovi_u:
+                maxSon = - float("inf")
+                for c in compatible[subset]:
+                    maxC = vozlisce_max[s][c]
+                    if maxC > maxSon:
+                        maxSon = maxC
+                tempWeight += maxSon
+            vozlisce_max[u][subset] = tempWeight
+        return True
+
+    DFS(T, roots=[0], postvisit=postvisit)
+    return max(vozlisce_max[0].values())
