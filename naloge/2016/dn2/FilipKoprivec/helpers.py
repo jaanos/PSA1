@@ -13,10 +13,12 @@ def are_compatible(x: BitMask, y: BitMask) -> bool:
     return x & y == 0
 
 
+# We inline are_compatible by hand
 # Cost: time: O(B^2), memory: O(T), where B = len(bitmasks) and T is length of returned list
 # Could make time cost lower ((B^2)/2) using symmetry, but for now leave it
 def make_transitions(bitmasks: List[BitMask]) -> Dict[BitMask, List[BitMask]]:
-    return {j: [i for i in bitmasks if are_compatible(j, i)] for j in bitmasks}
+    # return {j: [i for i in bitmasks if are_compatible(i,j)] for j in bitmasks}
+    return {j:  [i for i in bitmasks if i & j == 0] for j in bitmasks}
 
 """
 Analysis on length of returned list:
