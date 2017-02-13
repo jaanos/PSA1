@@ -74,4 +74,157 @@ def all_valid_cycles(n):
         res[i] = list_primernih_otrok(i)
     return res
 
+class StackRecord:
+    """Vnos v skladu"""
+    def __init__(self, x = None, next = None):
+        """
+        Inicializacija vnosa v skladu.
+        Časovna zahtevnost: O(1)
+        """
+        self.x = x
+        self.next = next
+
+    def __repr__(self):
+        """
+        Znakovna predstavitev vnosa v skladu.
+        Časovna zahtevnost: O(1)
+        """
+        if self.next is None:
+            return "|]"
+        return "|%s|<" % repr(self.x)
+
+class Stack:
+    """Sklad (LIFO)"""
+    def __init__(self):
+        """
+        Inicializacija sklada.
+        Časovna zahtevnost: O(1)
+        """
+        self.clear()
+
+    def __len__(self):
+        """
+        Velikost sklada.
+        Časovna zahtevnost: O(1)
+        """
+        return self.len
+
+    def __repr__(self):
+        """
+        Znakovna predstavitev sklada.
+        Časovna zahtevnost: O(n)
+        """
+        if self.len == 0:
+            return "<|]"
+        cur = self.top
+        out = "<| %s" % repr(cur.x)
+        cur = cur.next
+        while cur.next is not None:
+            out += " <- %s" % repr(cur.x)
+            cur = cur.next
+        return "%s |]" % out
+
+    def clear(self):
+        """
+        Izprazni sklad.
+        Časovna zahtevnost: O(1)
+        """
+        self.top = StackRecord()
+        self.len = 0
+
+    def peek(self):
+        """
+        Vrni vrhnji element v skladu.
+        Časovna zahtevnost: O(1)
+        """
+        if self.top.next is None:
+            raise IndexError('peek on an empty stack')
+        return self.top.x
+
+    def pop(self):
+        """
+        Odstrani in vrni vrhnji element v skladu.
+        Časovna zahtevnost: O(1)
+        """
+        if self.top.next is None:
+            raise IndexError('pop from an empty stack')
+        top = self.top
+        self.top = top.next
+        self.len -= 1
+        return top.x
+
+    def push(self, x):
+        """
+        Dodaj element na vrh sklada.
+        Časovna zahtevnost: O(1)
+        """
+        self.top = StackRecord(x, self.top)
+        self.len += 1
+
+def nothing(u, v = None):
+    """
+    Previsit/postvisit funkcija, ki ne naredi nič.
+    Časovna zahtevnost: O(1)
+    """
+    return True
+
+def iterDFS(G, roots = None, previsit = nothing, postvisit = nothing):
+    """
+    Rekurzivno iskanje v globino.
+
+    Argumenti so enaki kot pri funkciji DFS.
+
+    Časovna zahtevnost: O(m) + O(n) klicev funkcij previsit in postvisit
+    """
+    s = Stack()
+    n = len(G)
+    visited = [False] * n
+    if roots is None:
+        roots = range(n)
+    v, it = None, iter(roots)
+    while True:
+        try:
+            u = next(it)
+        except StopIteration:
+            if v is None:
+                return True
+            u = v
+            v, it = s.pop()
+            if not postvisit(u, v):
+                return False
+            continue
+        if visited[u]:
+            continue
+        visited[u] = True
+        if not previsit(u, v):
+            return False
+        s.push((v, it))
+        v, it = u, iter(G[u])
+
+
+
+def directet_tree(T, DFS = iterDFS):
+    n = len(T)
+    res = [None]*n
+
+    def nothing(u, v = None):
+        """
+        Previsit/postvisit funkcija, ki ne naredi nič.
+
+        Časovna zahtevnost: O(1)
+        """
+        return True
+
+    def previsit(u,v = None):
+        res[u] = T[u][:]
+        try:
+            res[u].remove(v)
+        except:
+            pass
+        return True
+
+    if not DFS(T, roots = [0] ,previsit = previsit,postvisit = nothing):
+        return False
+    return res
+
 

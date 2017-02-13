@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from .otherFunctions import list_primernih_otrok,all_valid_cycles
+from .otherFunctions import list_primernih_otrok,all_valid_cycles,directet_tree
 sys.setrecursionlimit(100000)
 
 __author__ = "LukaAvbreht"
@@ -25,6 +25,8 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
     # raise NotImplementedError("Naredi sam!")
+
+    T = directet_tree(T)
 
     def vrednost_cikla_na_nivoju(nivo,cikel):
         """Vrne vrednost cikla na mestu (nivo) v grafu"""
@@ -57,10 +59,9 @@ def maxCycleTreeIndependentSet(T, w):
             weight, index = vrednost_cikla_na_nivoju(ind_voz,patern)
             index = list(index)
             for voz in T[ind_voz]:
-                if voz > ind_voz:  # So we only look at children
-                    tr_weight, tr_index = recursive_max_subgroup(voz,patern)
-                    weight += tr_weight
-                    index += list(tr_index)
+                tr_weight, tr_index = recursive_max_subgroup(voz,patern)
+                weight += tr_weight
+                index += list(tr_index)
             if weight > res:
                 res = weight
                 nodes = index
