@@ -110,6 +110,10 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
         vertexes = levels[level_i]
         for vertex in vertexes:  # Check each vertex  # So together we have n operations here
 
+            # Pre indexing takes O(1) time (list indexing is constant) and O(1) space (one more reference)
+            # Pre index to speed up inner loops
+            DP_vertex = DP[vertex]
+
             # And with subloop children checking, we will count each vertex twice, first as parent, and then as child
             # of his parent, so running time is linear in n
 
@@ -123,7 +127,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
             for my_mask_i, my_mask in enumerate(bitmasks):  # bitmask on me
                 my_cost = calculate_weight(my_mask, vertex)
                 if not children[vertex]:  # Leaf of tree, all costs constant
-                    DP[vertex][my_mask_i] = my_cost, []
+                    DP_vertex[my_mask_i] = my_cost, []
                     continue
 
                 # Save optimal submasks for children
@@ -135,9 +139,13 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
                     # Check all my children
                     ma = MIN_INF
                     cur_mask_i = None
+
+                    # Pre index to speed up inner loop
+                    DP_child = DP[child]
+
                     # Get max by compatible mask
                     for compatible_mask_i in transitions[my_mask_i]:  # At most O(B), if my_mask = 0, we need to check all
-                        dp, _ = DP[child][compatible_mask_i]
+                        dp, _ = DP_child[compatible_mask_i]
                         if dp > ma:
                             ma = dp
                             cur_mask_i = compatible_mask_i
@@ -146,7 +154,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
                     assert cur_mask_i is not None
                     optimal_submasks.append(cur_mask_i)
 
-                DP[vertex][my_mask_i] = my_cost + cur, optimal_submasks
+                DP_vertex[my_mask_i] = my_cost + cur, optimal_submasks
 
     # full cost of loops: n*T => O(n * T)
 
