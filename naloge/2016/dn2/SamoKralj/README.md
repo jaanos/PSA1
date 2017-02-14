@@ -17,6 +17,34 @@ iskanja najtežje množice. Z memoizacijo pridemo do učinkovitega algoritma.
 
 # Analiza časovne zahtevnosti
 
+## Število bitmaskov
+
+Vseh elementov 1 in 0 dolžine k je 2^k. Število veljavnih bitmask bo neka podmnožica te množice iz česar lahko predvidevamo, da se bo število
+veljavnih bitmaskov povečevalo eksponentno. S pomočjo dinamičnega programiranja izračunamo število veljavnih bitmask. Spodaj je tabela dobljenih vrednosti.
+
+| 2       | 3    | 4       | 5       | 6       | 7       | 8       | 9       | 10      | 11      | 12      | 13      | 14      | 15      | 16      | 17      | 18      | 19      | 20      | 21      | 22      | 23      | 24      | 25      | 26      | 27      | 28      | 29      |
+|---------|------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|
+| 3       | 4    | 7       | 11      | 18      | 29      | 47      | 76      | 123     | 199     | 322     | 521     | 843     | 1364    | 2207    | 3571    | 5778    | 9349    | 15127   | 24476   | 39603   | 64079   | 103682  | 167761  | 271443  | 439204  | 710647  | 1149851 |
+| 1.33333 | 1.75 | 1.57143 | 1.63636 | 1.61111 | 1.62069 | 1.61702 | 1.61842 | 1.61789 | 1.61809 | 1.61801 | 1.61804 | 1.61803 | 1.61804 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 |         |
+
+V prvi vrstici je dolžina cikla. V drugi število veljavnih bitmaskov za to dolžino, v tretji vrstici pa imamo kvocient stevila veljavnih bitmaskov za sosednja k.
+Kvocienti hitro skonvergirajo k vrednosti 1.618033988749895 kar pa je ravno (1 + koren(5))/2. Število bitmaskov bo torej za primerne k enak ((1 + koren(5))/2)^k.
+
+
+
+
+## Prostorska zahtevnost
+
+Za najtežjo množico bo potrebno izračunati najtežje množice vseh poddreves in to za vsako možno bitmasko, ki jo je imel predhodnik. Ker delamo
+rekurzivno in si vsako rešitev shranjujemo v slovar, to pomeni, da bomo imeli n*število_bitmaks ključev v slovarju. Pri vsakem ključu imamo za vrednost
+najtežjo množico tega podrevesa in sicer kot nabor vozlišča in bitmaske uporabljene na tem vozlišču. Dolžina tega nabora je odvisna od števila vozlišč
+v posameznem podrevesu. Bolj kot je drevo razvejano, manjša bo povprečna dolžina nabora. Najslabši primer pa bo takrat, ko bo drevo kar pot. Ker je pot zelo
+zdegeneriran primer naključnega drevesa lahko raje ocenimo kakšna bo povprečna dolžina naključnega drevesa in neka groba ocena bo število_vozlišč v drevesu/2.
+
+Prostor, ki ga vzame memoizacija je torej velikosti O(n^2 * število_bitmask). 
+
+
+
 # Meritve časovne zahtevnosti
 
 Za prvo merjenje sem generiral naključna drevesa T s k vozlišči in algoritem uporabil na kartezičnem produktu T x C4, T x C7 in T x C10.
@@ -61,9 +89,11 @@ Poglejmo si nekaj kvocientov v spodnjem delu tabele:
 * 364 / 143 = 2.5384
 * 143 / 56 = 2.5535
 * 179 / 69 = 2.5942
-...
+* ...
 
 Lahko sklepamo, da osnova pri eksponentu leži nekje med 2.5 in 2.8.
+Iz te tabele prav tako lahko preberemo linearno rast v število vozlišč, če recimo pogledamo določeno vrstico v tabeli.
+Čas, ki ga porabimo za drevo z 100 vozlišči je približno 2-krat večji kot čas, ki ga potrebujemo za drevo z 50 vozlišči.
 
  ![Graf izmerjenih časov2](dolzinacikla.png)
 
