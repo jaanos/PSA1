@@ -65,8 +65,7 @@ Poglejmo si nekaj kvocientov v spodnjem delu tabele:
 
 Lahko sklepamo, da osnova pri eksponentu leži nekje med 2.5 in 2.8.
 
-![Čas izmerjenih časov](dolzinacikla.png)
-Format: ![Alt Text](url)
+ ![Graf izmerjenih časov2](dolzinacikla.png)
 
 | Dolžina cikla | Vozlišč v drevesu: 50 | Vozlišč v drevesu: 100 | Vozlišč v drevesu: 200 |
 |:----:|:-----------:|:-----------:|:------------:|
