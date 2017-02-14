@@ -109,6 +109,9 @@ def vrednost(mask, w, k, vozlisce):
     return teza#, vozlisca_grafa
 
 def MakeDirectedTreeGraph(T, u):
+    """
+    Iz usmerjenega drevesa naredi neusmerjeno drevo s korenom v u.
+    """
     for v in T[u]:
         T[v].remove(u)
         T = MakeDirectedTreeGraph(T, v)
