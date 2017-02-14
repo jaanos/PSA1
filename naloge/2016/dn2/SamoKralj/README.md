@@ -55,17 +55,18 @@ Iz grafa lahko preberemo eksponentno rast časa v odvisnosti od dolžine cikla. 
 
 Poglejmo si nekaj kvocientov v spodnjem delu tabele:
 
--- 470 / 179 = 2.6256
--- 224 / 86 = 2.604
--- 1023 / 364 = 2.8104
--- 364 / 143 = 2.5384
--- 143 / 56 = 2.5535
--- 179 / 69 = 2.5942
+* 470 / 179 = 2.6256
+* 224 / 86 = 2.604
+* 1023 / 364 = 2.8104
+* 364 / 143 = 2.5384
+* 143 / 56 = 2.5535
+* 179 / 69 = 2.5942
 ...
 
 Lahko sklepamo, da osnova pri eksponentu leži nekje med 2.5 in 2.8.
 
- ![Graf izmerjenih časov2](dolzinacikla.png)
+![Čas izmerjenih časov](dolzinacikla.png)
+Format: ![Alt Text](url)
 
 | Dolžina cikla | Vozlišč v drevesu: 50 | Vozlišč v drevesu: 100 | Vozlišč v drevesu: 200 |
 |:----:|:-----------:|:-----------:|:------------:|
