@@ -71,17 +71,20 @@ Prostor, ki ga vzame memoizacija je torej velikosti O(n^2 * število_bitmask) = 
 Poleg memoizacije pa si naredimo tudi slovar vseh bitmask in njihovih ujemanj. Za fiksno dolžino k je le teh B^k. Za vsak ključ pa imamo v povprečju 
 1/4 * B^k vrednosti. Prostorska zahtevnost tega slovarja je potem O(0.25 * B^(2*k)).
 
-Skupna prostorska zahtevnost algoritma je O(n^2 * B^(2*k)).
+Skupna prostorska zahtevnost algoritma je O(n^2 * B^k + B^(2*k)).
+
+V primeru implementacije algoritma od spodaj navzgor, bi se nam bilo potrebno naenkrat zapomniti samo eno plast največjih neodvisnih množic. S tem 
+bi lahko znižali prostorsko zahtevnost.
 
 ## Časovna zahtevnost
 
 * V algoritmu najprej generiramo bitmaske. To delamo z naivno metodo in sicer za generiranje bitmask dolžine k, se zapeljemo z zanko do 0 do števila 2^k in
 preverimo kateri bitmaski so veljavni. Algoritem bi lahko izboljšali s tem, da bi bitmaske generirali rekurzivno in tako izpustili vse kose števil za katera
 recimo binarni zapis vsebuje dve enici na začetku.  Ko generiramo še vse ujemajoče bitmaske nam ta del da časovno zahtevnost O(2^k * B^k). Pri tem predpostavimo,
-da je operacija AND dveh števil porabi O(1) časa.
+da operacija AND dveh števil porabi O(1) časa.
 
-* 
-
+* Tekom iskanja največje množice se z funkcijo kličemo enkrat na vsakem vozlišču drevesa in na vsaki možni bitmaski. V primeru večkratnega klicanja
+funkcije na istih argumentih zaradi memoizacije dobimo rezultat v O(1). Vseh različnih argumentov za klic funkcije je n * B^k. 
 
 
 # Meritve časovne zahtevnosti
@@ -94,26 +97,19 @@ Iz grafa se jasno vidi linearna časovna zahtevnost v številu vozlišč.
 
 | Število vozlišč v drevesu | Dolžina cikla: 4 | Dolžina cikla: 7 | Dolžina cikla: 10 |
 |:-----:|:---------:|:---------:|:----------:|
-| 20  | 0.00302 | 0.04600 | 0.76962  |
-| 50  | 0.00801 | 0.12556 | 2.09281  |
-| 80  | 0.01456 | 0.20502 | 3.40917  |
-| 110 | 0.01949 | 0.28205 | 4.83899  |
-| 140 | 0.02400 | 0.37155 | 6.13874  |
-| 170 | 0.02956 | 0.44608 | 7.38600  |
-| 200 | 0.03353 | 0.51654 | 8.81765  |
-| 230 | 0.03906 | 0.60459 | 10.10419 |
-| 260 | 0.04445 | 0.68313 | 11.39722 |
-| 290 | 0.05051 | 0.78665 | 12.80874 |
-| 320 | 0.05556 | 0.84562 | 14.04720 |
-| 350 | 0.05952 | 0.91160 | 15.37646 |
-| 380 | 0.06452 | 1.02261 | 16.73320 |
-| 410 | 0.07003 | 1.06962 | 17.95572 |
-| 440 | 0.09457 | 1.14865 | 19.27492 |
-| 470 | 0.09802 | 1.24866 | 20.65266 |
-| 500 | 0.08546 | 1.32139 | 22.06154 |
-| 530 | 0.09096 | 1.41725 | 23.39472 |
-| 560 | 0.11052 | 1.50612 | 24.73277 |
-| 590 | 0.10155 | 1.57963 | 25.89728 |
+|  20 | 0.00154 | 0.01242 | 0.13514 |
+| 100 | 0.00700 | 0.06514 | 0.76954 |
+| 180 | 0.01350 | 0.12204 | 1.43123 |
+| 260 | 0.02001 | 0.19147 | 2.09189 |
+| 340 | 0.02700 | 0.23753 | 2.84346 |
+| 420 | 0.03302 | 0.28954 | 3.46403 |
+| 500 | 0.03900 | 0.37599 | 4.39033 |
+| 580 | 0.07058 | 0.43152 | 4.94373 |
+| 660 | 0.07901 | 0.50501 | 5.74741 |
+| 740 | 0.06054 | 0.58156 | 6.40926 |
+| 820 | 0.09851 | 0.62162 | 7.33915 |
+| 900 | 0.10700 | 0.66433 | 7.87683 |
+| 980 | 0.11949 | 0.72626 | 8.58420 |
 
 Za merjenje zahtevnosti v dolžini cikla pa sem generiral drevesa na 50, 100 in 200 vozliščih in izračunal T x Ck.
 
@@ -138,20 +134,20 @@ Iz te tabele prav tako lahko preberemo linearno rast v število vozlišč, če r
 
 | Dolžina cikla | Vozlišč v drevesu: 50 | Vozlišč v drevesu: 100 | Vozlišč v drevesu: 200 |
 |:----:|:-----------:|:-----------:|:------------:|
-| 2  | 0.00150   | 0.00400   | 0.00700    |
-| 3  | 0.00298   | 0.00650   | 0.01350    |
-| 4  | 0.00849   | 0.01697   | 0.03304    |
-| 5  | 0.02057   | 0.03955   | 0.08206    |
-| 6  | 0.04846   | 0.10001   | 0.20460    |
-| 7  | 0.14155   | 0.26299   | 0.51406    |
-| 8  | 0.31009   | 0.64858   | 1.31067    |
-| 9  | 0.79465   | 1.64742   | 3.40593    |
-| 10 | 2.03576   | 4.20110   | 8.58516    |
-| 11 | 5.26311   | 11.08873  | 22.54611   |
-| 12 | 13.35390  | 27.37777  | 56.63912   |
-| 13 | 34.37785  | 69.84037  | 143.21437  |
-| 14 | 86.10051  | 179.31695 | 363.92527  |
-| 15 | 224.50726 | 470.44878 | 1022.81468 |
+|  2 |  0.00100 |  0.00296 |  0.00500  |
+|  3 |  0.00150 |  0.00400 |  0.00750  |
+|  4 |  0.00350 |  0.00702 |  0.01505  |
+|  5 |  0.00700 |  0.01555 |  0.02956  |
+|  6 |  0.01419 |  0.02995 |  0.07080  |
+|  7 |  0.03053 |  0.06569 |  0.13400  |
+|  8 |  0.06801 |  0.14605 |  0.31313  |
+|  9 |  0.16005 |  0.35005 |  0.67514  |
+| 10 |  0.43650 |  0.76567 |  1.66729  |
+| 11 |  0.86164 |  1.78279 |  3.77038  |
+| 12 |  2.10203 |  4.40730 |  9.05810  |
+| 13 |  4.72122 | 10.33312 |  22.08986 |
+| 14 | 11.50032 | 25.23384 |  53.53822 |
+| 15 | 28.78786 | 65.75724 | 137.32453 |
 
 
 

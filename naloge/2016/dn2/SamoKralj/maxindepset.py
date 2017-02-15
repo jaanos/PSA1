@@ -26,6 +26,11 @@ def maxCycleTreeIndependentSet(T, w):
 
     mask = generiraj_bitmask(k)
 
+    teze_memo = dict()
+    for b in mask:
+        for u in range(len(T)):
+            teze_memo[b,u] = vrednost(b, w, k, u)
+
     G = MakeDirectedTreeGraph([e[:] for e in T], 0)
 
     def find_max(koren, v):
@@ -35,7 +40,7 @@ def maxCycleTreeIndependentSet(T, w):
             maksimum = 0
             vozlisca = tuple()
             for vzorec in mask[koren]:
-                teza = vrednost(vzorec, w, k, v)
+                teza = teze_memo[vzorec, v]
                 vozl = ((v, vzorec),)
                 for u in G[v]:
                     teza_dodaj, vozl_dodaj = find_max(vzorec, u)
@@ -58,7 +63,6 @@ def maxCycleTreeIndependentSet(T, w):
         for i in range(len(zapis)):
             if zapis[i] == 1:
                 vozlisca.append((i, v))
-
     return maks_teza, vozlisca
 
 def generiraj_bitmask(k):
@@ -101,12 +105,9 @@ def vrednost(mask, w, k, vozlisce):
     """
     zapis = binarno(mask, k)
     teza = 0
-    #vozlisca_grafa = tuple()
     for i in range(k):
         teza += zapis[i]*w[i][vozlisce]
-        #if zapis[i] == 1:
-        #    vozlisca_grafa += ((i, vozlisce),)
-    return teza#, vozlisca_grafa
+    return teza
 
 def MakeDirectedTreeGraph(T, u):
     """
