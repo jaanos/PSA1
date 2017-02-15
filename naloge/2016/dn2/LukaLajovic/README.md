@@ -13,6 +13,8 @@ Ko gre nazaj za vsako vozlišče drevesa, za vsako neodvisno množico na ciklu t
 svojih prednikov. Množica komplemente vrne vse disjunktne množice zato,
 ko računamo vrednost neke neodvisne množice, na vozlišču, ki ni list ji moramo prišteti še največjo vrednost njegovih prednikov, ob čemer moramo ohraniti neodvisnost. hkrati se hranijo vsi elementi, za vsako vozlišče.
 
-#n je dolžina grafa, k je dolžina cikla
+n je dolžina grafa, k je dolžina cikla
+
 Prostorska zahtevnost bi morala biti 2^k*(n)*2+2^k, ker imamo 2 slovarja 
+
 Časovna zahtevnost je enaka septavi O(n*2^k) 
