@@ -19,19 +19,44 @@ iskanja najtežje množice. Z memoizacijo pridemo do učinkovitega algoritma.
 
 ## Število bitmaskov
 
-Vseh elementov 1 in 0 dolžine k je 2^k. Število veljavnih bitmask bo neka podmnožica te množice iz česar lahko predvidevamo, da se bo število
+Vseh nizov enic in ničel dolžine k je 2^k. Število veljavnih bitmask bo neka podmnožica te množice iz česar lahko predvidevamo, da se bo število
 veljavnih bitmaskov povečevalo eksponentno. S pomočjo dinamičnega programiranja izračunamo število veljavnih bitmask. Spodaj je tabela dobljenih vrednosti.
 
-| 2       | 3    | 4       | 5       | 6       | 7       | 8       | 9       | 10      | 11      | 12      | 13      | 14      | 15      | 16      | 17      | 18      | 19      | 20      | 21      | 22      | 23      | 24      | 25      | 26      | 27      | 28      | 29      |
-|---------|------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|---------|
-| 3       | 4    | 7       | 11      | 18      | 29      | 47      | 76      | 123     | 199     | 322     | 521     | 843     | 1364    | 2207    | 3571    | 5778    | 9349    | 15127   | 24476   | 39603   | 64079   | 103682  | 167761  | 271443  | 439204  | 710647  | 1149851 |
+|    2    |   3  |    4    |    5    |    6    |    7    |    8    |    9    |    10   |    11   |    12   |    13   |    14   |    15   |    16   |    17   |    18   |    19   |    20   |    21   |    22   |    23   |    24   |    25   |    26   |    27   |    28   |    29   |
+|:-------:|:----:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+|    3    |   4  |    7    |    11   |    18   |    29   |    47   |    76   |   123   |   199   |   322   |   521   |   843   |   1364  |   2207  |   3571  |   5778  |   9349  |  15127  |  24476  |  39603  |  64079  |  103682 |  167761 |  271443 |  439204 |  710647 | 1149851 |
 | 1.33333 | 1.75 | 1.57143 | 1.63636 | 1.61111 | 1.62069 | 1.61702 | 1.61842 | 1.61789 | 1.61809 | 1.61801 | 1.61804 | 1.61803 | 1.61804 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 | 1.61803 |         |
 
-V prvi vrstici je dolžina cikla. V drugi število veljavnih bitmaskov za to dolžino, v tretji vrstici pa imamo kvocient stevila veljavnih bitmaskov za sosednja k.
-Kvocienti hitro skonvergirajo k vrednosti 1.618033988749895 kar pa je ravno (1 + koren(5))/2. Število bitmaskov bo torej za primerne k enak ((1 + koren(5))/2)^k.
+V prvi vrstici so dolžine ciklov. V drugi število veljavnih bitmaskov za to dolžino, v tretji vrstici pa imamo kvocient števila veljavnih bitmaskov za dolžino i + 1 in dolžino i.
+Kvocienti hitro skonvergirajo k vrednosti 1.618033988749895, kar pa je ravno (1 + koren(5))/2. Število bitmaskov bo torej za primerne k enako ((1 + koren(5))/2)^k.
 
+Označimo B = (1 + koren(5))/2. Število veljavnih bitmaskov za določeno dolžino k je torej B^k.
 
+Zanima nas še pričakovana vrednost bitmaskov, ki se ujemajo z dano bitmasko. 
 
+| Dolžina cikla | Število veljavnih bitmask | Povprečno število ujemanj |
+|:--:|:----:|:----------:|
+|  2 |   3  |   2.33333  |
+|  3 |   4  |   3.25000  |
+|  4 |   7  |   5.00000  |
+|  5 |  11  |   7.36364  |
+|  6 |  18  |  11.05556  |
+|  7 |  29  |  16.44828  |
+|  8 |  47  |  24.57447  |
+|  9 |  76  |  36.64474  |
+| 10 |  123 |  54.69106  |
+| 11 |  199 |  81.59296  |
+| 12 |  322 |  121.74845 |
+| 13 |  521 |  181.65259 |
+| 14 |  843 |  271.04033 |
+| 15 | 1364 |  404.40836 |
+| 16 | 2207 |  603.40507 |
+| 17 | 3571 |  900.31952 |
+| 18 | 5778 | 1343.33662 |
+| 19 | 9349 | 2004.34667 |
+
+Opazimo lahko, da razmerje povprečnih ujemajočih se bitmaskov in vseh veljavnih bitmaskov pada. Ker nas v glavnem zanimajo dovolj veliki k bomo privzeli
+da je povprečno število ujemanj enako 1/4 vseh veljavnih bitmask.
 
 ## Prostorska zahtevnost
 
@@ -41,7 +66,21 @@ najtežjo množico tega podrevesa in sicer kot nabor vozlišča in bitmaske upor
 v posameznem podrevesu. Bolj kot je drevo razvejano, manjša bo povprečna dolžina nabora. Najslabši primer pa bo takrat, ko bo drevo kar pot. Ker je pot zelo
 zdegeneriran primer naključnega drevesa lahko raje ocenimo kakšna bo povprečna dolžina naključnega drevesa in neka groba ocena bo število_vozlišč v drevesu/2.
 
-Prostor, ki ga vzame memoizacija je torej velikosti O(n^2 * število_bitmask). 
+Prostor, ki ga vzame memoizacija je torej velikosti O(n^2 * število_bitmask) = O(n^2 * B^k). 
+
+Poleg memoizacije pa si naredimo tudi slovar vseh bitmask in njihovih ujemanj. Za fiksno dolžino k je le teh B^k. Za vsak ključ pa imamo v povprečju 
+1/4 * B^k vrednosti. Prostorska zahtevnost tega slovarja je potem O(0.25 * B^(2*k)).
+
+Skupna prostorska zahtevnost algoritma je O(n^2 * B^(2*k)).
+
+## Časovna zahtevnost
+
+* V algoritmu najprej generiramo bitmaske. To delamo z naivno metodo in sicer za generiranje bitmask dolžine k, se zapeljemo z zanko do 0 do števila 2^k in
+preverimo kateri bitmaski so veljavni. Algoritem bi lahko izboljšali s tem, da bi bitmaske generirali rekurzivno in tako izpustili vse kose števil za katera
+recimo binarni zapis vsebuje dve enici na začetku.  Ko generiramo še vse ujemajoče bitmaske nam ta del da časovno zahtevnost O(2^k * B^k). Pri tem predpostavimo,
+da je operacija AND dveh števil porabi O(1) časa.
+
+* 
 
 
 
