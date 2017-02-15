@@ -71,6 +71,8 @@ Prostor, ki ga vzame memoizacija je torej velikosti O(n^2 * število_bitmask) = 
 Poleg memoizacije pa si naredimo tudi slovar vseh bitmask in njihovih ujemanj. Za fiksno dolžino k je le teh B^k. Za vsak ključ pa imamo v povprečju 
 1/4 * B^k vrednosti. Prostorska zahtevnost tega slovarja je potem O(0.25 * B^(2*k)).
 
+Imamo pa še slovar v katerem so ključi (bitmask, vozlišče) in vrednost je teža tega cikla. Velikost slovarja je O(n * B^k).
+
 Skupna prostorska zahtevnost algoritma je O(n^2 * B^k + B^(2*k)).
 
 V primeru implementacije algoritma od spodaj navzgor, bi se nam bilo potrebno naenkrat zapomniti samo eno plast največjih neodvisnih množic. S tem 
@@ -83,9 +85,15 @@ preverimo kateri bitmaski so veljavni. Algoritem bi lahko izboljšali s tem, da 
 recimo binarni zapis vsebuje dve enici na začetku.  Ko generiramo še vse ujemajoče bitmaske nam ta del da časovno zahtevnost O(2^k * B^k). Pri tem predpostavimo,
 da operacija AND dveh števil porabi O(1) časa.
 
-* Tekom iskanja največje množice se z funkcijo kličemo enkrat na vsakem vozlišču drevesa in na vsaki možni bitmaski. V primeru večkratnega klicanja
-funkcije na istih argumentih zaradi memoizacije dobimo rezultat v O(1). Vseh različnih argumentov za klic funkcije je n * B^k. 
+* Ko generiramo slovar teže posameznega cikla z določeno bitmasko se zapeljemo po vseh vozliščih in vseh bitmaskah in na vsaki izračunamo težo.
+Izračun teže za posamezen primer je zahtevnosti O(k). Skupna zahtevnost tega dela algoritma je O(k) * n * B^k = O(n*k*B^k).
 
+* Tekom iskanja največje množice se z funkcijo kličemo enkrat na vsakem vozlišču drevesa in na vsaki možni bitmaski. V primeru večkratnega klicanja
+funkcije na istih argumentih zaradi memoizacije dobimo rezultat v O(1). Vseh različnih argumentov za klic funkcije je n * B^k. V funkciji se zapeljemo 
+vseh veljavnih bitmaskah in izračunamo najboljšo možnost. Zahtevnost tega dela bi tako bila O(n * B^k * B^k).
+
+Skupna zahtevnost algoritma je torej: O(2^k * B^k + n*k*B^k + n*(B^2)^k). Faktor B^2 ima približno vrednost 2.6200 kar se dokaj dobro ujema tudi
+z našo izmerjeno časovno zahtevnostjo spodaj.  
 
 # Meritve časovne zahtevnosti
 
@@ -118,15 +126,15 @@ Iz grafa lahko preberemo eksponentno rast časa v odvisnosti od dolžine cikla. 
 
 Poglejmo si nekaj kvocientov v spodnjem delu tabele:
 
-* 470 / 179 = 2.6256
-* 224 / 86 = 2.604
-* 1023 / 364 = 2.8104
-* 364 / 143 = 2.5384
-* 143 / 56 = 2.5535
-* 179 / 69 = 2.5942
+* 137 / 53 = 2.58490
+* 53 / 22 = 2.40909
+* 68 / 25 = 2.72
+* 25 / 10 = 2.4466
+* 29 / 10.5 = 2.5217
+* 11.5 / 4.7 = 2.4468
 * ...
 
-Lahko sklepamo, da osnova pri eksponentu leži nekje med 2.5 in 2.8.
+Lahko sklepamo, da osnova pri eksponentu leži nekje med 2.4 in 2.7.
 Iz te tabele prav tako lahko preberemo linearno rast v število vozlišč, če recimo pogledamo določeno vrstico v tabeli.
 Čas, ki ga porabimo za drevo z 100 vozlišči je približno 2-krat večji kot čas, ki ga potrebujemo za drevo z 50 vozlišči.
 
