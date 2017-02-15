@@ -2,6 +2,9 @@
 
 *Juš Kosmač*
 
+## Opis algoritma
+Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Vse možne podmnožice shranimo v slovar. Prav tako si shranimo katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozliščih v drevesu in bo unija še vedno ustrezala zahtevi po neodvisnosti). Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših.
+
 ## Časovna in prostorska zahtevnost
 
 ### Generiranje vseh možnosti za podmnožice na ciklu in ujemanj med njimi
@@ -33,7 +36,7 @@ Najprej ustvarimo seznam predhodnikov - prostorska in časovna zahtevnost `O(n)`
 Prostorska zahtevnost za celoten DFS: `O(n * k)`
 
 ### Skupaj
-Seštejemo vse prostorske in časovne zahtevnosti.
+Seštejemo vse prostorske in časovne zahtevnosti.  
 Skupna časovna zahtevnost : `O(k * 2^k) + O((A^2)^k) + O(n * B^k) + O(n * k) = O(n * B^k)`  
 Skupna prostorska zahtevnost: `O(k * A^k) + O(B^k) + O(n * k * B^k) + O(n * k) = O(n * k * B^k)`  
 
