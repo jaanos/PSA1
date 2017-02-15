@@ -3,7 +3,8 @@
 *Juš Kosmač*
 
 ## Opis algoritma
-Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Vse možne podmnožice shranimo v slovar. Prav tako si shranimo katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozliščih v drevesu in bo unija še vedno ustrezala zahtevi po neodvisnosti). Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših.
+Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Ustrezajo le tisti nizi, ki nimajo dveh zaporednih enic. Vse možne podmnožice shranimo v slovar. Prav tako si shranimo katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozlišč v drevesu in bo unija še vedno neodvisna). To so ravno vsi pari nizov, ki nimajo podvojenih enic na istem mestu. Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših. Za vsako vozlišče in vsako možno izbiro podmnožice na pripadajočem ciklu izračunamo maksimalno težo poddrevesa, ki ima dano vozlišče za koren in se dejanska podmnožica cikla pri korenu ujema z izbrano podmnožico. Pri tem uporabljamo že izračunane vrednosti za otroke vozlišča. Shranjujemo si tudi vozlišča, ki smo jih izbrali. Optimalno rešitev preberemo iz korena drevesa. Naredimo še en obhod drevesa z DFS-jem in rekonstruiramo celotno množico izbranih vozlišč.   
+Podrobnejši komentarji o delovanju algoritma so v datoteki z algoritmom. 
 
 ## Časovna in prostorska zahtevnost
 
@@ -38,5 +39,9 @@ Prostorska zahtevnost za celoten DFS: `O(n * k)`
 ### Skupaj
 Seštejemo vse prostorske in časovne zahtevnosti.  
 Skupna časovna zahtevnost : `O(k * 2^k) + O((A^2)^k) + O(n * B^k) + O(n * k) = O(n * B^k)`  
-Skupna prostorska zahtevnost: `O(k * A^k) + O(B^k) + O(n * k * B^k) + O(n * k) = O(n * k * B^k)`  
+Skupna prostorska zahtevnost: `O(k * A^k) + O(B^k) + O(n * k * B^k) + O(n * k) = O(n * k * B^k)`
+
+## Primerjava časov izvajanja algoritma
+
+
 
