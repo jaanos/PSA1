@@ -9,3 +9,23 @@ Vsako število med 1 in `2^k` pretvorimo v niz ničel in enic dolžine `k`, ki u
 
 Časovna zahtevnost : `O(k * 2^k)`  
 Prostorska zahtevnost: `O(k * A^k)`
+
+Za vsako število v slovarju možnosti gremo še enkrat skozi isti slovar, da pregledamo s katerimi preostalimi možnostmi se ujema. Predpostavljamo, da so števila tako majhna, da je operacija `&` konstantna in da je potreben prostor za hranjenje posameznega števila tudi konstanten. Za oceno velikosti slovarja ujemanj definiramo `c_k` kot število ujemanj med vsemi nizi, ki smo jih prešteli z `a_k`. Potrebovali bomo tudi `d_k` - definirano enako kot `c_k`, le da od enega izmed nizov zahtevamo, da se začne z ničlo. Poiščimo rekurzivne zveze. Pri `c_k`, se lahko niza začneta z `(0,0), (0,1)` ali `(1,0)`. Pri zadnjih dveh primerih moramo v naslednjem koraku od enega izmed nizov zahtevati, da se začne z ničlo (da bo ustrezal zahtevi `a_k`). Torej velja `c_k = c_(k-1) + 2 * d_(k-1)`. Pri `d_k` pa izbiramo le začetek drugega niza (drugi se mora začeti z ničlo), torej `d_k = d_(k-1) + c_(k-1)`. Iz teh dveh rekurzivnih zvez lahko izrazimo `c_k = 2 * c_(k-1) + c_(k-2)`. Enako kot prej označimo večjo ničlo karakterističnega polinoma `x^2 - 2 * x - 1` z `B = 1 + sqrt(2)`. V resnici pa je vseh ujemanj (označimo z `g_k`) manj, saj nismo upoštevali, da morata začetka in konca obeh nizov ustrezati isti zahtevi kot pri zaporedju `b_k`. Lahko pa ocenimo: `c_(k-1) <= g_k <= c_k`, saj vsakemu izmed nizov dolžine `k-1` lahko na konec dodamo ničlo in dobimo ujemanje dveh nizov dolžine `k`. Torej velja `g_k = O(c_k)`.
+
+Časovna zahtevnost : `O((A^k)^2) = O((A^2)^k)`  
+Prostorska zahtevnost: `O(B^k)`  
+
+### Prvi obhod drevesa z DFS-jem
+Oglejmo si funkcijo _izracunaj_, ki jo uporabljamo v postvisitu. označimo število sosedov vozlišča _u_ s `s(u)`. Najprej naredimo seznam vseh sosedov, porabimo `O(s(u))` prostora in časa. Nato za vsako možnost iz slovarja možnosti v slovar tež zapisemo težo in vozlišča ustrezne podmnožice na ciklu. Tukaj spet predpostavljamo, da so teže dovolj majhne, da so osnovne aritmetične operacije z njimi konstantne. Opravimo `O(A^k)` klicev funkcije _teza_, ki ima časovno in prostorsko zahtevnost `O(k)`. Skupaj porabimo `O(k * A^k)` časa in prostora (prostor se sešteva, ker vse zapisujemo v slovar tež). Nato pa za vsako možnost in vsako ujemanje izračunamo maksimalno težo vozlišča skupaj z otroci in jo skupaj z uporabljenimi vozlišči shranimo v slovar rezultatov. Za vsakega otroka porabimo le konstantno operacij (poizvedbe v slovar in prištevanje). Porabimo `O(s(u) * B^k)` časa in `O(s(u) * k * B^k)` prostora. 
+
+Časovna zahtevnost : `O(s(u)) + O(k * A^k) + O(s(u) * B^k)`  
+Prostorska zahtevnost: `O(s(u)) + O(k * A^k) + O(s(u) * k * B^k)`  
+
+Skupna zahtevnost DFS-ja je seštevek teh zahtevnosti po vseh vozliščih. Pri tem štejemo prostorsko zahtevnost za ustvarjanje seznama sosedov in slovarja tež le enkrat (pri vozlišču z največ sosedi), saj ju pri vsakem vozlišču na novo prepišemo. V resnici s tem v splošnem nič ne prihranimo, saj ima lahko v najslabšem primeru eno vozlišče vsa ostala vozlišča za sosede.
+
+Časovna zahtevnost za celoten DFS: `O(n) + O(k * A^k) + O(n * B^k) = O(n * B^k)`  
+Prostorska zahtevnost za celoten DFS: `O(n) + O(k * A^k) + O(n * k * B^k) = O(n * k * B^k)`  
+
+### Drugi obhod drevesa z DFS-jem
+Sedaj kot postvisit funkcijo kličemo _dodaj_vozlisca_.
+
