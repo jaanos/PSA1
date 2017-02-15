@@ -22,6 +22,7 @@ koraku rekurzije tako funkcijo razdelimo na toliko delov, kolikor otrok ima posa
 
 V nasem primeru ko imamo opravka z binarnim drevsom z 13 vozlisci, in pa ciklom dolzine 4 tako algoritem deluje na 
 priblizno sledeci nacin
+
 ```python
 >>> T = [[1, 2], [0, 3, 4], [0, 5], [1, 6, 7], [1, 8], [2, 9, 10], [3], [3], [4, 11], [5], [5, 12], [8], [10, 13], [12]]
 >>> w = [[6, 7, 3, 6, 8, 7, 5, 4, 5, 8, 7, 6, 2, 5],
@@ -47,16 +48,16 @@ poklicemo na poddrevesih z ihodisci v 1 in v 2 ter v nasem primeru ocetom oblike
  
 Za testni primer smo algoritem izvajali na uravnotezenih binarnih drevesih z vedno vecjo globino (polnih binarnih drevesih)
 
-Globina drevesa\dolzina cikla |  3  |  5  |  7  |  10  |  15 
-----------------------------------|--------------|-------------|-----------------|-----------------|-----------------
-     2 | To be tested | To be tested | To be tested | To be tested | To be tested 
-     3 | To be tested | To be tested | To be tested | To be tested | To be tested 
-     4 | To be tested | To be tested | To be tested | To be tested | To be tested
-     5 | To be tested | To be tested | To be tested | To be tested | To be tested
-     6 | To be tested | To be tested | To be tested | To be tested | To be tested
-     7 | To be tested | To be tested | To be tested | To be tested | To be tested
-     8 | To be tested | To be tested | To be tested | To be tested | To be tested
-     9 | To be tested | To be tested | To be tested | To be tested | To be tested
-     10 | To be tested | To be tested | To be tested | To be tested | To be tested
-     11 | To be tested | To be tested | To be tested | To be tested | To be tested
-     12 | To be tested | To be tested | To be tested | To be tested | To be tested
+Globina drevesa\dolzina cikla |  3  |  5  |  7  |  9  |  12  |  15   |
+----------------------------------|--------------|-------------|-----------------|-----------------|-----------------|-----------------|
+     2 |  0.0  |      0.0005  |      0.0035  |      0.0200  |      0.2782  |      4.2648  |  
+     3 |   0.0005002021789550781  |      0.0015  |      0.0075  |      0.0480  |      0.7560  |     11.9549  |  
+     4 |   0.000499725341796875  |      0.0030  |      0.0185  |      0.1096  |      1.7493  |     28.8186  |  
+     5 |   0.0015015602111816406  |      0.0065  |      0.0395  |      0.2962  |      3.8520  |     67.1365  |  
+     6 |   0.005003929138183594  |      0.1281  |      0.0840  |      0.5369  |      8.6129  |    141.3120  |  
+     7 |   0.004997968673706055  |      0.0330  |      0.1711  |      1.0953  |     18.3168  |    299.3329  |  
+     8 |   0.01851177215576172  |      0.0610  |      0.3618  |      2.8603  |     37.5308  |    636.8147  |  
+     9 |   0.036025285720825195  |      0.1306  |      0.7645  |      5.0017  |     80.9928  |   1289.9691  |  
+     10 |   0.09157490730285645  |      0.2942  |      1.7348  |     13.9997  |    192.9435  | To Be tested |
+     11 | To be tested | To be tested | To be tested | To be tested | To be tested | To be tested |
+     12 | To be tested | To be tested | To be tested | To be tested | To be tested | To be tested | 
