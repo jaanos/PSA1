@@ -33,6 +33,7 @@ priblizno sledeci nacin
 (153, [(0, 0), (2, 0), (1, 1), (3, 1), (0, 3), (2, 3), (0, 4), (2, 4), (1, 5), (3, 5), (1, 6), (3, 6), (1, 7), (3, 7), (1, 8), (3, 8), (0, 9), (2, 9), (0, 10), (2, 10), (0, 11), (2, 11), (1, 12), (3, 12), (0, 13), (2, 13)])
 ```
 
+* Pred samim zacetkom izvajanja programa si pripravimo usmirjeno drevo, ki ga izdelamo iz podanega grafa, to storimo s pomocjo algoritma DFS (vaje5)
 * V prvem koraku poklicemo funkcijo na izhodiscu, ter za obliko njegovega oceta nastavimo prazen cikel ("0000")
 * Nato maximiziramo vse mozne oblike izhodiscnega cikla kot sina navideznega praznega cikla, ter funkcijo rekurzivno 
 poklicemo na poddrevesih z ihodisci v 1 in v 2 ter v nasem primeru ocetom oblike "1010"
@@ -42,7 +43,16 @@ poklicemo na poddrevesih z ihodisci v 1 in v 2 ter v nasem primeru ocetom oblike
 
 ## Časovna zahtevbnost 
 
+Generiranje binarnih zaporedij, brez sosednjih enic nam vzame za vako zaporedje `O(n)` casa pri cemer je n dolzina ciklov
+
+```Legenda
+n --- dolzina cikla/ binarnega zapisa vsakega vozlisca (binarne maske)
+k --- stevilo dreves
+```
+
 ## Prostorska zahtevnost
+
+
 
 ## Tablea časov izvajanja programa pri razlicnih vhoodnih podatkih
  
@@ -58,6 +68,6 @@ Globina drevesa\dolzina cikla |  3  |  5  |  7  |  9  |  12  |  15   |
      7 |   0.0049  |      0.0330  |      0.1711  |      1.0953  |     18.3168  |    299.3329  |  
      8 |   0.0185  |      0.0610  |      0.3618  |      2.8603  |     37.5308  |    636.8147  |  
      9 |   0.0360  |      0.1306  |      0.7645  |      5.0017  |     80.9928  |   1289.9691  |  
-     10 |   0.0915  |      0.2942  |      1.7348  |     13.9997  |    192.9435  | To Be tested |
-     11 | To be tested | To be tested | To be tested | To be tested | To be tested | To be tested |
-     12 | To be tested | To be tested | To be tested | To be tested | To be tested | To be tested | 
+     10 |   0.0915  |      0.2942  |      1.7348  |     13.9997  |    192.9435  |  //  |
+     11 |  //  |  //  |  //  |  //  |  //  |  //  |
+     12 |  //  |  //  |  //  |  //  |  //  |  //  | 
