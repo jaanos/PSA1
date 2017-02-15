@@ -88,11 +88,11 @@ da operacija AND dveh števil porabi O(1) časa.
 * Ko generiramo slovar teže posameznega cikla z določeno bitmasko se zapeljemo po vseh vozliščih in vseh bitmaskah in na vsaki izračunamo težo.
 Izračun teže za posamezen primer je zahtevnosti O(k). Skupna zahtevnost tega dela algoritma je O(k) * n * B^k = O(n*k*B^k).
 
-* Tekom iskanja največje množice se z funkcijo kličemo enkrat na vsakem vozlišču drevesa in na vsaki možni bitmaski. V primeru večkratnega klicanja
+* Tekom iskanja največje množice se s funkcijo kličemo enkrat na vsakem vozlišču drevesa in na vsaki možni bitmaski. V primeru večkratnega klicanja
 funkcije na istih argumentih zaradi memoizacije dobimo rezultat v O(1). Vseh različnih argumentov za klic funkcije je n * B^k. V funkciji se zapeljemo 
-vseh veljavnih bitmaskah in izračunamo najboljšo možnost. Zahtevnost tega dela bi tako bila O(n * B^k * B^k).
+po vseh veljavnih bitmaskah in izračunamo najboljšo možnost. Zahtevnost tega dela bi tako bila O(n * B^k * B^k).
 
-Skupna zahtevnost algoritma je torej: O(2^k * B^k + n*k*B^k + n*(B^2)^k). Faktor B^2 ima približno vrednost 2.6200 kar se dokaj dobro ujema tudi
+Skupna zahtevnost algoritma je torej: O(2^k * B^k + n*k*B^k + n*(B^2)^k). Faktor B^2 ima približno vrednost 2.62 kar se dokaj dobro ujema tudi
 z našo izmerjeno časovno zahtevnostjo spodaj.  
 
 # Meritve časovne zahtevnosti
