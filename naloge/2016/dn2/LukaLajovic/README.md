@@ -15,6 +15,6 @@ ko računamo vrednost neke neodvisne množice, na vozlišču, ki ni list ji mora
 
 n je dolžina grafa, k je dolžina cikla
 
-Prostorska zahtevnost bi morala biti 2^k*(n)*2+2^k, ker imamo 2 slovarja 
+Prostorska zahtevnost bi morala biti 2^k  (n)2+2^k, ker imamo 2 slovarja 
 
-Časovna zahtevnost je enaka septavi O(n*2^k) 
+Časovna zahtevnost je enaka sepravi O(n2^k) 
