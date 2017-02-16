@@ -64,7 +64,7 @@ indeksu in seznam mask, ki smo jih za to morali uporabiti na otrocih tega vozli�
 saj sovpada z vrstnim redom v seznamu children).
 
 Za lažji izračun teže bitne maske uporabljene na določenem vozlišču definiramo pomožno funkcija `calculate_weight`, ki 
-za bitno in indeks `j` izračuna težo uporabe (preprosto sešteje vse teže `w[i][j]`, če je `i` ti bit prižgan).
+za bitno masko in indeks `j` izračuna težo uporabe (preprosto sešteje vse teže `w[i][j]`, če je `i` ti bit prižgan).
 
 #### Izračun najtežje množice
 
@@ -167,7 +167,7 @@ tej maski kompatibilno masko opraviti konstantno dela, kako lahko to izrazimo ko
 Ta analiza nas zanima, da lahko omejimo tako časovno kot prostorsko zahtevnost funkcije make_transitions. Časovna 
 zahtevnost je očitno `O(B^2)`, saj moramo za vsako masko izločiti njej nekompatibilne (za `B` mask `B` preverjanj.). 
 Ravno tu uporabimo predpostavko o konstantnih bitnih operacijah, saj bi v nasprotnem primeru bila časovna zahtevnost 
-posameznega preverjanja `O(B)`, kar bi skupno časovno zahtevnost spremenilo na `O(B^3)`, v realnosti pa so primerjave ali 
+posameznega preverjanja `O(k)`, kar bi skupno časovno zahtevnost spremenilo na `O(k*B^2)`, v realnosti pa so primerjave ali 
 sta dve bitni maski kompatibilni konstantne in je torej časovna zahtevnost metode res `O(B^2)`
 
 Poleg časovne zahtevnosti pa nas zanima tudi prostorska zahtevnost te metode. Da jo lažje anlizirajmo moramo pogledati, 
@@ -188,7 +188,7 @@ za vse smiselne vhodne podatke.
 `A(0) + A(1) + ... + A(n-1)`, kar pa nas privede do vsote fibonaccijevih števil. Pomagamo si z 
 [http://mathforum.org/library/drmath/view/52707.html](http://mathforum.org/library/drmath/view/52707.html), in časovno 
 zahtevnost spet omejimo s pomočjo formule za rast, torej `O(phi^k)`, kjer je `k` dolžina cikla.
-+ `generate_product_with_bitmask`: Funkcija za posamezen bit v maski prever, ali je prižgan in če je, v seznam doda 
++ `generate_product_with_bitmask`: Funkcija za posamezen bit v maski preveri, ali je prižgan in če je, v seznam doda 
 ustrezen par. Časovna zahtevnost: `O(k)` (saj preverimo vsak bit posebej), prostorska zahtevnost: `O(k)`, dolžina 
 vrnjenega seznama.
 + `make_transitions`: Kot je bilo ugotovljeno zgoraj, časovna zahtevnost: `O(B^2)`, prostorska zahtevnost: `O(T)`.
