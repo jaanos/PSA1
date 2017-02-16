@@ -56,7 +56,7 @@ def maxCycleTreeIndependentSet(T, w):
         return compatible
 
     def getCycleWeight(v, subset):
-        """ Vrne vsoto uteži podmnožice cikla na mestu 'v' v drevesu, kjer je '1' v binarnem zapisu spremenljivke
+        """ Vrne vsoto tistih uteži cikla na mestu 'v' v drevesu, kjer je '1' v binarnem zapisu spremenljivke
         'subset'. """
         weight = 0
         binary = bin(subset)[2:]
@@ -96,9 +96,12 @@ def maxCycleTreeIndependentSet(T, w):
             vozlisce_max[u][subset] = (tempWeight, son_used)
         return True
 
+    # Z DFS-jem in funkcijo postvisit seznam vozlisce_max izpolnjujemo od spodaj navzgor, da imamo potomce trenutnega
+    # vozlisca vedno ze izracunane.
     DFS(T, roots=[0], postvisit=postvisit)
     maxWeight = - float("inf")
-    rootCycle = None
+    rootCycle = None  # Podmnozica cikla v korenu drevesa
+    # Preverimo maksimalno tezo za vse ustrezne podmnozice cikla v korenu drevesa in poiscemo najvecjo.
     for subset in vozlisce_max[0].keys():
         weight = vozlisce_max[0][subset][0]
         if weight > maxWeight:
@@ -107,7 +110,8 @@ def maxCycleTreeIndependentSet(T, w):
     cycles = [None] * n
     cycles[0] = rootCycle
     vertices = []
-    for v in range(0,n):
+    # Preberemo katero podmnozico cikla smo uporabili v vsakem vozliscu drevesa
+    for v in range(0, n):
         for u, cycle in vozlisce_max[v][cycles[v]][1]:
             cycles[u] = cycle
         binary = bin(cycles[v])[2:]
