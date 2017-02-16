@@ -76,7 +76,9 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
     # Also saves which bitmask is assigned to specific child
     # Cost: O(n)
     B = len(bitmasks)
-    DP = [[(0, []) for _ in range(B)] for _ in range(n)]  # type: List[List[Tuple[int, List[int]]]]
+    # Cache range(B
+    range_b = range(B)
+    DP = [[(0, []) for _ in range_b] for _ in range(n)]  # type: List[List[Tuple[int, List[int]]]]
     # memory: assuming good behaved dictionary, will store up to n*B, entries, where each entry will consist of
     # int(max value) and bitmask used for obtaining this value for each child of i
 
@@ -90,10 +92,13 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
 
     MIN_INF = float("-inf")
 
+    # Cache range(k)
+    range_k = range(k)
+
     def calculate_weight(bitmask: BitMask, j: int) -> int:  # Cost: O(len(bitmask)) = O(k), memory: O(1)
         # return sum(w[i][j] for i in range(k) if 1 << i & bitmask)
         su = 0
-        for i in range(k):
+        for i in range_k:
             if 1 << i & bitmask:
                 su += w[i][j]
         return su
