@@ -153,8 +153,6 @@ def maxCycleTreeIndependentSet(T, w):
 
     vrednost, seznamVzorcevZaVsakoVozlisceTree = max(vrednostiVozliscSedem[0][k] for k in range(len(vzorciZaCikel(k)[0])))
 
-    print(vzorciZaCikel(4))
-
     uporabljeneTocke = []
     print(seznamVzorcevZaVsakoVozlisceTree)
     for vozlisceDrevesa, indexVzorec in seznamVzorcevZaVsakoVozlisceTree:
