@@ -34,11 +34,12 @@ def maxCycleTreeIndependentSet(T, w):
 
     #oce ali pa sin,ded = (položaj, vključena vozlišča v ciklu )
 
-    def rekurzija(drevo, utezi, sidro, ded = None):
+
+    def rekurzija(sidro, ded = None):
 
 
 
-        sinovi2D = nasledniki(drevo, sidro, ded)
+        sinovi2D = nasledniki(sidro, ded)
 
 
         for sinDrevo in sinovi2D:
@@ -46,14 +47,14 @@ def maxCycleTreeIndependentSet(T, w):
                 if sin in memo:
                     continue
 
-                elif sinJeList(drevo, sin, sidro):
-                    memo[sin] = ustavitev(drevo, utezi, sin, sidro)
+                elif sinJeList(sin):
+                    memo[sin] = ustavitev(sin, sidro)
 
                 else:
-                    memo[sin] = rekurzija(drevo, utezi, sin, sidro)
+                    memo[sin] = rekurzija(sin, sidro)
 
 
-        vsota = teza(utezi, sidro)
+        vsota = teza(sidro)
         cikliPotomcev = []
         for sinDrevo in sinovi2D:
             c = (minusNeskoncno,cikel)
@@ -69,26 +70,55 @@ def maxCycleTreeIndependentSet(T, w):
         return memo(sidro)
 
 
-    def ustavitev(drevo, utezi, sidro, oce):
+    def ustavitev(sidro, oce):
         pass
 
-    def teza(utezi, sidro):
-        k = len(utezi[0])
+
+    def teza(sidro):
         (polozaj, cikel) = sidro
         vsota = 0
         for i in range(k):
             if cikel % 2 == 1:
-                vsota += utezi[polozaj][i]
+                vsota += w[i][polozaj]
             cikel = cikel // 2
 
         return vsota
 
+
     def nasledniki(sidro, ded):
-        pass
+        (polozaj, cikel) = sidro
+        nas = []
+        for sinDrevo in T[sidro[0]]:
+            if sinDrevo == ded:
+                pass
+            else:
+                nas += kombinacije(sinDrevo, sidro)
+        return nas
+
+    def sinJeList(sin):
+        return len(T[sin]) == 1
 
 
-    def sinJeList(drevo, sin, sidro):
-        pass
 
-    def kombinacije(sidro):
-        pass
+    def kombinacije(sinDrevo, sidro):
+        moznih = 2^k
+        kombi = []
+        for cikel in range(moznih):
+            if preveri(cikel, sidro[1]):
+                kombi += [(sinDrevo,cikel)]
+        return  kombi
+
+    def preveri(sumljivCikel, sidroCikel):
+        if sumljivCikel & sidroCikel != 0:
+            return False
+
+        else:
+            if (sumljivCikel%2) == (sumljivCikel//(2^(k-1)) %2):
+                return False
+
+            for i in range(k-1):
+                tre = sumljivCikel%2
+                nas = sumljivCikel//2%2
+                if tre == nas:
+                    return False
+        return True
