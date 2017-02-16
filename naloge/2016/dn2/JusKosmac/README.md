@@ -3,7 +3,7 @@
 *Juš Kosmač*
 
 ## Opis algoritma
-Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Ustrezajo le tisti nizi, ki nimajo dveh zaporednih enic. Vse možne podmnožice shranimo v slovar. Prav tako si shranimo katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozlišč v drevesu in bo unija še vedno neodvisna). To so ravno vsi pari nizov, ki nimajo podvojenih enic na istem mestu. Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših. Za vsako vozlišče in vsako možno izbiro podmnožice na pripadajočem ciklu izračunamo maksimalno težo poddrevesa, ki ima dano vozlišče za koren in se dejanska podmnožica cikla pri korenu ujema z izbrano podmnožico. Pri tem uporabljamo že izračunane vrednosti za otroke vozlišča. Shranjujemo si tudi vozlišča, ki smo jih izbrali. Optimalno rešitev preberemo iz korena drevesa. Naredimo še en obhod drevesa z DFS-jem in rekonstruiramo celotno množico izbranih vozlišč.   
+Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Ustrezajo le tisti nizi, ki nimajo dveh zaporednih enic. Vse možne podmnožice shranimo v slovar. Prav tako si shranimo katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozlišč v drevesu in bo unija še vedno neodvisna). To so ravno vsi pari nizov, ki nimajo podvojenih enic na istem mestu. Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših. Za vsako vozlišče in vsako možno izbiro podmnožice na pripadajočem ciklu izračunamo maksimalno težo poddrevesa, ki ima dano vozlišče za koren in se dejanska podmnožica cikla pri korenu ujema z izbrano podmnožico. Pri tem uporabljamo že izračunane vrednosti za otroke vozlišča. Shranjujemo si tudi katero podmnožico smo dejansko izbrali. Optimalno rešitev preberemo iz korena drevesa. Naredimo še en obhod drevesa z DFS-jem in rekonstruiramo celotno množico izbranih vozlišč.   
 Podrobnejši komentarji o delovanju algoritma so v datoteki z algoritmom. 
 
 ## Časovna in prostorska zahtevnost
@@ -20,28 +20,35 @@ Za vsako število v slovarju možnosti gremo še enkrat skozi isti slovar, da pr
 Prostorska zahtevnost: `O(B^k)`  
 
 ### Prvi obhod drevesa z DFS-jem
-Oglejmo si funkcijo _izracunaj_, ki jo uporabljamo v postvisitu. označimo število sosedov vozlišča _u_ s `s(u)`. Najprej naredimo seznam vseh sosedov, porabimo `O(s(u))` prostora in časa. Nato za vsako možnost iz slovarja možnosti v slovar tež zapisemo težo in vozlišča ustrezne podmnožice na ciklu. Tukaj spet predpostavljamo, da so teže dovolj majhne, da so osnovne aritmetične operacije z njimi konstantne. Opravimo `O(A^k)` klicev funkcije _teza_, ki ima časovno in prostorsko zahtevnost `O(k)`. Skupaj porabimo `O(k * A^k)` časa in prostora (prostor se sešteva, ker vse zapisujemo v slovar tež). Nato pa za vsako možnost in vsako ujemanje izračunamo maksimalno težo vozlišča skupaj z otroci in jo skupaj z uporabljenimi vozlišči shranimo v slovar rezultatov. Za vsakega otroka porabimo le konstantno operacij (poizvedbe v slovar in prištevanje). Porabimo `O(s(u) * B^k)` časa in `O(s(u) * k * B^k)` prostora. 
+Oglejmo si funkcijo _izracunaj_, ki jo uporabljamo v postvisitu. označimo število sosedov vozlišča _u_ s `s(u)`. Najprej naredimo seznam vseh sosedov, porabimo `O(s(u))` prostora in časa. Nato za vsako možnost iz slovarja možnosti v slovar tež zapisemo težo ustrezne podmnožice na ciklu. Tukaj spet predpostavljamo, da so teže dovolj majhne, da so osnovne aritmetične operacije z njimi konstantne. Opravimo `O(A^k)` klicev funkcije _teza_, ki ima časovno zahtevnost `O(k)` in prostorsko zahtevnost `O(1)`. Skupaj porabimo `O(k * A^k)` časa in `O(A^k)` prostora (prostor se sešteva, ker vse zapisujemo v slovar tež). Nato pa za vsako možnost in vsako ujemanje izračunamo maksimalno težo vozlišča skupaj z otroci in jo shranimo v slovar rezultatov. Za vsakega otroka porabimo le konstantno operacij (poizvedbe v slovar in prištevanje). Porabimo `O(s(u) * B^k)` časa in `O(s(u) * B^k)` prostora. 
 
 Časovna zahtevnost : `O(s(u)) + O(k * A^k) + O(s(u) * B^k)`  
-Prostorska zahtevnost: `O(s(u)) + O(k * A^k) + O(s(u) * k * B^k)`  
+Prostorska zahtevnost: `O(s(u)) + O(A^k) + O(s(u) * B^k)`  
 
 Skupna zahtevnost DFS-ja je seštevek teh zahtevnosti po vseh vozliščih. Pri tem štejemo prostorsko zahtevnost za ustvarjanje seznama sosedov in slovarja tež le enkrat (pri vozlišču z največ sosedi), saj ju pri vsakem vozlišču na novo prepišemo. V resnici s tem v splošnem nič ne prihranimo, saj ima lahko v najslabšem primeru eno vozlišče vsa ostala vozlišča za sosede.
 
-Časovna zahtevnost za celoten DFS: `O(n) + O(k * A^k) + O(n * B^k) = O(n * B^k)`  
-Prostorska zahtevnost za celoten DFS: `O(n) + O(k * A^k) + O(n * k * B^k) = O(n * k * B^k)`  
+Časovna zahtevnost za celoten DFS: `O(n) + O(n * k * A^k) + O(n * B^k) = O(n * B^k)`  
+Prostorska zahtevnost za celoten DFS: `O(n) + O(A^k) + O(n * B^k) = O(n * B^k)`  
 
 ### Drugi obhod drevesa z DFS-jem
-Najprej ustvarimo seznam predhodnikov - prostorska in časovna zahtevnost `O(n)`. Sedaj kot previsit funkcijo kličemo _dodaj_vozlisca_. Vask klic funkcije popravi vrednost v seznamu predhodnikov in seznamu optimalno doda seznam velikosti največ `k`. Torej ima časovno in prostorsko zahtevnost `O(k)`. 
+Najprej ustvarimo seznam izbranih podmnožic - prostorska in časovna zahtevnost `O(n)`. Sedaj kot previsit funkcijo kličemo _dodaj_vozlisca_. Vask klic funkcije popravi vrednost v seznamu predhodnikov in seznamu optimalno doda največ `k` vozlišč. Torej ima časovno in prostorsko zahtevnost `O(k)`. 
 
 Časovna zahtevnost za celoten DFS: `O(n * k)`  
 Prostorska zahtevnost za celoten DFS: `O(n * k)`
 
 ### Skupaj
 Seštejemo vse prostorske in časovne zahtevnosti.  
-Skupna časovna zahtevnost : `O(k * 2^k) + O((A^2)^k) + O(n * B^k) + O(n * k) = O(n * B^k)`  
-Skupna prostorska zahtevnost: `O(k * A^k) + O(B^k) + O(n * k * B^k) + O(n * k) = O(n * k * B^k)`
+Skupna časovna zahtevnost : `O(k * 2^k) + O((A^2)^k) + O(n * B^k) + O(n * k) = O(n * B^k + (A^2)^k)`  
+Skupna prostorska zahtevnost: `O(k * A^k) + O(B^k) + O(n * B^k) + O(n * k) = O(n * B^k)`
 
 ## Primerjava časov izvajanja algoritma
+Najprej bomo algoritem testirali na naključno generiranih drevesih s težami vozlišč med `0` in `100`. Pri prvem testu bomo preverjali odvisnost od števila vozlišč v drevesu `n`. Omejili se bomo na nekaj izbranih velikosti cikla `k`, `n` pa bomo povečevali. 
+
+|`k` \ `n`  |100 |200|300|400|500|1000|2000|3000|4000|5000|10000|
+|---|---|---|---|---|---|---|---|---|---|---|---|
+|4   |0.02  |0.02   |0.02  |0.03  |0.03  |0.08  |0.17 |0.25 |0.33 |0.42 |0.86|
+|8   |0.13  |0.25   |0.36  |0.50 |0.63  |1.22 |2.49|3.72|5.03 |6.19|12.39|
+|12  |3.52  |6.95  |10.36  |13.92  |17.30   |34.72  |69.19 |104.00 |138.13 |173.88|347.22|
 
 
 
