@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
+minusNeskoncno = float("-inf")
+cikel = 0
+
+
+
 
 def maxCycleTreeIndependentSet(T, w):
     """
@@ -25,34 +30,65 @@ def maxCycleTreeIndependentSet(T, w):
     raise NotImplementedError("Naredi sam!")
 
 
-    memo = {}
+    memo = {}   #memo[sin] = (teza, cikli sina in njegovih pozomcev )
+
+    #oce ali pa sin,ded = (položaj, vključena vozlišča v ciklu )
+
+    def rekurzija(drevo, utezi, sidro, ded = None):
 
 
 
-    def rekurzija(drevo, utezi, oce, ded = None):
-
-        sinovi = nasledniki(oce, ded)
-
-        for sin in sinovi:
-            if sin in memo:
-                continue
-
-            elif sinJeList(sin, oce):
-                pass
-
-            else:
-                memo[sin] = rekurzija(drevo, utezi, sin, oce)
+        sinovi2D = nasledniki(drevo, sidro, ded)
 
 
+        for sinDrevo in sinovi2D:
+            for sin in sinDrevo:
+                if sin in memo:
+                    continue
+
+                elif sinJeList(drevo, sin, sidro):
+                    memo[sin] = ustavitev(drevo, utezi, sin, sidro)
+
+                else:
+                    memo[sin] = rekurzija(drevo, utezi, sin, sidro)
 
 
+        vsota = teza(utezi, sidro)
+        cikliPotomcev = []
+        for sinDrevo in sinovi2D:
+            c = (minusNeskoncno,cikel)
+            najboljsi = None
+            for sin in sinDrevo:
+                if memo[sin][0] > c[0]:
+                    c = memo[sin]
+                    najboljsi = sin
+            vsota += c[0]
+            cikliPotomcev += [najboljsi]
+        memo[sidro] = (vsota, cikliPotomcev)
 
-    def nasledniki(oce, ded):
+        return memo(sidro)
+
+
+    def ustavitev(drevo, utezi, sidro, oce):
+        pass
+
+    def teza(utezi, sidro):
+        k = len(utezi[0])
+        (polozaj, cikel) = sidro
+        vsota = 0
+        for i in range(k):
+            if cikel % 2 == 1:
+                vsota += utezi[polozaj][i]
+            cikel = cikel // 2
+
+        return vsota
+
+    def nasledniki(sidro, ded):
         pass
 
 
-    def sinJeList(sin, oce):
+    def sinJeList(drevo, sin, sidro):
         pass
 
-    def kombinacije(oce):
+    def kombinacije(sidro):
         pass
