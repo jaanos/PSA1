@@ -4,7 +4,7 @@
 
 ## Kratek opis algoritmov
 
-Sama ideja delovanja programa in opisi se večinoma nahajajo že kot komentarji v sami kodi programa, v poročilu si 
+Večina ideje delovanja programa in opisi kode se nahajajo že kot komentarji v sami kodi programa, v poročilu si 
 bomo pogledali predvsem pot do rešitve in kakšno implementacijsko podrobnost. Prvih nekaj vrstic, ki so namenjene
 zgolj temu, da se pripričamo, da so vhodni podatki smiselni bomo pri analizi izpustili, prav tako jih bomo zaradi 
 nepotrebne porabe časa odstranili v končni verziji.
@@ -21,7 +21,7 @@ mypy "zapakiramo" v tip `BitMask`, kar je časovno še vedno hitro (ob zagonu pr
 ob inicializaciji nove maske se pokliče navidezni konstruktor, ki zgolj vrne svoj argument, torej za ceno klica 
 funkcije(zgolj dve dodatni operaciji: `LOAD_GLOBAL` in `CALL_FUNCTION`) pridobimo nekaj varnosti).
 
-Sama bitno masko razumemo kot seznam prižganih ali ugasnjenih bitov, kjer bit na `i` tem indeksu (gledano z desne) 
+Samo bitno masko razumemo kot seznam prižganih ali ugasnjenih bitov, kjer bit na `i` tem indeksu (gledano z desne) 
 predstavlja, da smo v ciklu vzeli vozlišče na indeksu `i` (vsako vozlišče metadrevesa si lahko predstavljamo kot cikel).
 Tako lahko hitro zgolj s pomočjo operacij na bitih pridemo do prižganih bitov, prav tako lahko hitro preverimo, ali sta 
 dve maski med seboj kompatibilni (če smo masko `a` uporabili na očetu, ali lahko masko `b` uporabimo na sinu).
@@ -33,9 +33,9 @@ kasneje.
 #### Priprava podatkov
 
 Ker nimamo o drevesu nobenih dodatnih podatkov si za začetek pripravimo primerno predstavitve drevesa kot grafa, 
-ki jih bomo potrebovali v nadaljevanju. Bolj natančno si za pripravimo seznam, ki za posamezno vozlišče vsebuje 
-njegovega očeta (parent, tu smo nekoliko nepazljivi in korenu drevesa za njegovega starša nastavimo kar sebe, a 
-tega v resnici nikoli ne potrebujemo, tako da si to lahko privoščimo), v drugem seznamu (children) pa si za posamezno 
+ki jih bomo potrebovali v nadaljevanju. Bolj natančno si pripravimo seznam, ki za posamezno vozlišče vsebuje 
+njegovega očeta (`parent`, tu smo nekoliko nepazljivi in korenu drevesa za njegovega starša nastavimo kar sebe, a 
+tega v resnici nikoli ne potrebujemo, tako da si to lahko privoščimo), v drugem seznamu (`children`) pa si za posamezno 
 vozlišče shranimo njegove otroke (children). Poleg tega si za lažje postopanje pri dinamičnem programiranju pripravimo 
 še seznam `levels`, ki na `i` tem mestu hrani seznam vozlišč, za katera velja, da se nahajajo v `i` tem nivoju drevesa.
 
@@ -56,12 +56,17 @@ prižgemo `n`-ti bit, ali pa jih pustimo take kot so (in s tem efektivno dodamo 
 Zgeneriramo tudi slovar seznamov, ki za poljubno masko vsebuje vse maske, ki so z njo kompatibilne, to preprosto 
 preverimo z bitno logično operacijo `in (AND, &)` in dve maski štejemo za kompatibilni, če je rezultat operacije `0`, 
 torej če nimata skupnih prižganih bitov, kar pomeni, da je monžica, ki jo pokrijeta na očetu in sinu neodvisna. 
-Funkcija `make_transitions` se preprosto zapelje čez vse maske in jih doda v seznam če so kompatibilne.
+Funkcija `make_transitions` se preprosto zapelje čez vse maske in jih doda v seznam če so kompatibilne. Zaradi hitrosti 
+"na roko" vstavimo funkcijo `are_compatible` (naredimo jo "inline").
 
-Za konec si pripravimo še ogrodje za tabelo, kjer si bomo shranjevali že izračunane podatke (DP), ki za poljuben indeks 
-vozlišča vsebuje slovar, katerega ključi (bitne maske) imajo za vrednost par najtežje podmnožice ki ustreza maski in 
-indeksu in seznam mask, ki smo jih za to morali uporabiti na otrocih tega vozlišča. (Vrstni red v seznamu je pomemben, 
-saj sovpada z vrstnim redom v seznamu children).
+Za konec si pripravimo še ogrodje za tabelo, kjer si bomo shranjevali že izračunane podatke (tabela `DP`), ki za 
+poljuben indeks vozlišča vsebuje seznam, ki na `i` tem mestu shrani najboljšo vrednost (in njene "otroke"), ki jo lahko 
+dosežemo, če na tem vozlišču uporabimo `i`-to bitno masko (glede na seznam `bitmasks`). Prednost uporabe seznama proti 
+slovarju je v hitrosti (indeksiranje po seznamu in slovarju je samiptotično sicer enako, a je konstanta pri slovraju 
+večja, prav tako pa je dodatna poraba spomina pri seznamu manjša (praktično ničelna), dasiravno je pri slovarju še vedno 
+samo linearna glede na dolžino). Posamezni elementi, ki jih `DP` shranjuje so pari največje teže, ki je bila dosežena in
+seznam, kjer je na `k` tem mestu shranjen indeks bitne maske, ki smo jo za dosego take teže (maksimalne ob pogoju maske)
+uporabili na `k` tem otroku vozlišča.
 
 Za lažji izračun teže bitne maske uporabljene na določenem vozlišču definiramo pomožno funkcija `calculate_weight`, ki 
 za bitno masko in indeks `j` izračuna težo uporabe (preprosto sešteje vse teže `w[i][j]`, če je `i` ti bit prižgan).
@@ -72,13 +77,13 @@ Za izračun se poslužimo iterativnega dinamičnega programiranja. Vsako vrednos
 vrednosti njegovih otrok, kjer je najboljša vrednost otroka definirana kot maksimum vseh tež, ki jih lahko dosežemo s 
 kompatibilnimi maskami. 
 `DP[i][mask] = sum(max(DP[j][comp_mask] for com_mask in compatible[mask]) for j in direct_children(i)) + 
-calculate_weight(mask, i)`, končne vrednosti pa smiselno dosežemo pri vozliščih brez otrok, kjer velja 
+calculate_weight(masks[mask], i)`, končne vrednosti pa smiselno dosežemo pri vozliščih brez otrok, kjer velja 
 `DP[i][mask] = calculate_weight(mask, i)` (če bi definirali `max([]) = 0`, bi lahko robne primere kar vključili v prvo 
 formulo, za programiranje pa se izkaže, da je bolje, da jih eksplicitno izvzamemo).
 
 Za "bottom up" pristop k temu dinamičnemu problemu je topološka ureditev podproblemov precej očitna, vozlišče je odvisno 
 zgolj od vozlišč, ki so nižje od njega(glede na nivoje drevesa), zato začnemo tabelo polniti na dnu drevesa (to je tudi 
-razlog za pripravo tabele `levels`). Zgolj zaradi praktičnosti korak za povsem spodnji novo naredimo posebej.
+razlog za pripravo tabele `levels`). Zgolj zaradi praktičnosti korak za povsem spodnji nivo naredimo posebej.
 
 Glavna for zanka povsem sledi formuli za podprobleme: Po vrsti se sprehajamo od spodaj navzgor po nivojih in za 
 poljubno vozlišče iz nivoja `level_i` za vsako masko, ki jo na njem lahko uporabimo preverimo, kakšna so najtežja 
@@ -107,7 +112,7 @@ vselej vrne enako množico, prav s tem namenom nikoli ne iteriramo po ključih s
 generiranih bitnih mask, katerega vrstni red je vedno enak (za enake vhodne podatke).
 
 
-## Analiza časovne zahtevnosti
+## Analiza časovne in prostorske zahtevnosti zahtevnosti
 
 ### Za lažjo analizo bomo predpostavili naslednje:
 
@@ -115,20 +120,21 @@ generiranih bitnih mask, katerega vrstni red je vedno enak (za enake vhodne poda
 povezav v drevesu določimo z `n`, saj `E = n - 1`, torej `O(n) = O(E) = O(E + n)`.
 + Naj `sq(x)` označuje kvadratni koren števila `x`
 + Naj `sq2` označuje `sq(2)`, `sq21` označuje `sq2 + 1` in `phi` označuje zlati rez (`phi = (sq(5) + 1)/2`)
-+ Zgornjim številom ustrezaj opribližne vrednosti: `sq2 =~ 1.414`, `sq21 =~ 2.414`, `phi =~ 1.618`
++ Zgornjim številom ustrezajo približne vrednosti: `sq2 =~ 1.414`, `sq21 =~ 2.414`, `phi =~ 1.618`, očitno : 
+`sq2 < phi < sq21 < phi^2`
 + Naj `F(n)` označuje `n` to Fibnoaccijevo število, kjer `F(0) = 0, F(1) = 1`
 + Naj `^` označuje standardno operacijo potenciranja, `|` in `&` pa bitni `ali` in `in`. 
 + Dostop do elementov v seznamu (z indeksiranjem) je neodvisen od dolžine seznama
-+ Dostop do elementov v slovarju (z ključi) je (praktično) neodvisen od dolžine slovarja (dostopamo v konstantnem času).
++ Dostop do elementov v slovarju (s ključi) je (praktično) neodvisen od dolžine slovarja (dostopamo v konstantnem času).
 + Delov programa, ki so namenjeni raznim zagotovilom, ki bi morala držati (smiselnost vhodnih podatkov, pravilna vsota ...) 
 ne bomo analizirali, saj se jih lahko po želji odstrani in ne spremenijo delovanja programa, ampak so namenjeni bolj 
 programerju samemu za neke vrste samokontrolo, sem spadajo torej vse uporabe besede `assert`.
 + Označimo z `B` število dovoljenih bitnih mask
-+ Označimo s `T` vsoto vseh kompatibilnih mask (`sum(len(l) for l in transitions.values())`)
++ Označimo s `T` število vseh kompatibilnih mask (`sum(len(l) for l in transitions)`)
 + Predpostavimo, da so vse računske operacije na celih števili neodvisne od `n` in `k`.
-+ Nadalje predpostavimo (ta predpostavka velja zgolj na omejenem območju k), da so vse bitne operacije ma bitnih maskah 
++ Nadalje predpostavimo (ta predpostavka velja zgolj na omejenem območju `k`), da so vse bitne operacije na bitnih maskah 
 konstantne (torej neodvisne od `n` in predvsem `k`), povsem formalno je sicer bitna maska dolga `k` bitov, kar sicer za 
-velike `k` ni konstantno (pravzaprav), saj je najbrž velikostnega reda `O(k/w)`, kjer je `w` širina procesorske besede 
+velike `k` ni konstantno, saj je najbrž velikostnega reda `O(k/w)`, kjer je `w` širina procesorske besede 
 v bitih, kar pa je na večini trenutnih računalnikov vsaj `32` vedno bolj pogosto pa `64`. Za povsem natančno analizo 
 bi se bilo potrebno bolj poglobiti v standard jezika, a osnova standarda za jezik python ne predpostavlja kakšne 
 posebne omejitve, saj so cela števila na splošno implementirana kot poljubno velika 
@@ -143,17 +149,18 @@ velikost besed za samo uporabo.
 
 Najprej si poglejmo, kako lahko omejimo število bitnih mask, prvo grobo oceno nam poda kar struktura v kateri jo 
 shranjujemo, torej `int`, iz česar dobimo: `B <= 2^k`, vendar pa se da maske omejiti še bolj natančno. Če si pogledamo 
-način generacije bitnih mask lepo vidimo reukurzivnost. Za začetek se pri analizi omejimo zgolj na maske, kjer ne 
-zahtevamo cikličnosti (dovoljujemo torej vse maske, kjer nobena zaporedna bit nista prižgana, lahko pa sta hkrati 
+način generacije bitnih mask lepo vidimo rekurzivnost. Za začetek se pri analizi omejimo zgolj na maske, kjer ne 
+zahtevamo cikličnosti (dovoljujemo torej vse maske, kjer nobena zaporedna bita nista prižgana, lahko pa sta hkrati 
 prižgana prvi in zadnji bit). 
 
 Označimo torej z `A(n)` število ustreznih bitnih mask dolžine natanko `n`, očitno velja 
-`B(n) < A(n)`, če je le `n > 1`. Nadalje označimo z `A(n, 0)` in `A(n, 1)` število mask dolžine `n`, ki se končajo s 
-prižganim ali ugasnjenim bitom. Očitno velja `A(n) = A(n, 0) + A(n, 1)` in `A(1) = 2`. Hitro pridemo do rekurzivne 
-formule `A(n+1, 0) = A(n,0) + A(n,1) = A(n)`, če pa hočemo masko končati z prižganim bitom, potem lahko uporabimo zgolj 
-maske, ki so za ena krajše in se končajo z neprižganim bitom: `A(n+1, 1) = A(n, 0) = A(n-1)`, če formuli združimo 
-dobimo: `A(n+1) = A(n+1, 0) + A(n+1, 1) = A(n) + A(n-1)`, v čemer zlahka prepoznamo zamaknjeno Fibonaccijevo zaporedje, 
-za katerega velja `A(1) = 2` in `A(2) = 3` in torej `A(n) = F(n+2)`
+`B(n) < A(n)`, če je le `n > 1`. Nadalje označimo z `A(n, 0)` in `A(n, 1)` število mask dolžine `n`, ki se končajo z ugasnjenim 
+ali prižganim bitom. Očitno velja `A(n) = A(n, 0) + A(n, 1)` in `A(1) = 2`. Hitro pridemo do rekurzivne 
+formule za masko, kjer je zadnji bit ugasnjen: `A(n+1, 0) = A(n,0) + A(n,1) = A(n)`, če pa hočemo masko končati s 
+prižganim bitom, potem lahko uporabimo zgolj maske, ki so za ena krajše in se končajo z neprižganim bitom: 
+`A(n+1, 1) = A(n, 0) = A(n-1)`, če formuli združimo dobimo: `A(n+1) = A(n+1, 0) + A(n+1, 1) = A(n) + A(n-1)`, v čemer 
+zlahka prepoznamo zamaknjeno Fibonaccijevo zaporedje, za katerega velja `A(1) = 2` in `A(2) = 3` in torej 
+`A(n) = F(n+2)`
 
 Ker vemo, da `B(n) < A(n)` (saj v `A` dovoljujemo nekatere maske, ki jih v `B` ne), lahko z uporabo znanih dejstev o 
 rasti fibbonaccijevih števil torej lahko omejimo `B` z `O(phi^k)`, kar je gleda na `O(2^k)` znatna izboljšava.
@@ -164,13 +171,13 @@ Druga pomembna stvar, ki jo je glede bitnih mask potrebno analizirati je števil
 zanima nas, kako v odvisnosti od `k` raste število kompatibilnih mask (Če moramo za vsako masko posebej, in za vsako 
 tej maski kompatibilno masko opraviti konstantno dela, kako lahko to izrazimo kot funkcijo k).
 
-Ta analiza nas zanima, da lahko omejimo tako časovno kot prostorsko zahtevnost funkcije make_transitions. Časovna 
+Ta analiza nas zanima, da lahko omejimo tako časovno kot prostorsko zahtevnost funkcije `make_transitions`. Časovna 
 zahtevnost je očitno `O(B^2)`, saj moramo za vsako masko izločiti njej nekompatibilne (za `B` mask `B` preverjanj.). 
 Ravno tu uporabimo predpostavko o konstantnih bitnih operacijah, saj bi v nasprotnem primeru bila časovna zahtevnost 
 posameznega preverjanja `O(k)`, kar bi skupno časovno zahtevnost spremenilo na `O(k*B^2)`, v realnosti pa so primerjave ali 
 sta dve bitni maski kompatibilni konstantne in je torej časovna zahtevnost metode res `O(B^2)`
 
-Poleg časovne zahtevnosti pa nas zanima tudi prostorska zahtevnost te metode. Da jo lažje anlizirajmo moramo pogledati, 
+Poleg časovne zahtevnosti pa nas zanima tudi prostorska zahtevnost te metode. Da jo lažje anliziramo moramo pogledati, 
 iz česa je sestavljen vrnjeni senzam. Za vsako masko vsebuje vse maske, ki so z njo kompatibilne. Za par mask tako 
 preveri, če skupaj tvorita neodvisno množico v nekem podgrafu. Pomemben pa je ta podgraf, saj je pravzaprav produkt 
 polnega grafa velikost `2` in cikla dolžine `k`. Če si ključ predstavljamo kot del množice, ki v produktu leži na 
@@ -185,8 +192,7 @@ kot `Y(k) = (1 + sq2)^k + (-1)^k + (1 - sq2)^k` in preprosto omejimo z prostorsk
 + `are_compatible`: O tem je bilo povedano že dovolj. Kljub odvisnosti od `k` predpostavimo, da je operacija konstantna 
 za vse smiselne vhodne podatke.
 + `generate_bitmasks_with_multiplication`: V `j` tem koraku opravimo `A(j-2)` korakov. Torej skupaj opravimo 
-`A(0) + A(1) + ... + A(n-1)`, kar pa nas privede do vsote fibonaccijevih števil. Pomagamo si z 
-[http://mathforum.org/library/drmath/view/52707.html](http://mathforum.org/library/drmath/view/52707.html), in časovno 
+`A(0) + A(1) + ... + A(n-1)`, kar pa nas privede do vsote fibonaccijevih števil tako časovno 
 zahtevnost spet omejimo s pomočjo formule za rast, torej `O(phi^k)`, kjer je `k` dolžina cikla.
 + `generate_product_with_bitmask`: Funkcija za posamezen bit v maski preveri, ali je prižgan in če je, v seznam doda 
 ustrezen par. Časovna zahtevnost: `O(k)` (saj preverimo vsak bit posebej), prostorska zahtevnost: `O(k)`, dolžina 
