@@ -42,13 +42,51 @@ Skupna časovna zahtevnost : `O(k * 2^k) + O((A^2)^k) + O(n * B^k) + O(n * k) = 
 Skupna prostorska zahtevnost: `O(k * A^k) + O(B^k) + O(n * B^k) + O(n * k) = O(n * B^k)`
 
 ## Primerjava časov izvajanja algoritma
-Najprej bomo algoritem testirali na naključno generiranih drevesih s težami vozlišč med `0` in `100`. Pri prvem testu bomo preverjali odvisnost od števila vozlišč v drevesu `n`. Omejili se bomo na nekaj izbranih velikosti cikla `k`, `n` pa bomo povečevali. 
+Algoritem bomo testirali na naključno generiranih drevesih s težami vozlišč med `0` in `100`. Pri prvem testu bomo preverjali odvisnost od števila vozlišč v drevesu `n`. Omejili se bomo na nekaj izbranih velikosti cikla `k`, `n` pa bomo povečevali. 
 
-|`k` \ `n`  |100 |200|300|400|500|1000|2000|3000|4000|5000|10000|
+|`k` \ `n`  |100|200|300|400|500|1000|2000|3000|4000|5000|10000|
 |---|---|---|---|---|---|---|---|---|---|---|---|
 |4   |0.02  |0.02   |0.02  |0.03  |0.03  |0.08  |0.17 |0.25 |0.33 |0.42 |0.86|
 |8   |0.13  |0.25   |0.36  |0.50 |0.63  |1.22 |2.49|3.72|5.03 |6.19|12.39|
 |12  |3.52  |6.95  |10.36  |13.92  |17.30   |34.72  |69.19 |104.00 |138.13 |173.88|347.22|
+
+Sedaj pa bomo preverjali še odvisnost od dolžine cikla `k`.
+
+|`n` \ `k`  |10|11|12|13|14|15|16|17|18|19|20|
+|---|---|---|---|---|---|---|---|---|---|---|---|
+|100   |0.02  |0.02   |0.02  |0.03  |0.03  |0.08  |0.17 |0.25 |0.33 |0.42 |0.86|
+|200   |0.13  |0.25   |0.36  |0.50 |0.63  |1.22 |2.49|3.72|5.03 |6.19|12.39|
+|300  |3.52  |6.95  |10.36  |13.92  |17.30   |34.72  |69.19 |104.00 |138.13 |173.88|347.22|
+
+Oglejmo si še odvisnost od oblike drevesa. Algoritem bomo testirali na treh različnih oblikah dreves: poti, razvejanem drevesu in naključnem drevesu.
+
+Pot
+
+|`k` \ `n`  |250|500|750|1000|
+|---|---|---|---|---|
+|6   |0.08  |0.14  |0.23 |0.30  |
+|9   |0.72 |1.48  |2.23 |3.02 |
+|12  |9.25  |18.81 |27.88  |37.47|
+|15  |127.05 |257.72  |383.31  |513.70  |
+
+Razvejano drevo
+
+|`k` \ `n`  |250|500|750|1000|
+|---|---|---|---|---|
+|6   |0.06 |0.14  |0.22 |0.28 |
+|9   |0.65  |1.33  |2.02  |2.73 |
+|12  |8.45 |18.28 |28.55 |38.75 |
+|15  |134.44  |279.33 |429.11  |574.75  |
+
+Naključno drevo
+
+|`k` \ `n`  |250|500|750|1000|
+|---|---|---|---|---|
+|6   |0.06 |0.14  |0.20 |0.28 |
+|9   |0.69  |1.39   |2.06 |2.77|
+|12  |8.75 |17.356  |26.14 |34.94 |
+|15  |118.27 |236.19 |355.77 |476.34 |
+
 
 
 
