@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+
+
 def maxCycleTreeIndependentSet(T, w):
     """
     Najtežja neodvisna množica
@@ -19,4 +21,38 @@ def maxCycleTreeIndependentSet(T, w):
     assert k >= 2, "k mora biti vsaj 2!"
     if n == 0:
         return (0, [])
+
     raise NotImplementedError("Naredi sam!")
+
+
+    memo = {}
+
+
+
+    def rekurzija(drevo, utezi, oce, ded = None):
+
+        sinovi = nasledniki(oce, ded)
+
+        for sin in sinovi:
+            if sin in memo:
+                continue
+
+            elif sinJeList(sin, oce):
+                pass
+
+            else:
+                memo[sin] = rekurzija(drevo, utezi, sin, oce)
+
+
+
+
+
+    def nasledniki(oce, ded):
+        pass
+
+
+    def sinJeList(sin, oce):
+        pass
+
+    def kombinacije(oce):
+        pass
