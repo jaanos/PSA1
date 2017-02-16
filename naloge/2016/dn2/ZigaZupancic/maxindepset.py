@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from .dfs import DFS
+from .queue import Queue
+
 def maxCycleTreeIndependentSet(T, w):
     """
     Najtežja neodvisna množica
@@ -107,14 +109,15 @@ def maxCycleTreeIndependentSet(T, w):
         if weight > maxWeight:
             maxWeight = weight
             rootCycle = subset
-    cycles = [None] * n
-    cycles[0] = rootCycle
+    cycles = Queue()
+    cycles.enqueue((0, rootCycle))
     vertices = []
     # Preberemo katero podmnozico cikla smo uporabili v vsakem vozliscu drevesa
-    for v in range(0, n):
-        for u, cycle in vozlisce_max[v][cycles[v]][1]:
-            cycles[u] = cycle
-        binary = bin(cycles[v])[2:]
+    while len(cycles) > 0:
+        v, c = cycles.dequeue()
+        for u, cycle in vozlisce_max[v][c][1]:
+            cycles.enqueue((u, cycle))
+        binary = bin(c)[2:]
         if len(binary) < k:
             binary = '0' * (k - len(binary)) + binary
         for i, b in enumerate(binary):
