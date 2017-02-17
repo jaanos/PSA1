@@ -35,7 +35,7 @@ Skupna zahtevnost DFS-ja je seštevek teh zahtevnosti po vseh vozliščih. Pri t
 Prostorska zahtevnost za celoten DFS: `O(n) + O(A^k) + O(n * A^k) = O(n * A^k)`  
 
 ### Drugi obhod drevesa z DFS-jem
-Najprej ustvarimo seznam izbranih podmnožic - prostorska in časovna zahtevnost `O(n)`. Sedaj kot previsit funkcijo kličemo _dodaj_vozlisca_. Vsak klic funkcije popravi vrednost v seznamu izbranih podmnožic in seznamu optimalno doda največ `k` vozlišč. Torej ima časovno in prostorsko zahtevnost `O(k)`. 
+Najprej ustvarimo seznam izbranih podmnožic - prostorska in časovna zahtevnost `O(n)`. Sedaj kot previsit funkcijo kličemo _dodaj_vozlisca_. Vsak klic funkcije popravi vrednost v seznamu izbranih podmnožic in seznamu _optimalno_ doda največ `k` vozlišč. Torej ima časovno in prostorsko zahtevnost `O(k)`. 
 
 Časovna zahtevnost za celoten DFS: `O(n * k)`  
 Prostorska zahtevnost za celoten DFS: `O(n * k)`
