@@ -23,7 +23,7 @@ na drugo mesto postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnost
 Dobimo torej rekurzivno formulo
 `V(k) = V(k-1) + V(k-2)`
 z začetnima vrednostma
-`V(1) = 2 in V(2) = 3,`
+`V(1) = 2 in V(2) = 3`,
 katere rešitev je:
 `V(k) = ((1 + sqrt(5))/2)^k`
 
@@ -96,6 +96,23 @@ O(1)
 #### Prostorska zahtevnost funkcije nothing(u)
 O(1)
 
+### postvisitSedem
+
+#### Opis funkcije postvisitSedem(u,v):
+za vozlišče u poiščemo za vsak vzorec najboljšo izbiro vzorcev na sinovih od vozlišča u, da dobimo čimvečjo vsoto.
+
+#### Časovna zahtevnost funkcije postivsitSedem(u, v):
+V tej funkciji se sprehodimo čez prvo zanko, ki opravi V(k) klicev, v katerih izračunamo vsoto na tem vzorcu in tem
+vozlišču (kar nam vzame O(1) časa) ter se sprehodimo čez vse sinove vozlišča u,
+nato pa še čez vse indekse združljivih vzorce (ki so navzgor omejeni s številom vzorcev V(k)). Primerjave znotraj
+zadnje zanke porabijo O(1) časa.
+Skupna časovna zahtevnost je torej enaka `O(V(k)*(stevilo sinov = konstanta)*V(k)) = O(V(k)^(2))`.
+
+#### Prostorska zahtevnost funkcije postvisitSedem(u, v):
+V vmesnih korakih si shranjujemo vrednost vsota, ki nam zasede O(1) prostora, vzorec, ki nam zasede O(k) prostora,
+maximum, ki nam zasede O(1) prostora, seznam `sezna`, ki nam zasede O(n) prostora.
+Skupna prostorska zahtevnost funkcije postvisitSedem(u, v) je torej enaka O(1) + O(k) + O(1) + O(n) = O(max(n,k)).
+
 ### DFS(G, roots = None, previsit = nothing, postvisit = nothing)
 
 #### Opis funkcije DFS(G, roots = None, previsit = nothing, postvisit = nothing)
@@ -113,15 +130,6 @@ O(m) + O(n) klicev funkcij previsit in postvisit
 #### Prostorska zahtevnost funkcije DFS(G, roots = None, previsit = nothing, postvisit = nothing)
 TODO
 
-## število vzorcev cikla dolžine k
-če na začetek postavimo 0, imamo za naslednjih k-1 mest V(k-1) možnost, če na začetek postavimo 1, moramo na drugo mesto
-postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnosti.
-Dobimo torej rekurzivno formulo
-V(k) = V(k-1) + V(k-2)
-z začetnima vrednostma
-V(1) = 2 in V(2) = 3,
-katere rešitev je:
-V(k) = ((1 + sqrt(5))/2)^k
 
 
 Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
