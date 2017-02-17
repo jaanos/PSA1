@@ -129,8 +129,6 @@ def maxCycleTreeIndependentSet(T, w):
         return True
 
 
-    Janez = "haskelHeker"
-
     #za vse možne cikle na prvem vozlišču v drevesu izračunamo vrednosti in izberemo najboljšo
     #Tnekaj = Tkombinacije = O(2^k)
     haha = (minusNeskoncno, None)
@@ -141,39 +139,39 @@ def maxCycleTreeIndependentSet(T, w):
             haha = ha
             najKoren = kombina
 
-    return memo[najKoren]
+    #return memo[najKoren]
 
-    # #za vsako vozlišče v drevesu najdemo cikel, ki pripada vozlišču pri največji teži celotnega drevesa
-    # #najKoren =(mesto v drevesu, cikel)
-    #
-    # def VozliscaSCikli():
-    #     """vrne slovar s cikli za vsako vozlišče pri največji teži drevesa"""
-    #     vozlisca = {}
-    #     neobdelana = [najKoren]
-    #
-    #     while len(neobdelana)> 0:
-    #         tre = neobdelana.pop()  #tre = (mesto, cikel)
-    #         vozlisca[tre[0]] = tre[1]
-    #         sinovi = memo[tre][1]   #memo[tre] = (teža, [sinovi=(mesto cikel)])
-    #         if sinovi != None:
-    #             neobdelana += sinovi
-    #
-    #     return vozlisca
-    #
-    #
-    # def vrednostVozliscaVKartezicnem():
-    #     """vrne vrednost in seznam vozlisc v kartezicnem produktu"""
-    #     vozcikli = VozliscaSCikli()
-    #     tez = memo[najKoren][0]
-    #     vozKartezicnem = []
-    #     for vozlisce in vozcikli:
-    #         (pozicija,cikel) = vozlisce
-    #         for i in range(k):
-    #             if cikel%2 == 1:
-    #                 vozKartezicnem += [(pozicija, i)]
-    #             cikel = cikel //2
-    #
-    #     return (tez, vozKartezicnem)
-    #
-    #
-    # return vrednostVozliscaVKartezicnem()
+    #za vsako vozlišče v drevesu najdemo cikel, ki pripada vozlišču pri največji teži celotnega drevesa
+    #najKoren =(mesto v drevesu, cikel)
+
+    def VozliscaSCikli():
+        """vrne slovar s cikli za vsako vozlišče pri največji teži drevesa"""
+        vozlisca = {}
+        neobdelana = [najKoren]
+
+        while len(neobdelana)> 0:
+            tre = neobdelana.pop()
+            vozlisca[tre[0]] = tre[1]
+            sinovi = memo[tre][1]
+            if sinovi != None:
+                neobdelana += sinovi
+
+        return vozlisca
+
+
+    def vrednostVozliscaVKartezicnem():
+        """vrne vrednost in seznam vozlisc v kartezicnem produktu"""
+        vozcikli = VozliscaSCikli()
+        tez = memo[najKoren][0]
+        vozKartezicnem = []
+        for j in range(n):
+            cikel = vozcikli[j]
+            for i in range(k):
+                if cikel%2 == 1:
+                    vozKartezicnem += [(i, j)]
+                cikel = cikel //2
+
+        return (tez, vozKartezicnem)
+
+
+    return vrednostVozliscaVKartezicnem()
