@@ -92,7 +92,10 @@ Za vsako zaporedje namrec lahko shranimo rezultat za vsako povezavo, ki jo imamo
 Slovar ki ga uporabimo za maximiziranje v rekurziji: `O(T^2k)`
 Za vsako mozno binarno zaporedje imamao namrec slovar, ki ima za vrednosti vse mozne sinove.
 
-Skupna prostorska zahtevnost je torej: `O((n+m+T)*T^k)`
+Skupna prostorska zahtevnost je torej: 
+```
+O((n+m+T)*T^k)
+```
 
 ## Tablea časov izvajanja programa pri razlicnih vhoodnih podatkih
  
