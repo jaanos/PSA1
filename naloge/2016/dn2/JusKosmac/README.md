@@ -3,7 +3,7 @@
 *Juš Kosmač*
 
 ## Opis algoritma
-Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Ustrezajo le tisti nizi, ki nimajo dveh zaporednih enic. Vse možne podmnožice shranimo v slovar. Prav tako si shranimo katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozlišč v drevesu in bo unija še vedno neodvisna). To so ravno vsi pari nizov, ki nimajo podvojenih enic na istem mestu. Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših. Za vsako vozlišče in vsako možno izbiro podmnožice na pripadajočem ciklu izračunamo maksimalno težo poddrevesa, ki ima dano vozlišče za koren in se dejanska podmnožica cikla pri korenu ujema z izbrano podmnožico. Pri tem uporabljamo že izračunane vrednosti za otroke vozlišča. Shranjujemo si tudi katero podmnožico smo dejansko izbrali. Optimalno rešitev preberemo iz korena drevesa. Naredimo še en obhod drevesa z DFS-jem in rekonstruiramo celotno množico izbranih vozlišč.   
+Podmnožice na ciklu predstavimo kot nize ničel in enic oziroma kot dvojiške zapise števil manjših od `2^k`. Enice ustrezajo izbranim vozliščem, ničle pa tistim, ki jih nismo izbrali. Možni so le nizi, ki nimajo dveh zaporednih enic (torej nismo izbrali sosednih vozlišč na ciklu). Vse možne podmnožice shranimo v slovar. Prav tako si shranimo, katere podmnožice se ujemajo med sabo (to pomeni, da lahko ti dve množici uporabimo pri ciklih dveh sosednih vozlišč v drevesu in bo unija še vedno neodvisna). To so ravno vsi pari nizov, ki nimajo podvojenih enic na istem mestu. Nato pa z DFS-jem pregledamo celotno drevo - vemo, da se bo funkcija postvisit klicala najprej na otrocih in šele nato na starših. Za vsako vozlišče drevesa in vsako možno izbiro podmnožice na pripadajočem ciklu izračunamo maksimalno težo poddrevesa, ki ima dano vozlišče za koren in se dejanska podmnožica cikla pri korenu ujema z izbrano podmnožico. Pri tem uporabljamo že izračunane vrednosti za otroke vozlišča. Shranjujemo si teže in tudi katero podmnožico smo dejansko izbrali. Optimalno rešitev preberemo pri korenu drevesa. Naredimo še en obhod drevesa z DFS-jem in rekonstruiramo celotno množico izbranih vozlišč.   
 Podrobnejši komentarji o delovanju algoritma so v datoteki z algoritmom. 
 
 ## Časovna in prostorska zahtevnost
@@ -54,9 +54,9 @@ Sedaj pa bomo preverjali še odvisnost od dolžine cikla `k`.
 
 |`n` \ `k`  |10|11|12|13|14|15|16|17|18|19|20|
 |---|---|---|---|---|---|---|---|---|---|---|---|
-|100   |0.64  |1.48   |3.50 |8.30  |19.84  |48.13 |117.48|287.38 |691.20 |1707.73 |4239.50|
-|200   |1.27  |2.94  |6.94  |16.63|39.39  |95.19 |234.47|568.94|1382.05 |3424.84|8520.56|
-|300  |1.89  |4.41  |40.45  |24.55 |58.91  |142.02 |347.08 |850.58 |2089.97 |5070.50|12570.63|
+|100   |0.64  |1.48   |3.50 |8.30  |19.84  |48.13 |117.48|287.38 |691.20 |1707.73 |4239.5|
+|200   |1.27  |2.94  |6.94  |16.63|39.39  |95.19 |234.47|568.94|1382.05 |3424.84|8520.6|
+|300  |1.89  |4.41  |40.45  |24.55 |58.91  |142.02 |347.08 |850.58 |2089.97 |5070.50|12570.6|
 
 Povprečno razmerje
 
