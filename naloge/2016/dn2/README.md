@@ -1,4 +1,4 @@
-# Poročilo
+﻿# Poročilo
 
 *Nina Slivnik*
 
@@ -42,9 +42,9 @@ ter za binarno kopico:
 | k = 10 | 2.171875 | 4.390625 | 6.625    | 9.125    | 11.4375  | 13.421875 | 15.65625 | 17.890625 | 20.21875 |
 
 ![Graf pot]
-(https://SlivnikN.github.com/images/yaktocat.png)
+(https://github.com/SlivnikN/PSA1/blob/master/naloge/2016/dn2/pot.jpg)
 ![Graf binarna kopica]
-(https://SlivnikN.github.com/images/yaktocat.png)
+(https://github.com/SlivnikN/PSA1/blob/master/naloge/2016/dn2/binarna_kopica.jpg)
 
 Na grafih rdeča predstavlja *k = 10*, modra *k = 5* in zelena *k = 2*.
 Vidimo, da čas za konstanten *k* linearno narašča in da algoritem bolje deluje za binarne kopice kot za pot (največji čas za pot je prbl. 25, za binarno kopico pa prbl. 20).
