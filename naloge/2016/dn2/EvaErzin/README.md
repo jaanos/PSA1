@@ -55,8 +55,11 @@ Na koncu moramo še sestaviti seznam vseh vozlišč v največji neodvisni množi
 
 Čase sem primerjala na binarnih drevesih različnih globin za fiksne dolžine ciklov.
 Binarno drevo globine *m* ima *2^m - 1* elementov.
+
 n... število elementov v drevesu
+
 m... globina drevesa
+
 k... dolžina cikla
 
 |(m, n)\k|5|10|15|
