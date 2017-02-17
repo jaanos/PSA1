@@ -6,7 +6,7 @@ Algoritem vrne tisto množico nepovezanih vozlišč, ki ima največjo "ceno" ter
 
 Algoritem poteka na podoben način kot algoritem "sahovnica" pri 11 sklopu vaj. Na vsakem vozlišču drevesa T izračunamo maximalno "težko" neodvisno množico vozlišč poddrevesa s korenom v tem vozlišču. In to za vsako možno neodvisen možno podmnožico cikla. Ko tako izračunamo maximalne vrednosti v korenu drevesa. Zdaj izmed teh izberemo maximalno, ki jo vrnemo skupaj z seznamom vozlišč, ki prispevajo k njej.
 
-Poglejmo sedaj dele kode posebej.
+Poglejmo sedaj dele kode posebej. _Bolj podrobne komentarje pa se da najti v kodi._
 
 ## Vse možne neodvisne množice vozlišč cikla Ck:
 Na vsakem vozlišči drevesa T se nahaja 1 cikelj dolžine k. Zanimajo nas vse možne neodvisne podmnožice vozlišč, in kakšni sta lahko te množici na sosednjih vozliščih drevesa, da bo njuna unija neodvisna množica. Po definiciji kartezičnega produkta grafov. Bo to takrat ko se podmnožici ne bosta sekali (ne bosta vsebovali vozlišč na istih mestih).
@@ -39,11 +39,18 @@ Na vsakem vozlišču z funkcijo zapeljemo čez vse sosede danega vozlišča tore
 Na vsakem vozlišču se z postvisit funkcijo zapeljemo čez celoten slovar sl_kompat torej je njena časovna zahtevnost *O(L(k)^2)*.
 
 Po poznavanju DFS algoritma, ki smo ga vzeli na predavanjih in na vajah vemo da bo potem moj DFS algoritem porabil *O(E(T) + nO(max(T) + L(k)^2))*
+
 Za Drevo potomcev bomo porabili še za en T prostora.
-Pri dinamičnem programiranju pa bomo porabili *n * L(k)* prostora za tabelo maxIndependSet. To bi se dalo izboljšati če bi gledali samo po nivojih drevesa T in bi si vedno zapomnili le do zadnjega celega nivoja.
+Pri dinamičnem programiranju pa bomo porabili *n * L(k)* prostora za tabelo "maxIndependSet". To bi se dalo izboljšati če bi gledali samo po nivojih drevesa T in bi si vedno zapomnili le do zadnjega celega nivoja.
 
 ## Skupna časovna in prostorska zahtevnost
 Označevanje vseh neodvisnih podmnožic vozlišč cikla k porabi *O(k^4) + O(L(k)^2)* ali pa *O(1)*. Za DFS algoritem pa porabimo 
 *O(E(T) + nO(max(T) + L(k)^2))* Vsota tega je:
 
-_**O(k^4) + O(L(k)^2) + O(E(T) + nO(max(T) + L(k)^2))**_ = 
+_**O(k^4) + O(L(k)^2) + O(E(T) + nO(max(T) + L(k)^2))**_ = _**O[(n+1) * L(k)^2]_** Pri čemer vemo da je *L(k)* *fi*^k +(1-*fi*)^k, kjer je *fi* zlati rez.
+
+Torej je **T(n,k) = O[n * L(k)^2] = O[n * *fi*^2k]** 
+
+Prostka zahtevnost pa je *O(n * m)* za "DFSpotomci" (m je število povezav v T), *O(L(k)^2)* za "sl_kompat", *O(L(k))* za "legenda", in *O(n * L(k))* za "maxIndependSet"
+
+Torej je **V(n,k) = O[(n + L(k)) * L(k)] = O[(n + *fi*^k) * *fi*^k]
