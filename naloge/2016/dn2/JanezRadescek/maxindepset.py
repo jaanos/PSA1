@@ -4,8 +4,6 @@
 minusNeskoncno = float("-inf")
 
 
-
-
 def maxCycleTreeIndependentSet(T, w):
     """
     Najtežja neodvisna množica
@@ -29,13 +27,16 @@ def maxCycleTreeIndependentSet(T, w):
     #raise NotImplementedError("Naredi sam!")
 
 
-    memo = {}   #memo[sin] = (teza, cikli sina in njegovih pozomcev )
 
-    #oce ali pa sin,ded = (položaj, vključena vozlišča v ciklu )
+    #slovar kamor si bomo shranjevali rezultate za podprobleme
+    memo = {}
 
+    #memo[sin] = (teza podrevesa, ki se začne v sinu, sinovi pri katerih smo dobili težo)
+    #oce, sin, ded, sidro so oblike (položaj vdrevesu, izbran cikelj )
+    #oče = sidro
 
     def rekurzija(sidro, ded):
-
+        """za izbrano sidro rekurzivno najdemo vozlišča da bo teža največja. ded potrebujemo da se ne vračamo po drevesu nazaj"""
         sinovi2D = nasledniki(sidro, ded)
 
         for sinDrevo in sinovi2D:
@@ -66,10 +67,12 @@ def maxCycleTreeIndependentSet(T, w):
         return (vsota, cikliPotomcev)
 
     def ustavitev(sin):
+        """če je sin list"""
         memo[sin] = (teza(sin), None)
         return (teza(sin), None)
 
     def teza(sidro):
+        """izračuna težo izbranih vozliš vozlišč """
         (polozaj, cikel) = sidro
         vsota = 0
         for i in range(k):
@@ -80,6 +83,7 @@ def maxCycleTreeIndependentSet(T, w):
         return vsota
 
     def nasledniki(sidro, ded):
+        """vrne tabelo tabel(pogrupirani po položajih v drevesu)"""
         nasled = []
         for sinDrevo in T[sidro[0]]:
             if sinDrevo == ded[0]:
@@ -89,9 +93,11 @@ def maxCycleTreeIndependentSet(T, w):
         return nasled
 
     def sinJeList(sin):
+        """"preveri če je sin list"""
         return len(T[sin[0]]) == 1
 
     def kombinacije(sinDrevo, sidro):
+        """vrne vse možne kombinacije ciklov za sinDrevo, ki se prilegajo ciklu od sidra"""
         moznih = 2**k
         kombi = []
         for cikel in range(moznih):
@@ -100,6 +106,7 @@ def maxCycleTreeIndependentSet(T, w):
         return  kombi
 
     def preveri(sumljivCikel, sidroCikel):
+        """preveri izbrana cikla(za sidroCikel privzamemo da je vredu)"""
         if sumljivCikel & sidroCikel != 0:
             return False
 
@@ -119,15 +126,47 @@ def maxCycleTreeIndependentSet(T, w):
 
     Janez = "haskelHeker"
 
+    #za vse možne cikle na prvem vozlišču v drevesu izračunamo vrednosti in izberemo najboljšo
     haha = (minusNeskoncno, None)
+    najKoren = None
     for kombina in kombinacije(0, (-10,0)):
         ha =  rekurzija(kombina, (-10,0))
         if ha[0] > haha[0]:
             haha = ha
-
-            
-
+            najKoren = kombina
 
 
-
-    return haha
+    # #za vsako vozlišče v drevesu najdemo cikel, ki pripada vozlišču pri največji teži celotnega drevesa
+    # #najKoren =(mesto v drevesu, cikel)
+    #
+    # def VozliscaSCikli():
+    #     """vrne slovar s cikli za vsako vozlišče pri največji teži drevesa"""
+    #     vozlisca = {}
+    #     neobdelana = [najKoren]
+    #
+    #     while len(neobdelana)> 0:
+    #         tre = neobdelana.pop()  #tre = (mesto, cikel)
+    #         vozlisca[tre[0]] = tre[1]
+    #         sinovi = memo[tre][1]   #memo[tre] = (teža, [sinovi=(mesto cikel)])
+    #         if sinovi != None:
+    #             neobdelana += sinovi
+    #
+    #     return vozlisca
+    #
+    #
+    # def vrednostVozliscaVKartezicnem():
+    #     """vrne vrednost in seznam vozlisc v kartezicnem produktu"""
+    #     vozcikli = VozliscaSCikli()
+    #     tez = memo[najKoren][0]
+    #     vozKartezicnem = []
+    #     for vozlisce in vozcikli:
+    #         (pozicija,cikel) = vozlisce
+    #         for i in range(k):
+    #             if cikel%2 == 1:
+    #                 vozKartezicnem += [(pozicija, i)]
+    #             cikel = cikel //2
+    #
+    #     return (tez, vozKartezicnem)
+    #
+    #
+    # return vrednostVozliscaVKartezicnem()
