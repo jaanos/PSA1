@@ -70,7 +70,7 @@ Iz grafa je spet takoj očitno, da je odvisnost od `k` pri fiksnem `n` eksponent
 |---|---|---|---|---|---|---|---|---|---|
 |2.32 |2.37  |2.37 |2.39  |2.42 |2.44 |2.43|2.45 |2.46 |2.48|
 
-Iz ocene časovne zahtevnosti `O(n * B^k + (A^2)^k)` bi moralo biti razmerje približno `(n*B^(k+1) + (A^2)^(k+1))/(n*B^k + (A^2)^k)`. Ko je `k` majhen v primerjavi z `n`, v vsoti prevladuje člen `n * B^k`. Torej bi moralo biti razmerje približno `B = 2.42`. Ko je se `k` povečuje, vse bolj prevlada člen `(A^2)^k`. Razmerja zato naraščajo in se bližajo `A^2 = 2.62`. Pojasnimo še, zakaj so prva razmerja še manjša od `2.42`. V časovni zahtevnosti se pojavi tudi člen `n * k`, ki pri velikih `k` nima vpliva. Pri zelo majhnih `k` in dokaj velikih `n` pa nam še zmanjša pričakovano razmerje. 
+Iz ocene časovne zahtevnosti `O(n * B^k + (A^2)^k)` bi moralo biti razmerje približno `(n*B^(k+1) + (A^2)^(k+1))/(n*B^k + (A^2)^k)`. Ko je `k` majhen v primerjavi z `n`, v vsoti prevladuje člen `n * B^k`. Torej bi moralo biti razmerje približno `B = 2.42`. Ko se `k` povečuje, vse bolj prevlada člen `(A^2)^k`. Razmerja zato naraščajo in se bližajo `A^2 = 2.62`. Pojasnimo še, zakaj so prva razmerja še manjša od `2.42`. V časovni zahtevnosti se pojavi tudi člen `n * k`, ki pri velikih `k` nima vpliva. Pri zelo majhnih `k` in dokaj velikih `n` pa nam še zmanjša pričakovano razmerje. 
 
 Oglejmo si še odvisnost od oblike drevesa. Algoritem bomo testirali na treh različnih oblikah dreves: poti, razvejanem drevesu (drevo globine 1) in naključnem drevesu.
 
