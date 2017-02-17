@@ -26,5 +26,4 @@ n| L(n)
 
 ### Dokažimo da je vseh možnih neodvisnih podmnožic vozlišč cikla dolžine k ravno L(k)
 Prvo preverimo ujemanje rekurzivne formule:
-
 Podmnožice ahko
