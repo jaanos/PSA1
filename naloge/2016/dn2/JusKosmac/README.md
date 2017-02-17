@@ -50,6 +50,8 @@ Algoritem bomo testirali na naključno generiranih drevesih s težami vozlišč 
 |8   |0.13  |0.25   |0.36  |0.50 |0.63  |1.22 |2.49|3.72|5.03 |6.19|12.39|
 |12  |3.52  |6.95  |10.36  |13.92  |17.30   |34.72  |69.19 |104.00 |138.13 |173.88|347.22|
 
+![slika2](slika2.png)
+
 Iz grafa se lepo vidi, da je časovna odvisnost od `n` pri fiksnem `k` linearna. Opazimo tudi, da je naklon premice pri `k = 12` občutno bolj strm kot pri ostalih dveh. Iz ocenjene časovne zahtevnosti se vidu, da je sorazmeren z `B^k`.
 
 Sedaj pa bomo preverjali še odvisnost od dolžine cikla `k`.
@@ -59,6 +61,8 @@ Sedaj pa bomo preverjali še odvisnost od dolžine cikla `k`.
 |100   |0.64  |1.48   |3.50 |8.30  |19.84  |48.13 |117.48|287.38 |691.2 |1707.7 |4239.5|
 |200   |1.27  |2.94  |6.94  |16.63|39.39  |95.19 |234.47|568.94|1382.1 |3424.8|8520.6|
 |300  |1.89  |4.41  |40.45  |24.55 |58.91  |142.02 |347.08 |850.58 |2090.0 |5070.5|12570.6|
+
+![slika](slika.png)
 
 Iz grafa je spet takoj očitno, da je odvisnost od `k` pri fiksnem `n` eksponentna. Oglejmo si povprečno razmerje med dvema zaporednima časoma izvajanja algoritma (pri `k` in `k+1`).
 
