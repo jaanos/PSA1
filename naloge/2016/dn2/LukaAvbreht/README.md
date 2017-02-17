@@ -112,3 +112,15 @@ Globina drevesa\dolzina cikla |  3  |  5  |  7  |  9  |  12  |  15   |
      8 |   0.0185  |      0.0610  |      0.3618  |      2.8603  |     37.5308  |    636.8147  |  
      9 |   0.0360  |      0.1306  |      0.7645  |      5.0017  |     80.9928  |   1289.9691  |  
      10 |   0.0915  |      0.2942  |      1.7348  |     13.9997  |    192.9435  |  //  |
+     
+## Grafični prikaz
+
+Spodnji graf prikazuje cas izracuna najtezje mnozice v odvisnost od stevila vozlisc v drevesu pri fiksni dolzini cikla. Opazimo lahko da je ta odvisnost linearna
+
+![Graf1](graf1.png)  
+
+
+Spodnji graf prikazuje čas potrerben za izracun najtezje mnozice v odvisnosti od dolzine cikla, pri fiksnem drevesu 
+(fiksno stevilo vozlisc) 
+
+![Graf2](graf2.png)  
