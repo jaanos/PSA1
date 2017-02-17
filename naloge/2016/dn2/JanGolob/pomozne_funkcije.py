@@ -12,25 +12,34 @@ def vsiNeodPodCik (k):
                 temp |= {0,k-2}
             else:
                 temp |= {x+1, x-1}
-        return True
+        return True #to zahteva O(len(s)) operacij
 
     lukas = [ {i} for i in range(k)]
     start = 0
     stop = k
-
+    # Vsaka for zanka O(k) operacij
     for dolzina in range(1,k//2):
         for i in range(start,stop-1):
             for m in range(i+1,stop):
-                if NeodPodCik(lukas[i] | lukas[m]):
+                if NeodPodCik(lukas[i] | lukas[m]): #O(k//2) -> O(k)
                     lukas.append(lukas[i] | lukas[m])
             start, stop = stop, len(lukas)
 
-    return [set()] + lukas
+    return [set()] + lukas #Torej skupaj
 
 def potencialni_rekurzivci(k):
+    #Ta funkcija označi vsako neodvisno podmnožico(vrne kot drugi slovar) in naredi slovar kompatibilnosti(prvi slovar)
     lukas = vsiNeodPodCik(k)
     L = len(lukas) #oziroma k-to Lukasovo število
+    #pri prvem slovarju se "zapeljemo" čez seznam lukas in pri vsakem elementi le-tega seznamaše enkrat. Pri drugem pa samo 1
+    #skupaj porabimo L(k)^2 + L(k) operazij -> to je O(L(k)^2)
     return  ({i:[j for j in range(L) if lukas[i].isdisjoint(lukas[j])] for i in range(L)}, {i:list(lukas[i])for i in range(L)})
+
+memo={} #Ker je izhod za k enak, lahko močno skrajšamo časovno zahtevnost pri računanju večih maxindepset
+def memo_potencialni_rekurzivci(k):
+    if k not in memo:
+        memo[k] = potencialni_rekurzivci(k)
+    return memo[k]
 
 def nothing(u, v = None):
     """

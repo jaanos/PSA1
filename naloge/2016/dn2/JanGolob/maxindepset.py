@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .pomozne_funkcije import potencialni_rekurzivci, DFS, nothing
+from .pomozne_funkcije import memo_potencialni_rekurzivci, DFS, nothing
 
 def maxCycleTreeIndependentSet(T, w):
     """
@@ -21,7 +21,7 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
 
-    sl_kompat, legenda = potencialni_rekurzivci(k)
+    sl_kompat, legenda = memo_potencialni_rekurzivci(k)
     maxIndependSet = {}
 
     def w_podCikla(x, p):
@@ -30,27 +30,27 @@ def maxCycleTreeIndependentSet(T, w):
             temp_t += (w[l][x])
         return temp_t
 
-    def maxNodeDrevesa(u,v):
-        for l in legenda: # gremo po možnih izbirah neodvisnih podmnožic v ciklu
-            temp_weight =  w_podCikla(u,l)
+    def maxNodeDrevesa(u,v): #postvisit funkcija
+        for l in legenda: # gremo po možnih izbirah neodvisnih podmnožic v ciklu teh je ravno L(k)
+            temp_weight =  w_podCikla(u,l) #teža izbire podmnožice l v ciklu
             izbraniOtroci = {}
             for y in DFSpotomci[u]: #prištejemo vsoto maximalnih vrednosti, ki jih lahko dobimo
                 temp = max(maxIndependSet[y, l_komp] for l_komp in sl_kompat[l])
-                temp_weight += temp[0]
-                izbraniOtroci.update(temp[2])
-                izbraniOtroci[y] = temp[1]
-            maxIndependSet[(u,l)] = (temp_weight,l,izbraniOtroci)
+                temp_weight += temp[0] #prištejemo maksimalno možno težo potomcev pri taki izbiri (maximum kompatibilnih izbir v potomcih)
+                izbraniOtroci.update(temp[2]) #dopišemo katere podmnožice smo izbrali pri vnukih
+                izbraniOtroci[y] = temp[1] # in katero pri otrocih
+            maxIndependSet[(u,l)] = (temp_weight,l,izbraniOtroci) # (max teža, izbira podmnožice, izbira podmnožic pri potomcih) za dano izbiro podmnožice na danem vozlišču drevesa T
         return True
 
     DFSpotomci = {i:[] for i in range(n)}
-    def pripravidrevo(u, v):
+    def pripravidrevo(u, v): #previsit funkcija
         if v is not None:
             DFSpotomci[v].append(u)
         return True
 
     DFS(T,[0],pripravidrevo,maxNodeDrevesa)
 
-    (c,L0,razpored) = max([maxIndependSet[0,l] for l in legenda])
+    (c,L0,razpored) = max([maxIndependSet[0,l] for l in legenda]) #iz seznama izbire na korenu in seznamov izbire na potomcih korena samo še izvemo katera vozlišča imamo v naši neodvisni množici vozlišč
     s = [(l,0) for l in legenda[L0]]
     for drevo in razpored:
         for cikelj in legenda[razpored[drevo]]:
