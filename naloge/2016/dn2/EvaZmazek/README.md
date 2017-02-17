@@ -37,9 +37,7 @@ dve sosednji vrednosti nista hkrati enaki 1. Drugi seznam vrne iste vzorce kot p
 ki ga predstavlja vzorec, če si ga predstavljamo kot število v binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaPot(k)
 *k = 0, 1, 2, 3: T(k) = O(1)*
-*sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) =
-        = ... =
-        = O((V(k)))
+*sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) = ... = O((V(k)))
 #### Prostorska zahtevnost funkcije vzorciZaPot(k)
 O((V(k)))
 
@@ -51,11 +49,11 @@ oblike [0, 1, 0, 0, 0], kjer dve sosednji vrednosti ter prva in zadnja vrednost 
 iste vzorce kot prvi seznam, vendar v obliki števila, ki ga predstavlja vzorec, če si ga predstavljamo kot število v
 binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaCikel(k)
-T(k) = T(klic funkcije vzorciZaPot(k-2)) + T(klic funkcije vzorciZaPot(k-3))
-        + 2 * O(V(k-2)) + 2* O(V(k-3))
+`T(k) = T(klic funkcije vzorciZaPot(k-2)) + T(klic funkcije vzorciZaPot(k-3))
+        + 2 * O(V(k-2)) + 2* O(V(k-3))`
 
 #### Prostorska zahtevnost funkcije vzorciZaCikel(k)
-P(k) = 2 * k * V(k) = 2 * k * ((1 + sqrt(5))/2)^k
+`P(k) = 2 * k * V(k) = 2 * k * ((1 + sqrt(5))/2)^k`
 
 ### vsotaVzorca(indexVzorca, u)
 
@@ -67,7 +65,7 @@ ki ga prestavlja vzorec cikla z indeksom indexVzorca.
 V tej funkciji se sprehodimo skozi vzorec dolžine k, zato je časovna zahtevnost enaka O(k).
 
 #### Prostorska zahtevnost funkcije vsotaVzorca(indexVzorca, u)
-Shranjujemo si le vrednost vsota, zato je prostorska zahtevnost enaka O(1).
+Shranjujemo si le vrednost vsota, zato je prostorska zahtevnost enaka `O(1)`.
 
 ### slovarZdruzljivih(vzorci)
 
@@ -77,12 +75,12 @@ za množico vzorcev ustvari slovar združljivih vzorcev (vzorci so podani s šte
 našim vzorcem.
 
 #### Časovna zahtevnost funkcije slovarZdruzljivih(vzorci)
-v prvi zanki V(k)-krat izvedemo zanko, katere časovna zahtevnost je enaka O(V(k)). Skupna časovna zahtevnost je
-torej enaka O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2)).
+v prvi zanki V(k)-krat izvedemo zanko, katere časovna zahtevnost je enaka `O(V(k))`. Skupna časovna zahtevnost je
+torej enaka `O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2))`.
 
 #### Prostorska zahtevnost funkcije slovarZdruzljivih(vzorci)
 V slovarju za vsak vzorec shranimo indekse vzorcev, ki so z njim združljivi, torej je prostorska zahtevnost
-navzgor omejena z O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2)).
+navzgor omejena z `O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2))`.
 
 ### nothing(u)
 
@@ -90,10 +88,10 @@ navzgor omejena z O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2)).
 Ta funkcija ne naredi ničesar ter vrne True.
 
 #### Časovna zahtevnost funkcije nothing(u)
-O(1)
+`O(1)`
 
 #### Prostorska zahtevnost funkcije nothing(u)
-O(1)
+`O(1)`
 
 ### postvisitSedem
 
@@ -102,15 +100,15 @@ za vozlišče u poiščemo za vsak vzorec najboljšo izbiro vzorcev na sinovih o
 
 #### Časovna zahtevnost funkcije postivsitSedem(u, v):
 V tej funkciji se sprehodimo čez prvo zanko, ki opravi V(k) klicev, v katerih izračunamo vsoto na tem vzorcu in tem
-vozlišču (kar nam vzame O(1) časa) ter se sprehodimo čez vse sinove vozlišča u,
-nato pa še čez vse indekse združljivih vzorce (ki so navzgor omejeni s številom vzorcev V(k)). Primerjave znotraj
-zadnje zanke porabijo O(1) časa.
+vozlišču (kar nam vzame `O(1)` časa) ter se sprehodimo čez vse sinove vozlišča u,
+nato pa še čez vse indekse združljivih vzorce (ki so navzgor omejeni s številom vzorcev `V(k)`). Primerjave znotraj
+zadnje zanke porabijo `O(1)` časa.
 Skupna časovna zahtevnost je torej enaka `O(V(k)*(stevilo sinov = konstanta)*V(k)) = O(V(k)^(2))`.
 
 #### Prostorska zahtevnost funkcije postvisitSedem(u, v):
 V vmesnih korakih si shranjujemo vrednost vsota, ki nam zasede O(1) prostora, vzorec, ki nam zasede O(k) prostora,
-maximum, ki nam zasede O(1) prostora, seznam `sezna`, ki nam zasede O(n) prostora.
-Skupna prostorska zahtevnost funkcije postvisitSedem(u, v) je torej enaka O(1) + O(k) + O(1) + O(n) = O(max(n,k)).
+maximum, ki nam zasede `O(1)` prostora, seznam `sezna`, ki nam zasede O(n) prostora.
+Skupna prostorska zahtevnost funkcije postvisitSedem(u, v) je torej enaka `O(1) + O(k) + O(1) + O(n)` = `O(max(n,k))`.
 
 ### DFS(G, roots = None, previsit = nothing, postvisit = nothing)
 
@@ -124,15 +122,13 @@ Da se algoritem nadaljuje, morata vrniti True; če vrneta False, se funkcija pre
 Če iskanje pride do konca, funkcija vrne True.
 
 #### Časovna zahtevnost funkcije DFS(G, roots = None, previsit = nothing, postvisit = nothing)
-O(m) + O(n) klicev funkcij previsit in postvisit
+`O(m) + O(n)` klicev funkcij previsit in postvisit
 
 ### Skupna časovna zahtevnost
-T(k,n) = T(ustvarimo si seznam ciklov) + T(urstvarimo si slovar združljivih ciklov) + T(DFS) + T(zapišemo prave točke) <=
-       <= O(2^k) + O(((1+sqrt(5))/2)^(2)) + n * O(V(k)^(2)) + n * k
+`T(k,n) = T(ustvarimo si seznam ciklov) + T(urstvarimo si slovar združljivih ciklov) + T(DFS) + T(zapišemo prave točke) <=  O(2^k) + O(((1+sqrt(5))/2)^(2)) + n * O(V(k)^(2)) + n * k`
 
 ### Skupna prostorsk zahtevnost
-P(k,n) = P(ustvarimo si seznam ciklov) + P(ustvarimo si slovar združljivih ciklov) + P(DFS) + P(zapišemo prave točke) <=
-       <= O(n * k * V(k))
+`P(k,n) = P(ustvarimo si seznam ciklov) + P(ustvarimo si slovar združljivih ciklov) + P(DFS) + P(zapišemo prave točke) <= O(n * k * V(k))`
 
 
 ## Primerjava časov na drevesu z n vozlišči in cikli s k vozlišči
