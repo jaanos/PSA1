@@ -17,6 +17,8 @@ P = O(n*2^k)
 
 ## Primerjava časov
 
+Tabela časov za drevo z n elementi in cikli dolžine k.
+
 n\k | 2 | 4 | 6 | 8 | 10 |
 ----|----|---|----|---|---|
 5 |0.00199|0.00400|0.03602|0.29321|2.05245
@@ -29,7 +31,7 @@ n\k | 2 | 4 | 6 | 8 | 10 |
 40 |0.00500|0.02701|0.22084|2.04642|16.47726
 45 |0.00500|0.02902|0.27820|2.05198|20.76434
 
-
+![Image](https://github.com/JanezRadescek/PSA1/blob/janezDN2/naloge/2016/dn2/JanezRadescek/k5n5100.jpg)
 
 
 
