@@ -2,7 +2,6 @@
 
 
 minusNeskoncno = float("-inf")
-cikel = 0
 
 
 
@@ -27,7 +26,7 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
 
-    raise NotImplementedError("Naredi sam!")
+    #raise NotImplementedError("Naredi sam!")
 
 
     memo = {}   #memo[sin] = (teza, cikli sina in njegovih pozomcev )
@@ -37,10 +36,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     def rekurzija(sidro, ded):
 
-
-
         sinovi2D = nasledniki(sidro, ded)
-
 
         for sinDrevo in sinovi2D:
             for sin in sinDrevo:
@@ -57,7 +53,7 @@ def maxCycleTreeIndependentSet(T, w):
         vsota = teza(sidro)
         cikliPotomcev = []
         for sinDrevo in sinovi2D:
-            c = (minusNeskoncno,[cikel])
+            c = (minusNeskoncno,None)
             najboljsi = None
             for sin in sinDrevo:
                 if memo[sin][0] > c[0]:
@@ -67,11 +63,11 @@ def maxCycleTreeIndependentSet(T, w):
             cikliPotomcev += [najboljsi]
         memo[sidro] = (vsota, cikliPotomcev)
 
-        return memo(sidro)
+        return (vsota, cikliPotomcev)
 
     def ustavitev(sin):
         memo[sin] = (teza(sin), None)
-        return memo[sin]
+        return (teza(sin), None)
 
     def teza(sidro):
         (polozaj, cikel) = sidro
@@ -84,20 +80,19 @@ def maxCycleTreeIndependentSet(T, w):
         return vsota
 
     def nasledniki(sidro, ded):
-        (polozaj, cikel) = sidro
-        nas = []
+        nasled = []
         for sinDrevo in T[sidro[0]]:
-            if sinDrevo == ded:
+            if sinDrevo == ded[0]:
                 pass
             else:
-                nas += kombinacije(sinDrevo, sidro)
-        return nas
+                nasled += [kombinacije(sinDrevo, sidro)]
+        return nasled
 
     def sinJeList(sin):
-        return len(T[sin]) == 1
+        return len(T[sin[0]]) == 1
 
     def kombinacije(sinDrevo, sidro):
-        moznih = 2^k
+        moznih = 2**k
         kombi = []
         for cikel in range(moznih):
             if preveri(cikel, sidro[1]):
@@ -109,22 +104,23 @@ def maxCycleTreeIndependentSet(T, w):
             return False
 
         else:
-            if (sumljivCikel%2) == (sumljivCikel//(2^(k-1)) %2):
+            if (sumljivCikel%2 == 1) and (1 == (sumljivCikel//(2**(k-1)) %2)):
                 return False
 
             for i in range(k-1):
                 tre = sumljivCikel%2
                 nas = sumljivCikel//2%2
-                if tre == nas:
+                if tre == 1 and nas == 1:
                     return False
         return True
 
 
     Janez = "haskelHeker"
-    
+
     haha = (minusNeskoncno, None)
-    for kombina in kombinacije(T[0], (_,0)):
-        ha =  rekurzija(kombina, (_,0))
-        if ha[0] > haha:
+    for kombina in kombinacije(0, (-10,0)):
+        print(kombina)
+        ha =  rekurzija(kombina, (-10,0))
+        if ha[0] > haha[0]:
             haha = ha
     return haha
