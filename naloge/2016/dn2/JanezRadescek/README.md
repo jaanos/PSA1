@@ -7,17 +7,15 @@
 Algoritem vzame prvo pozlišče v drevesu. Zanj najde vse *delne cikle* z lastnostjo, da za vsaka sosednja vozlišča v ciklu nista oba hkrati v *delnem cikluu*. Za vsak *delen cikel* algoritem rekorzivno najde težo in uporabljena vozlišča na *pod drevesih*, ki nastanejo, če iz drevesa odstranimo prvo vozlišče. Seveda pri računanju teže *pod drevesa* izpustimo cikle, ki ne sovpadajo s ciklom vozlišča *predhodnika*.
 Na koncu izberemo za prvo vozlišče v drevesu cikelj pri katerem bo skupna teža največja.
 
-## Časovna zahtevnost
+## Časovna/prostorska zahtevnost
 
-T = O(n*2^k)
+- T = O(n*2^k)
 
-## Prostorska zahtevnost
-
-P = O(n*2^k)
+- Podatke si shranjujemo v slovar memo, ki je velikosti c*n*2^k. P = O(n*2^k)
 
 ## Primerjava časov
 
-Tabela časov za drevo z n elementi in cikli dolžine k.
+Tabela časov za drevesa z n elementi in cikli dolžine k.
 
 n\k | 2 | 4 | 6 | 8 | 10 |
 ----|----|---|----|---|---|
@@ -31,7 +29,19 @@ n\k | 2 | 4 | 6 | 8 | 10 |
 40 |0.00500|0.02701|0.22084|2.04642|16.47726
 45 |0.00500|0.02902|0.27820|2.05198|20.76434
 
+Graf časov za drevesa z n elementi in cikli dolžine k=6
+
 ![Image](https://github.com/JanezRadescek/PSA1/blob/janezDN2/naloge/2016/dn2/JanezRadescek/k5n5100.jpg)
+
+Graf časov za drevesa z n=20 elementi in cikli dolžine k
+![Image](https://github.com/JanezRadescek/PSA1/blob/janezDN2/naloge/2016/dn2/JanezRadescek/n20.jpg)
+
+Graf časov z eksponentno skalo za drevesa z n=20 elementi in cikli dolžine k
+![Image](https://github.com/JanezRadescek/PSA1/blob/janezDN2/naloge/2016/dn2/JanezRadescek/n20ekp.jpg)
+
+
+
+
 
 
 
