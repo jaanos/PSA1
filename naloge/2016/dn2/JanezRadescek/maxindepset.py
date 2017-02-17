@@ -104,14 +104,16 @@ def maxCycleTreeIndependentSet(T, w):
             return False
 
         else:
-            if (sumljivCikel%2 == 1) and (1 == (sumljivCikel//(2**(k-1)) %2)):
+            aaa = sumljivCikel
+            if (aaa%2 == 1) and (1 == (aaa//(2**(k-1)) %2)):
                 return False
 
             for i in range(k-1):
-                tre = sumljivCikel%2
-                nas = sumljivCikel//2%2
+                tre = aaa%2
+                nas = aaa//2%2
                 if tre == 1 and nas == 1:
                     return False
+                aaa = aaa//2
         return True
 
 
@@ -119,8 +121,13 @@ def maxCycleTreeIndependentSet(T, w):
 
     haha = (minusNeskoncno, None)
     for kombina in kombinacije(0, (-10,0)):
-        print(kombina)
         ha =  rekurzija(kombina, (-10,0))
         if ha[0] > haha[0]:
             haha = ha
+
+            
+
+
+
+
     return haha
