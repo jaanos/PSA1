@@ -52,7 +52,7 @@ iste vzorce kot prvi seznam, vendar v obliki števila, ki ga predstavlja vzorec,
 binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaCikel(k)
 T(k) = T(klic funkcije vzorciZaPot(k-2)) + T(klic funkcije vzorciZaPot(k-3))
-        + 2 * O(V(k-2)) + 2* O(V(k-3))=
+        + 2 * O(V(k-2)) + 2* O(V(k-3))
 
 #### Prostorska zahtevnost funkcije vzorciZaCikel(k)
 P(k) = 2 * k * V(k) = 2 * k * ((1 + sqrt(5))/2)^k
@@ -127,11 +127,13 @@ Da se algoritem nadaljuje, morata vrniti True; če vrneta False, se funkcija pre
 O(m) + O(n) klicev funkcij previsit in postvisit
 
 ### Skupna časovna zahtevnost
-T(k,n) = T(ustvarimo si seznam ciklov) + T(urstvarimo si slovar združljivih ciklov) + T(DFS) + T(zapišemo prave točke)=
-       =
+T(k,n) = T(ustvarimo si seznam ciklov) + T(urstvarimo si slovar združljivih ciklov) + T(DFS) + T(zapišemo prave točke) <=
+       <= O(2^k) + O(((1+sqrt(5))/2)^(2)) + n * O(V(k)^(2)) + n * k
 
 ### Skupna prostorsk zahtevnost
-P(k,n) = P(ustvarimo si seznam ciklov) + P(urstvarimo si slovar združljivih ciklov) + P(DFS) + P(zapišemo prave točke)
+P(k,n) = P(ustvarimo si seznam ciklov) + P(ustvarimo si slovar združljivih ciklov) + P(DFS) + P(zapišemo prave točke) <=
+       <= O(n * k * V(k))
+
 
 ## Primerjava časov na drevesu z n vozlišči in cikli s k vozlišči
 
