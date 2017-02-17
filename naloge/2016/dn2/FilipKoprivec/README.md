@@ -244,4 +244,60 @@ Skupna prostorska zahtevnost:
 
 ## Primerjava dejanskih časov izvajanja
 
-TODO
+Dejanske čase izvajanja bomo primerjali na več načinov. Najprej bomo preverili, kako se čas izvajanja spreminja, če 
+povečujemo velikost drevesa. Tako bomo za velikost cikla vzeli konstanto (`10`) in za velikost drevesa števila od `2` do 
+`2^12`. Prav tako bomo za posamezno velikost drevesa generirali tri možnosti: pot, plitko drevo(imamo koren, vsa ostala 
+vozlišča pa so na prvem nivoju) in naključno drevo, vsi časi so v sekundah.
+
+
+#### Spreminjanje velikosti drevesa
+
+| Tip drevesa \ Velikost drevesa |    2     |    4     |    8     |    16    |    32    |    64    |   128    |   256    |   512    |   1024   |   2048   |   4096   |
+|:------------------------------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+|              Pot               |  0.003   |  0.006   |   0.01   |  0.019   |  0.038   |  0.068   |  0.148   |  0.284   |  0.579   |  1.365   |  2.732   |  5.671   |
+|          Plitko drevo          |  0.005   |  0.008   |  0.011   |  0.029   |  0.041   |  0.071   |  0.179   |  0.321   |  0.755   |  1.349   |  2.841   |  5.823   |
+|        Naključno drevo         |  0.004   |  0.006   |   0.01   |  0.022   |  0.036   |  0.075   |  0.151   |  0.311   |  0.817   |  1.423   |  2.825   |  5.793   |
+
+
+Tabela razmerij časov izvajanja
+
+| Tip drevesa \ Velikost drevesa |    2     |    4     |    8     |    16    |    32    |    64    |   128    |   256    |   512    |   1024   |   2048   |
+|:------------------------------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+|              Pot               |  1.833   |  1.818   |   1.85   |  2.054   |  1.777   |  2.185   |  1.925   |  2.035   |   2.36   |  2.001   |  2.076   |
+|          Plitko drevo          |  1.667   |  1.467   |  2.591   |  1.439   |  1.732   |  2.514   |  1.798   |   2.35   |  1.786   |  2.106   |  2.049   |
+|        Naključno drevo         |  1.715   |  1.667   |  2.199   |  1.614   |  2.113   |  2.013   |   2.06   |  2.625   |  1.742   |  1.985   |  2.051   |
+
+#### Spreminjanje velikosti cikla
+
+Uporabili smo drevo velikosti `50`.
+
+|  Tip drevesa \ Velikost cikla  |    10    |    11    |    12    |    13    |    14    |    15    |    16    |
+|:------------------------------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+|              Pot               |   0.06   |  0.137   |  0.293   |  0.674   |  1.528   |  3.863   |  8.372   |
+|          Plitko drevo          |  0.054   |  0.124   |  0.265   |  0.633   |  1.463   |  3.544   |  8.077   |
+|        Naključno drevo         |  0.054   |  0.121   |  0.267   |  0.586   |  1.415   |  3.197   |  7.962   |
+
+
+Tabela razmerij časov izvajanja
+
+|  Tip drevesa \ Velikost cikla  |    10    |    11    |    12    |    13    |    14    |    15    |
+|:------------------------------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+|              Pot               |  2.303   |  2.135   |  2.301   |  2.268   |  2.528   |  2.167   |
+|          Plitko drevo          |  2.308   |  2.146   |  2.387   |  2.311   |  2.423   |  2.279   |
+|        Naključno drevo         |   2.24   |  2.203   |  2.197   |  2.415   |  2.259   |   2.49   |
+
+
+### Komentar na rezultate
+
+Pri povečevanju velikosti drevesa je linearnosti (v `n`) lepo vidna (čeprav so časi dokaj razpršeni), pa tudi oblika 
+drevesa ne kaže posebnega vpliva na hitrost izvajanja (male razlike sicer obstajajo, a so dokaj majhne glede na čas 
+izvajanja.)
+
+Prav tako je pri ciklu lepo vidno eksponentno naraščanje glede na `k`, razmerja so sicer dokaj nestabilna, vendar se vrtijo okoli pravilnega.
+
+
+
+
+
+
+Filip Koprivec

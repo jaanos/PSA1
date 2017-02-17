@@ -173,7 +173,7 @@ def maxCycleTreeIndependentSet(T: List[List[int]], w: List[List[int]], assert_su
     m, obj = calculate_graph(DP, children, bitmasks)
 
     # Total cost:
-    # Time: O(n * T) = O(n^2 * sq21^k) = approx = O(n * 2.414^k)
+    # Time: O(n * T + B^2) = O(n * sq21^k + phi^(2*k)) = approx = O(2.826^k + n * 2.414^k)
     # Space: O(T) + O(B*n) = O(sq21^k) + O(phi^k*n) = O(sq21^k + phi^k*n) = approx = O(2.414^k + 1.618^k*n)
 
     # Ignore this in analysis
