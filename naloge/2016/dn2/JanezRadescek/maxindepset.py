@@ -28,15 +28,14 @@ def maxCycleTreeIndependentSet(T, w):
 
 
 
-    #slovar kamor si bomo shranjevali rezultate za podprobleme
+    #slovar kamor si bomo shranjevali rezultate za podprobleme P = O(n*2^k)
     memo = {}
 
-    #memo[sin] = (teza podrevesa, ki se začne v sinu, sinovi pri katerih smo dobili težo)
-    #oce, sin, ded, sidro so oblike (položaj vdrevesu, izbran cikelj )
-    #oče = sidro
 
     def rekurzija(sidro, ded):
         """za izbrano sidro rekurzivno najdemo vozlišča da bo teža največja. ded potrebujemo da se ne vračamo po drevesu nazaj"""
+        #Trekurzija = 2*Tnasledniki + Tnasledniki * Trekurzija + Tteza = O(n*2^k)
+
         sinovi2D = nasledniki(sidro, ded)
 
         for sinDrevo in sinovi2D:
@@ -68,11 +67,13 @@ def maxCycleTreeIndependentSet(T, w):
 
     def ustavitev(sin):
         """če je sin list"""
+        #Tustavitev = Tteza = O(k)
         memo[sin] = (teza(sin), None)
         return (teza(sin), None)
 
     def teza(sidro):
         """izračuna težo izbranih vozliš vozlišč """
+        #Tteza = O(k)
         (polozaj, cikel) = sidro
         vsota = 0
         for i in range(k):
@@ -84,6 +85,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     def nasledniki(sidro, ded):
         """vrne tabelo tabel(pogrupirani po položajih v drevesu)"""
+        #Tnasledniki = n * Tkombinacije = O(n*2^k)
         nasled = []
         for sinDrevo in T[sidro[0]]:
             if sinDrevo == ded[0]:
@@ -94,10 +96,12 @@ def maxCycleTreeIndependentSet(T, w):
 
     def sinJeList(sin):
         """"preveri če je sin list"""
+        #TsinJeList = O(1)
         return len(T[sin[0]]) == 1
 
     def kombinacije(sinDrevo, sidro):
         """vrne vse možne kombinacije ciklov za sinDrevo, ki se prilegajo ciklu od sidra"""
+        #Tkombinacije = O(2^k)
         moznih = 2**k
         kombi = []
         for cikel in range(moznih):
@@ -107,6 +111,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     def preveri(sumljivCikel, sidroCikel):
         """preveri izbrana cikla(za sidroCikel privzamemo da je vredu)"""
+        #Tpreveri = O(k)
         if sumljivCikel & sidroCikel != 0:
             return False
 
@@ -127,6 +132,7 @@ def maxCycleTreeIndependentSet(T, w):
     Janez = "haskelHeker"
 
     #za vse možne cikle na prvem vozlišču v drevesu izračunamo vrednosti in izberemo najboljšo
+    #Tnekaj = Tkombinacije = O(2^k)
     haha = (minusNeskoncno, None)
     najKoren = None
     for kombina in kombinacije(0, (-10,0)):
@@ -135,6 +141,7 @@ def maxCycleTreeIndependentSet(T, w):
             haha = ha
             najKoren = kombina
 
+    return memo[najKoren]
 
     # #za vsako vozlišče v drevesu najdemo cikel, ki pripada vozlišču pri največji teži celotnega drevesa
     # #najKoren =(mesto v drevesu, cikel)
