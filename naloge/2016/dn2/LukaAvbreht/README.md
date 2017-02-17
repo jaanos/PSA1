@@ -47,6 +47,7 @@ poklicemo na poddrevesih z ihodisci v 1 in v 2 ter v nasem primeru ocetom oblike
 k --- dolzina cikla/ binarnega zapisa vsakega vozlisca (binarne maske)
 n --- stevilo povezav v drevesu
 m --- stevilo vozlisc v drevesu
+T --- 1+sqrt((5)/(2))
 ```
 
 ### Priprava grafa na algoritem
@@ -60,11 +61,36 @@ Z pomocjo izracuna limite lahko tako preverimo, da moc mnozice konvergira proti 
 
 ### Izracun časovne zahtevnosti
 
+Generiranje binarnih zaporediji : `O((T)^k)`
+
+Sprehod algoritma po drevesu (iskanje najtezje neodvisne mnozice) : `O(T^2k * n)`
+
+Iskanje najtezje neodvisne mnozice deluje tako da se za vsakeego razlicno binarno zaporedje (T^k) sprehodimo po vseh 
+povezavah v grafu, ter na vsakem nivoju maximiziramo med vsemi moznimi zaporedji. Rezultate memoriziramo s pomocjo slovarja,
+tako da nobenega racuna ne ponavljamo.
+
+Izracun teze vsakega posameznega vozlisca : `O(k * m * T^k)`
+
+Tukaj namrec za vsako vozlisce (m) izracunamo tezo tako da se sprehodimo po binarnem zaporedju dolzine (k) (dolzina cikla), 
+ter to na vsakem nivoju v najslabsem primeru naredimo v za vsako mozno binarno zaporedje (T^k). Zaradi memorizacije nikdar tega racuna ne ponavljamo.
 
 
+Skupna casovna zahtevnost:
+
+``` 
+O(T^4k * k * m^2 )
+```
 
 ## Prostorska zahtevnost
 
+Slovar memorizacije tez: `O(m*T^k)`
+V najslabsem primeru bomo na vsakem nivoju izracunali tezo za vsako razlicno zaporedje
+
+Slovar memorizacije rezultatov poddreves: `O(T^k*n)`
+Za vsako zaporedje namrec lahko shranimo rezultat za vsako povezavo, ki jo imamo.
+
+Slovar ki ga uporabimo za maximiziranje v rekurziji: `O(T^k)`
+Za vsako mozno binarno zaporedje imamao namrec slovar, ki ima za vrednosti vse mozne sinove.
 
 
 ## Tablea časov izvajanja programa pri razlicnih vhoodnih podatkih
@@ -82,5 +108,3 @@ Globina drevesa\dolzina cikla |  3  |  5  |  7  |  9  |  12  |  15   |
      8 |   0.0185  |      0.0610  |      0.3618  |      2.8603  |     37.5308  |    636.8147  |  
      9 |   0.0360  |      0.1306  |      0.7645  |      5.0017  |     80.9928  |   1289.9691  |  
      10 |   0.0915  |      0.2942  |      1.7348  |     13.9997  |    192.9435  |  //  |
-     11 |  //  |  //  |  //  |  //  |  //  |  //  |
-     12 |  //  |  //  |  //  |  //  |  //  |  //  | 

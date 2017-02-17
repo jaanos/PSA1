@@ -32,6 +32,8 @@ def list_primernih_otrok(parent):
                 else:
                     if res[j][0]=='1':
                         tren.append(res[j]+'0')
+                    elif res[j][-1]=='1':
+                        tren.append(res[j]+'0')
                     else:
                         tren.append(res[j]+'1')
                         tren.append(res[j]+'0')
