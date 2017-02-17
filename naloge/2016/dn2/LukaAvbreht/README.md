@@ -89,9 +89,10 @@ V najslabsem primeru bomo na vsakem nivoju izracunali tezo za vsako razlicno zap
 Slovar memorizacije rezultatov poddreves: `O(T^k*n)`
 Za vsako zaporedje namrec lahko shranimo rezultat za vsako povezavo, ki jo imamo.
 
-Slovar ki ga uporabimo za maximiziranje v rekurziji: `O(T^k)`
+Slovar ki ga uporabimo za maximiziranje v rekurziji: `O(T^2k)`
 Za vsako mozno binarno zaporedje imamao namrec slovar, ki ima za vrednosti vse mozne sinove.
 
+Skupna prostorska zahtevnost je torej: `O((n+m+T)*T^k)`
 
 ## Tablea časov izvajanja programa pri razlicnih vhoodnih podatkih
  
