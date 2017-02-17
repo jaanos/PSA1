@@ -128,7 +128,6 @@ def maxCycleTreeIndependentSet(T, w):
 
     vzorci = vzorciZaCikel_sez[1]
     vrednostiVozliscSedem = [[None]*len(vzorci) for i in range(n)]
-    print(vrednostiVozliscSedem)
 
     zdruzljivi = slovarZdruzljivih(vzorciZaCikel_sez[1])
 

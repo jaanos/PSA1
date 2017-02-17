@@ -39,9 +39,9 @@ ki ga predstavlja vzorec, če si ga predstavljamo kot število v binarni obliki.
 *k = 0, 1, 2, 3: T(k) = O(1)*
 *sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) =
         = ... =
-        = O((V(k))^k)
+        = O((V(k)))
 #### Prostorska zahtevnost funkcije vzorciZaPot(k)
-O((V(k))^k)
+O((V(k)))
 
 ### vzorciZaCikel(k)
 
@@ -53,8 +53,7 @@ binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaCikel(k)
 T(k) = T(klic funkcije vzorciZaPot(k-2)) + T(klic funkcije vzorciZaPot(k-3))
         + 2 * O(V(k-2)) + 2* O(V(k-3))=
-        = O(n^(k-2)) + O(n^(k-3)) + 2 * O(((1 + sqrt(5))/2)^(k-3)*((1+sqrt(5))/2)+1)
-T(k) = O(n^(k-2)) + O(n^(k-3)) = O(n^(k-3)*(n+1)) = O(n^(k-3)*n)
+
 #### Prostorska zahtevnost funkcije vzorciZaCikel(k)
 P(k) = 2 * k * V(k) = 2 * k * ((1 + sqrt(5))/2)^k
 
@@ -127,11 +126,25 @@ Da se algoritem nadaljuje, morata vrniti True; če vrneta False, se funkcija pre
 #### Časovna zahtevnost funkcije DFS(G, roots = None, previsit = nothing, postvisit = nothing)
 O(m) + O(n) klicev funkcij previsit in postvisit
 
-#### Prostorska zahtevnost funkcije DFS(G, roots = None, previsit = nothing, postvisit = nothing)
-TODO
+### Skupna časovna zahtevnost
+T(k,n) = T(ustvarimo si seznam ciklov) + T(urstvarimo si slovar združljivih ciklov) + T(DFS) + T(zapišemo prave točke)=
+       =
+
+### Skupna prostorsk zahtevnost
+P(k,n) = P(ustvarimo si seznam ciklov) + P(urstvarimo si slovar združljivih ciklov) + P(DFS) + P(zapišemo prave točke)
+
+## Primerjava časov na drevesu z n vozlišči in cikli s k vozlišči
+
+k\n | 10 | 20 | 50 | 70 | 100 | 150
+----|----|----|----|----|-----|-----
+  2  | 0.001s | 0.002s | 0.002s | 0.003s |
+  5  | 0.002s | 0.004s | 0.009s | 0.010s |
+  10  |0.019s | 0.038s | 0.148s | 0.285 s |
+  15  |1.375s | 2.206s | 7.449s | 10.202s |
+  17 | 6.592s | 11.804s | - | - | - | -
+
+ Vidimo, da vrednosti po stolpcih naraščajo veliko hitreje kot po vrsticah (posledica eksponentne časovne zahtevnosti
+ v k in polinomske časovne zahtevnosti v n).
 
 
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
-
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
