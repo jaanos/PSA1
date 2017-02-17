@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from EvaErzin.DFS import *
+from .DFS import DFS, nothing
 
 
 def maxCycleTreeIndependentSet(T, w):
@@ -27,7 +27,6 @@ def maxCycleTreeIndependentSet(T, w):
 
         """ Vrne neodvisne podmnožice cikla s k elementi predstavljene v binarnem zapisu. """
 
-        ##
 
         subsets = []
         ind = 0
@@ -99,8 +98,9 @@ def maxCycleTreeIndependentSet(T, w):
 
     DFS(T, postvisit=postvisit)
 
-    final_set = []
+## Sestavimo končno množico
 
+    final_set = []
 
     max_weight, sez = max(max_weights[0][k] for k in range(n_sets))
 
@@ -113,8 +113,4 @@ def maxCycleTreeIndependentSet(T, w):
     return (max_weight, final_set)
 
 
-
-T = [[1, 2], [0, 3, 4], [0, 5], [1, 6, 7], [1, 8], [2, 9, 10], [3], [3], [4, 11], [5], [5, 12], [8], [10, 13], [12]]
-w = [[6, 7, 3, 6, 8, 7, 5, 4, 5, 8, 7, 6, 2, 5], [3, 6, 2, 5, 8, 5, 9, 1, 5, 8, 3, 7, 3, 3], [8, 3, 2, 5, 7, 9, 4, 3, 7, 8, 0, 9, 3, 8], [5, 7, 3, 7, 2, 9, 4, 2, 6, 0, 9, 1, 5, 0]]
-print(maxCycleTreeIndependentSet(T, w))
 
