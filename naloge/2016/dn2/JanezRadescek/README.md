@@ -36,7 +36,7 @@ Graf časov za drevesa z n elementi in cikli dolžine k=6
 Graf časov za drevesa z n=20 elementi in cikli dolžine k
 ![Image](https://github.com/JanezRadescek/PSA1/blob/janezDN2/naloge/2016/dn2/JanezRadescek/n20.jpg)
 
-Graf časov z eksponentno skalo za drevesa z n=20 elementi in cikli dolžine k
+Graf časov z logaritemsko skalo za drevesa z n=20 elementi in cikli dolžine k
 ![Image](https://github.com/JanezRadescek/PSA1/blob/janezDN2/naloge/2016/dn2/JanezRadescek/n20ekp.jpg)
 
 
