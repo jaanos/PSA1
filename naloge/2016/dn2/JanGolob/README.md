@@ -1,6 +1,5 @@
-# Poročilo
-
 *Jan Golob*
+# Poročilo
 
 Kot vhodni podatek dobimo utežen kartezičen produkt drevesa z n vozlišči in ciklja s k vozlišči. To je v programu podano z tabelo tež in tabelo sosedov drevesa.
 Algoritem vrne tisto množico nepovezanih vozlišč, ki ima največjo "ceno" ter le-to ceno.
@@ -17,6 +16,7 @@ Lukasova števila so podana z rekurzino formulo *L(n) = L(n-1) + L(n-2)* in zač
 
 Tabela Lucasovih števil:
 
-|n| L(n)|
-|1|1|
-|2|3|
+n| L(n)
+--- | --- 
+1|1
+2|3
