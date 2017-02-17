@@ -21,9 +21,9 @@ V naslednjih računih bomo večkrat rabili izračun števila vzorcev.
 Če na začetek vzorca postavimo 0, imamo za naslednjih k-1 mest V(k-1) možnost, če na začetek postavimo 1, moramo
 na drugo mesto postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnosti.
 Dobimo torej rekurzivno formulo
-``V(k) = V(k-1) + V(k-2)``
+`V(k) = V(k-1) + V(k-2)`
 z začetnima vrednostma
-`V(1) = 2 in V(2) = 3,``
+`V(1) = 2 in V(2) = 3,`
 katere rešitev je:
 `V(k) = ((1 + sqrt(5))/2)^k`
 
