@@ -31,13 +31,15 @@ def maxCycleTreeIndependentSet(T, w):
             return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 0, 1]], [0, 1, 2, 4, 5]
         vzorci = []
         stevilo = []
-        for i in vzorciZaPot(k - 2)[0]:
+        prviVzorci = vzorciZaPot(k-2)
+        drugiVzorci = vzorciZaPot(k-1)
+        for i in prviVzorci[0]:
             vzorci += [[1, 0] + i]
-        for j in vzorciZaPot(k - 1)[0]:
+        for j in drugiVzorci[0]:
             vzorci += [[0] + j]
-        for i in vzorciZaPot(k - 2)[1]:
+        for i in pviVzorci[1]:
             stevilo += [2 ** (k - 1) + i]
-        for j in vzorciZaPot(k - 1)[1]:
+        for j in drugiVzorci[1]:
             stevilo += [j]
         return vzorci, stevilo
 
@@ -57,16 +59,20 @@ def maxCycleTreeIndependentSet(T, w):
             return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0]], [0, 1, 2, 4]
         vzorci = []
         stevilo = []
-        for i in vzorciZaPot(k - 3)[0]:
+        prviVzorci = vzorciZaPot(k-3)
+        drugiVzorci = vzorciZaPot(k-2)
+        for i in prviVzorci[0]:
             vzorci += [[1, 0] + i + [0]]
             vzorci += [[0] + i + [0, 1]]
-        for j in vzorciZaPot(k - 2)[0]:
+        for j in drugiVzorci[0]:
             vzorci += [[0] + j + [0]]
-        for i in vzorciZaPot(k - 3)[1]:
+        for i in prviVzorci[1]:
             stevilo += [2 ** (k - 1) + i * 2, i * 4 + 1]
-        for j in vzorciZaPot(k - 2)[1]:
+        for j in drugiVzorci[1]:
             stevilo += [j * 2]
         return vzorci, stevilo
+
+    vzorci = vzorciZaCikel(k)
 
     def vsotaVzorca(indexVzorca, u):
         """
@@ -76,7 +82,7 @@ def maxCycleTreeIndependentSet(T, w):
         Prostorska zahtevnost:
         """
         vsota = 0
-        vzorcek = vzorciZaCikel(k)[0][indexVzorca]
+        vzorcek = vzorci[0][indexVzorca]
         for i in range(k):
             if vzorcek[i] == 1:
                 vsota += w[i][u]
@@ -104,10 +110,9 @@ def maxCycleTreeIndependentSet(T, w):
     vrednostiVozliscSedem = [[None]*len(vzorciZaCikel(k)[1]) for i in range(n)]
 
     def postvisitSedem(u,v):
-        vzorci = vzorciZaCikel(k)[1]
-        l = len(vzorci)
+        l = len(vzorci[1])
         for indexVzorca in range(l):
-            vzorec = vzorci[indexVzorca]
+            vzorec = vzorci[1][indexVzorca]
             vsota = vsotaVzorca(indexVzorca, u)
             vrednostiVozliscSedem[u][indexVzorca] = (vsota, [(u, indexVzorca)])
             for sin in T[u]:
@@ -116,7 +121,7 @@ def maxCycleTreeIndependentSet(T, w):
                 maximum = 0
                 sezna = []
                 for indexMoznega in range(l):
-                    if vzorci[indexMoznega] in slovarZdruzljivih(vzorci)[vzorec]:
+                    if vzorci[1][indexMoznega] in slovarZdruzljivih(vzorci[1])[vzorec]:
                         if vrednostiVozliscSedem[sin][indexMoznega][0] > maximum:
                             maximum = vrednostiVozliscSedem[sin][indexMoznega][0]
                             sezna = vrednostiVozliscSedem[sin][indexMoznega][1]
@@ -124,7 +129,6 @@ def maxCycleTreeIndependentSet(T, w):
                 vrednost += maximum
                 seznamcek += sezna
                 vrednostiVozliscSedem[u][indexVzorca] = (vrednost, sorted(seznamcek))
-
         return True
 
 
@@ -170,16 +174,17 @@ def maxCycleTreeIndependentSet(T, w):
         return True
 
 
-    DFS(T, roots=None, previsit=nothing, postvisit=postvisitSedem)
+    DFS(T, roots=[0], previsit=nothing, postvisit=postvisitSedem)
 
-    vrednost, seznamVzorcevZaVsakoVozlisceTree = max(vrednostiVozliscSedem[0][k] for k in range(len(vzorciZaCikel(k)[0])))
+    vrednost, seznamVzorcevZaVsakoVozlisceTree = max(vrednostiVozliscSedem[0][k] for k in range(len(vzorci[0])))
 
     uporabljeneTocke = []
-    print(seznamVzorcevZaVsakoVozlisceTree)
     for vozlisceDrevesa, indexVzorec in seznamVzorcevZaVsakoVozlisceTree:
-        vzorcek = vzorciZaCikel(k)[0][indexVzorec]
+        vzorcek = vzorci[0][indexVzorec]
         for i in range(k):
             if vzorcek[i] == 1:
                 uporabljeneTocke += [(i, vozlisceDrevesa)]
 
     return (vrednost, uporabljeneTocke)
+
+print(maxCycleTreeIndependentSet([[1], [0]], [[1, 20], [7, 10]]))
