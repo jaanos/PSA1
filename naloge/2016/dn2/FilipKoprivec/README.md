@@ -267,6 +267,13 @@ Tabela razmerij časov izvajanja
 |          Plitko drevo          |  1.667   |  1.467   |  2.591   |  1.439   |  1.732   |  2.514   |  1.798   |   2.35   |  1.786   |  2.106   |  2.049   |
 |        Naključno drevo         |  1.715   |  1.667   |  2.199   |  1.614   |  2.113   |  2.013   |   2.06   |  2.625   |  1.742   |  1.985   |  2.051   |
 
+![Prikaz časov][tree_plot]
+
+[tree_plot]: tree.png "Prikaz časov izvajanja za različne velikosti drevesa"
+
+Tudi graf časov lepo pokaže linearno odvisnost od `n` in praktično neodvisnost od oblike drevesa.
+
+
 #### Spreminjanje velikosti cikla
 
 Uporabili smo drevo velikosti `50`.
@@ -287,16 +294,21 @@ Tabela razmerij časov izvajanja
 |        Naključno drevo         |   2.24   |  2.203   |  2.197   |  2.415   |  2.259   |   2.49   |
 
 
+![Prikaz časov][cycle_plot]
+
+[cycle_plot]: cycle.png "Prikaz logartima časa izvajanja glede na velikost cikla"
+
+Če čase za različne velikosti cikla logaritmiramo spet dobimo lepo premico in podoben rezultat, da je čas izvajanja 
+neodvisen od oblike drevesa.
+
 ### Komentar na rezultate
 
 Pri povečevanju velikosti drevesa je linearnosti (v `n`) lepo vidna (čeprav so časi dokaj razpršeni), pa tudi oblika 
 drevesa ne kaže posebnega vpliva na hitrost izvajanja (male razlike sicer obstajajo, a so dokaj majhne glede na čas 
 izvajanja.)
 
-Prav tako je pri ciklu lepo vidno eksponentno naraščanje glede na `k`, razmerja so sicer dokaj nestabilna, vendar se vrtijo okoli pravilnega.
-
-
-
+Prav tako je pri ciklu lepo vidno eksponentno naraščanje glede na `k`, razmerja so sicer dokaj nestabilna, vendar se 
+vrtijo okoli pravilnega (`sq21`).
 
 
 
