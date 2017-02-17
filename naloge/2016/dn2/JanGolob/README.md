@@ -1,7 +1,8 @@
 # Poročilo
 
-*Ime Priimek*
+*Jan Golob*
 
-Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
+Kot vhodni podatek dobimo utežen kartezičen produkt drevesa z n vozlišči in ciklja s k vozlišči. To je v programu podano z tabelo tež in tabelo sosedov drevesa.
+Algoritem vrne tisto množico nepovezanih vozlišč, ki ima največjo "ceno" ter le-to ceno.
 
-Če se odločite za pisanje poročila v LaTeXu, to omenite tukaj in na repozitorij naložite datoteko `.tex`.
+Algoritem poteka na podoben način kot algoritem "sahovnica" pri 11 sklopu vaj.
