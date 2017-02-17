@@ -23,6 +23,7 @@ def vsiNeodPodCik (k):
             for m in range(i+1,stop):
                 if NeodPodCik(lukas[i] | lukas[m]):
                     lukas.append(lukas[i] | lukas[m])
+            start, stop = stop, len(lukas)
 
     return [set()] + lukas
 
