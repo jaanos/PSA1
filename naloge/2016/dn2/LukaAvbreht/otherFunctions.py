@@ -11,7 +11,10 @@ def primeren_otrok(parent,child):
     return True
 
 def list_primernih_otrok(parent):
-    """Returns the list of all valid children of a parent as a list of binary numbers(strings)"""
+    """
+    Returns the list of all valid children of a parent as a list of binary numbers(strings)
+    O(1+sqrt(5/2)^k) where k i slen of parent
+    """
     assert valid_cycle(parent) == True, "Parent is not the valid cycle"
     if parent[0] == '1':
         res = ['0']
@@ -19,9 +22,20 @@ def list_primernih_otrok(parent):
     else:
         res = ['1','0']
         k = 2
-    for i in parent[1:]:
+    dol = len(parent)-2
+    for p,i in enumerate(parent[1:]):
         tren = list()
-        if i =='1':
+        if p == dol:
+            for j in range(k):
+                if i =='1':
+                    tren.append(res[j]+'0')
+                else:
+                    if res[j][0]=='1':
+                        tren.append(res[j]+'0')
+                    else:
+                        tren.append(res[j]+'1')
+                        tren.append(res[j]+'0')
+        elif i =='1':
             for j in range(k):
                 tren.append(res[j]+'0')
         else:
@@ -35,11 +49,7 @@ def list_primernih_otrok(parent):
                     tren.append(res[j]+'0')
             k = k*2-dif
         res = tren
-    tren = list()
-    for i in res:
-        if valid_cycle(i):
-            tren.append(i)
-    return tren
+    return res
 
 def valid_cycle(cycle):
     """Returns True if a cycle is valid and False othervise (Cycle is valid ifi it has an independent subgroup of ones)"""

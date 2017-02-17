@@ -58,6 +58,8 @@ Vseh moznih zaporediji 1 in 0 je torej 2^k, nas pa zanimajo le zaporedja, ki so 
 Torej nas zanima podmnožica množice z močjo 2^k. Opazimo lahko da je velikost te množice sorazmerna z k-2 im fibonaccijevemu številu.
 Z pomocjo izracuna limite lahko tako preverimo, da moc mnozice konvergira proti (1+sqrt((5)/(2)))^k.
 
+### Izracun časovne zahtevnosti
+
 
 
 
