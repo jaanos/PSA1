@@ -43,12 +43,23 @@ poklicemo na poddrevesih z ihodisci v 1 in v 2 ter v nasem primeru ocetom oblike
 
 ## Časovna zahtevbnost 
 
-Generiranje binarnih zaporedij, brez sosednjih enic nam vzame za vako zaporedje `O(n)` casa pri cemer je n dolzina ciklov
-
 ```Legenda
-n --- dolzina cikla/ binarnega zapisa vsakega vozlisca (binarne maske)
-k --- stevilo dreves
+k --- dolzina cikla/ binarnega zapisa vsakega vozlisca (binarne maske)
+n --- stevilo povezav v drevesu
+m --- stevilo vozlisc v drevesu
 ```
+
+### Priprava grafa na algoritem
+
+V prvem koraku iz drevesa naredimo usmerjeno drevo s pomocjo algoritma `iterDFS`, ki porabi `O(n) + O(m)*O(1)` časa.
+
+Generiranje binarnih zaporedij, brez sosednjih enic nam vzame za vako zaporedje `O(k)` casa pri cemer je k dolzina ciklov.
+Vseh moznih zaporediji 1 in 0 je torej 2^k, nas pa zanimajo le zaporedja, ki so neodvisna (nikoli nista dve enici sosednji). 
+Torej nas zanima podmnožica množice z močjo 2^k. Opazimo lahko da je velikost te množice sorazmerna z k-2 im fibonaccijevemu številu.
+Z pomocjo izracuna limite lahko tako preverimo, da moc mnozice konvergira proti (1+sqrt((5)/(2)))^k.
+
+
+
 
 ## Prostorska zahtevnost
 

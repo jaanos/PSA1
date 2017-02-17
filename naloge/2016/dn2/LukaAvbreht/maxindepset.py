@@ -28,16 +28,22 @@ def maxCycleTreeIndependentSet(T, w):
 
     T = directet_tree(T)
 
+    memovred = dict()
+
     def vrednost_cikla_na_nivoju(nivo,cikel):
         """Vrne vrednost cikla na mestu (nivo) v grafu"""
-        res = 0
-        nivo = int(nivo)
-        vozlisca_grafa = tuple()
-        for j,i in enumerate(cikel):
-            if i == '1':
-                res+= w[j][nivo]
-                vozlisca_grafa += ((j, nivo),)
-        return res, vozlisca_grafa
+        if (nivo,cikel) in memovred:
+            return memovred[(nivo,cikel)]
+        else:
+            res = 0
+            nivo = int(nivo)
+            vozlisca_grafa = tuple()
+            for j,i in enumerate(cikel):
+                if i == '1':
+                    res+= w[j][nivo]
+                    vozlisca_grafa += ((j, nivo),)
+            memovred[nivo,cikel] = (res, vozlisca_grafa)
+            return res, vozlisca_grafa
 
     vsi_mozni_cikli = all_valid_cycles(k)
 
