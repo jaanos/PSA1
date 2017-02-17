@@ -8,4 +8,4 @@ Algoritem vrne tisto množico nepovezanih vozlišč, ki ima največjo "ceno" ter
 Algoritem poteka na podoben način kot algoritem "sahovnica" pri 11 sklopu vaj. Na vsakem vozlišču drevesa T izračunamo maximalno "težko" neodvisno množico vozlišč poddrevesa s korenom v tem vozlišču. In to za vsako možno neodvisen možno podmnožico cikla. Ko tako izračunamo maximalne vrednosti v korenu drevesa. Zdaj izmed teh izberemo maximalno, ki jo vrnemo skupaj z seznamom vozlišč, ki prispevajo k njej.
 
 Poglejmo sedaj dele kode posebej.
-*1
+#1
