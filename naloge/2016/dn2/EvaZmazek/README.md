@@ -36,8 +36,9 @@ Ta fukcija ustvari seznam dveh seznamov. Prvi vrne vse možne vzorce dolžine k 
 dve sosednji vrednosti nista hkrati enaki 1. Drugi seznam vrne iste vzorce kot prvi seznam, vendar v obliki števila,
 ki ga predstavlja vzorec, če si ga predstavljamo kot število v binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaPot(k)
-*k = 0, 1, 2, 3: T(k) = O(1)*
-*sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) = ... = O((V(k)))
+`k = 0, 1, 2, 3: T(k) = O(1)`
+
+`sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) = ... = O((V(k)))`
 #### Prostorska zahtevnost funkcije vzorciZaPot(k)
 O((V(k)))
 
@@ -50,7 +51,7 @@ iste vzorce kot prvi seznam, vendar v obliki števila, ki ga predstavlja vzorec,
 binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaCikel(k)
 `T(k) = T(klic funkcije vzorciZaPot(k-2)) + T(klic funkcije vzorciZaPot(k-3))
-        + 2 * O(V(k-2)) + 2* O(V(k-3))`
+        + 2 * O(V(k-2)) + 2* O(V(k-3)) = O(k*V(k))`
 
 #### Prostorska zahtevnost funkcije vzorciZaCikel(k)
 `P(k) = 2 * k * V(k) = 2 * k * ((1 + sqrt(5))/2)^k`
