@@ -20,6 +20,27 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
 
+    def vzorciZaPot(k):
+        if k == 0:
+            return [], []
+        if k == 1:
+            return [[0], [1]], [0, 1]
+        if k == 2:
+            return [[0, 0], [0, 1], [1, 0]], [0, 1, 2]
+        if k == 3:
+            return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 0, 1]], [0, 1, 2, 4, 5]
+        vzorci = []
+        stevilo = []
+        for i in vzorciZaPot(k - 2)[0]:
+            vzorci += [[1, 0] + i]
+        for j in vzorciZaPot(k - 1)[0]:
+            vzorci += [[0] + j]
+        for i in vzorciZaPot(k - 2)[1]:
+            stevilo += [2 ** (k - 1) + i]
+        for j in vzorciZaPot(k - 1)[1]:
+            stevilo += [j]
+        return vzorci, stevilo
+
     def vzorciZaCikel(k):
         """
         Opis funkcije:
@@ -36,15 +57,15 @@ def maxCycleTreeIndependentSet(T, w):
             return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0]], [0, 1, 2, 4]
         vzorci = []
         stevilo = []
-        for i in vzorciZaCikel(k-3)[0]:
-            vzorci += [[1,0] + i + [0]]
+        for i in vzorciZaPot(k - 3)[0]:
+            vzorci += [[1, 0] + i + [0]]
             vzorci += [[0] + i + [0, 1]]
-        for j in vzorciZaCikel(k-2)[0]:
+        for j in vzorciZaPot(k - 2)[0]:
             vzorci += [[0] + j + [0]]
-        for i in vzorciZaCikel(k-3)[1]:
-            stevilo += [2**(k-1) + i*2, i*4 + 1]
-        for j in vzorciZaCikel(k-2)[1]:
-            stevilo += [j*2]
+        for i in vzorciZaPot(k - 3)[1]:
+            stevilo += [2 ** (k - 1) + i * 2, i * 4 + 1]
+        for j in vzorciZaPot(k - 2)[1]:
+            stevilo += [j * 2]
         return vzorci, stevilo
 
     def vsotaVzorca(indexVzorca, u):
