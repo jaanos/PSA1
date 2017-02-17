@@ -34,7 +34,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     def rekurzija(sidro, ded):
         """za izbrano sidro rekurzivno najdemo vozlišča da bo teža največja. ded potrebujemo da se ne vračamo po drevesu nazaj"""
-        #Trekurzija = 2*Tnasledniki + Tnasledniki * Trekurzija + Tteza = O(n*2^k)
+        #Trekurzija = 2*Tnasledniki + Tnasledniki * Trekurzija + Tteza = O(n^2*k*2^k)
 
         sinovi2D = nasledniki(sidro, ded)
 
@@ -85,7 +85,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     def nasledniki(sidro, ded):
         """vrne tabelo tabel(pogrupirani po položajih v drevesu)"""
-        #Tnasledniki = n * Tkombinacije = O(n*2^k)
+        #Tnasledniki = n * Tkombinacije = O(n*k*2^k)
         nasled = []
         for sinDrevo in T[sidro[0]]:
             if sinDrevo == ded[0]:
@@ -101,7 +101,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     def kombinacije(sinDrevo, sidro):
         """vrne vse možne kombinacije ciklov za sinDrevo, ki se prilegajo ciklu od sidra"""
-        #Tkombinacije = O(2^k)
+        #Tkombinacije = 2^k * Tpreveri= O(k*2^k)
         moznih = 2**k
         kombi = []
         for cikel in range(moznih):
