@@ -52,3 +52,26 @@ drevesu ter zapis vseh uporabljenih vozlišč pa porabimo `O(n * k)` časa ter `
 uporabljenih vozlišč.
 
 ## Primerjava dejanskih časov izvajanja
+
+Spodnji graf prikazuje čas izvajanja algoritma v odvisnosti od `n` pri različnih `k`-jih. Pri zeleni krivulje je 
+`k = 16`, pri rdeči je `k = 13` ter pri modri `k = 10`.
+
+![graf_n](graf_n.jpg)
+
+Opazimo, da so krivulje premice, torej algoritem zadošča zahtevi o polinomskem času izvajanja v `n`. Iz grafa tudi 
+vidimo, da z naraščanjem `k`-ja strmina premica hitro narašča. V spodnji tabeli so vrednosti časov pri različnih 
+vrednostih `n` in `k`.
+
+| k\n | 10 | 35 |60|85|110|135|160|185|210|235|260|285|310|335|
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|10|0.01|0.07|0.06|0.08|0.10|0.13|0.16|0.17|0.19|0.45|0.24|0.28|0.28|0.31|
+|13|0.13|0.39|0.70|0.98|1.28|1.56|1.86|2.15|2.39|2.53|3.03|3.32|3.60|3.92|
+|16|1.69|5.17|8.64|12.2|15.6|19.0|22.5|26.3|29.5|32.9|36.6|39.9|43.3|47.0|
+
+
+Naslednji graf prikazuje čase izvajanja algoritma v odvisnosti od `k` pri `n = 100` (modra krivulja), `n = 200` 
+(rdeča krivulja) ter `n = 300` (zelena krivulja).
+
+![graf_k](graf_k.jpg)
+
+Tukaj opazimo, da se čas izvajanja hitro povečuje, ko se veča `k`. Čas izvajanja se veča eksponentno glede na `k`.
