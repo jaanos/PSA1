@@ -1,0 +1,76 @@
+\documentclass[a4paper]{article}
+\usepackage{amsmath, amsthm, amssymb}
+
+\usepackage[slovene]{babel}
+\usepackage{verbatim}
+\usepackage[utf8x]{inputenc}
+
+\begin{document}
+\title{Poročilo domače naloge za PSA1}
+\author{Gašper Domen Romih}
+\maketitle
+\newpage
+\section{Opis algoritmov}
+\subsection{SlowMatrix}
+Osnovni algoritem, ki izračuna produkt matrik tako, da $c_{ij}$ izračuna skalarni produkt $i$-te vrstice matrike A ter $j$-tega stolpca matrike B
+\subsection{FastMatrix}
+
+Izračuna produkt matrik $A$ in $B$ po Strassenovem algoritmu, za poljubne dimenzije matrik $A$ in $B$. V algoritmu najprej preverimo če je kateri od 
+faktorjev vektor ali stolpec, se pravi, da ima vsaj eno dimenzijo enako ena. V tem primeru ne nadaljujemo z strassnovim algoritmom vendar izvedemo naivno množenje, ki ga pokličemo iz nadrazreda SlowMatrix. Naivno množenje lahko uporabimo tudi ko se matriki dovolj  'zmanjšata', saj se pri matrikah manjših velikosti poznajo seštevanja, ki jih je v Strassnovem algoritmu več. 
+
+Nato nastavimo dimenzije novih podmatrik, pri čemer ne upoštevamo sodosti ali lihosti stolpcev in vrstic, saj to popravimo malo kasneje. Nato izvedemo klasični Strassnov algoritem z 7 rekurzivnimi matričnimi množenji ter na koncu pravilno nastavimo vrednosti ciljne matrike. Nato matriko še popravimo zaradi morebitnih lihih vrstic ali stolpcev.
+
+\subsection{CheapMatrix}
+
+Izračuna produkt matrik $A$ in $B$ z Strassnovim algoritmom, podobno kot v FastMatrix, le da tu pazimo, da porabimo čim manj dodatne spomina. V ta namen imamo na voljo delovno matriko $W$, lahko pa tudi prepisujemo začetni matriki $A$ in $B$ vendar jih moramo na koncu vrniti v prvotno stanje. Rezultate rekurzivnih množenj sem si po blokih shranil v $C11$, $C12$, $C21$, $C22$ ter v $W12$, $W21$, $W22$, pri tem pa sem blok $W11$ uporabil kot delovno matriko za nadaljno rekurzijo. Sedaj z operatorjema $+=$ ter $-=$ popravimo matriko $C$, da bodo v njej prave vrednosti.
+
+Na koncu tako kot v prejšnem primeru popravimo morebitne lihe vrstice in stolpce.
+
+\section{Analiza časovne zahtevnosti}
+\subsection{SlowMatrik}
+Najprej označimo z $A$ levo matriko dimenzij $n * m$, z $B$ desno matriko dimenzij $m*k$ ter z $C$ ciljno matriko dimenzij $n*k$. Metoda multiply se sprehodi po dveh gnezdenih for zankah dolžine $n$ in $k$ v vsakem koraku for zanke se izračuna skalarni produkt med pripadajoču vrstico iz matrike $A$ ter stolpcem iz matrike $B$, ki je dolžine $m$. Torej je časovna zahtevnost te metode $O(mnk)$. 
+
+Prostorska zahtevnost te metode je konstantna, saj ne ustvarjamo nobenih novih matrik, vrednosti le prepišemo v ciljno matriko $C$ (self).
+
+\subsection{FastMatrix}
+Naj bodo oznake kot prej, dodajmo še $L = max(m,n,k)$. Najprej si oglejmo primer, ko so vse dimenzije sode. V baznem primeru je vsaj ena od $n,m,k$ enaka 1, uporabimo pa navino množenje z zahtevnostjo $O(nmk)$, kar lahko v tem primeru ocenimo z $O(L^2)$. Nastavitev vrednosti novih dimenzij podmatrik vzame konstanto časa sepravi $O(1)$. Inicializacija podmatrik vzame največ $O(L^2)$ zato lahko vse skupaj omejimo z $O(L^2)$. Nato sledi 7 rekurzivhin klicev na polovico manjših matrika ter dodatnih nekaj seštevanj, ki porabijo $O(L^2)$. Z uporabo krovnega izreka za $T(L) = 7*T(L/2) + O(L^2)$, dobimo časovno zahtevnost $O(L^{log_27})$.
+
+Oglejo si sedaj še koliko dodajo lihe vrstice in stolpci. V tem primeru je zopet vsaj ena od dimenzij enaka 1, tako da z uporabo naivnega množenja dobimo oceno $O(L^2)$ kar pa je manj v primerjavi z $O(L^{log_27})$.
+
+Prostorsa zahtevnost tega algoritma je kar velika, saj nareimo veliko novih matrik med seštevanjem in množenjem, vendar pa jih naredimo konstantmo, sepravi je prostorska zahtevnost omejena z $O(L^2)$
+
+\subsection{CheapMatrix}
+Časovna zahtevnost je enaka kot pri FastMatrix. Prostorsa zahtevnost pa je v primerjavi z FastMatrix precej manjša, saj na nobenem koraku rekurzije ne ustvarjamo novih, tako porabimo le prostora za eno ciljno matriko.
+
+\section{Časovna primerjava}
+\begin{table}[h]
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        Size & Slow    & Fast    & Cheap   \\ \hline
+        32   & 0.3875  & 5.7265  & 4.9987  \\ \hline
+        64   & 3.0001  & 40.2063 & 35.2105 \\ \hline
+        128  & 25.1138 & 285.278 & 249.872 \\ \hline
+        256  & 244.84  & 2135.87 & 2049.34 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Kot vidimo iz tabele sta Fast in Cheap precej počasnejšna od naivnega množenja, vendar je to posledica izvajanje rekurzije do matrik velikosti 1. Če pri velikosti 32 nehamo izvajati rekurzijo ter uporabimo naivno množenje se tabela spremeni:
+
+\begin{table}[h]
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        Size & Slow   & Fast   & Cheap  \\ \hline
+        32   & 0.3956 & 0.3896 & 0.3793 \\ \hline
+        64   & 3.0659 & 2.9361 & 2.7657 \\ \hline
+        128  & 25.004 & 20.298 & 19.971 \\ \hline
+        256  & 208.32 & 160.23 & 149.63 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Iz rezultatov je očitno, da za velike velikosti matrik Strassnov algoritem občutno hitreje računa produkte matrik, prav tako pa verzija z manj porabljenega spomina porabi manj časa kljub temu, da ima nekiloko več seštevanj kot navadna verzija.
+
+
+
+\end{document}
