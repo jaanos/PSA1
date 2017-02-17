@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
-__all__ = ['AbstractMatrix']
+__all__ = ['testTimeMaxCycle']
 
-from .matrix import AbstractMatrix
+from .tester import testTimeMaxCycle
