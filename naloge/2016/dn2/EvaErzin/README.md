@@ -52,3 +52,24 @@ Funkcija DFS porabi *O(m) + O(n) x c* časa in *O(n)* dodatnega prostora.
 Na koncu moramo še sestaviti seznam vseh vozlišč v največji neodvisni množici. Za to porabimo *O(n x k)* časa, saj seznam čez katerega iteriramo za vsako vozlišče drevesa T vsebuje binarno predstavitev neodvisne množice, v kateri moramo poiskati vse člene, ki so enaki '1'. Za shranjevanje končnega seznama porabimo *O(n x k)* prostora.
 
 ## 3. Primerjava dejanskih časov izvajanja algoritma
+
+Čase sem primerjala na binarnih drevesih različnih globin za fiksne dolžine ciklov.
+Binarno drevo globine *m* ima *2^m - 1* elementov.
+n... število elementov v drevesu
+m... globina drevesa
+k... dolžina cikla
+
+|(m, n)\k|5|10|15|
+|---|---|---|---|
+|(2, 3)|0.00|0.01|0.63|
+|(3, 7)|0.00|0.01|0.95|
+|(4, 15)|0.00|0.03|1.79|
+|(5, 31)|0.00|0.05|3.04|
+|(6, 63)|0.00|0.13|5.67|
+|(7, 127)|0.05|0.20|11.31|
+|(8, 255)|0.02|0.50|22.55|
+|(9, 511)|0.04|1.00|48.50|
+|(10, 1023)|0.14|1.99|108.40|
+|(11, 2047)|0.14|4.21|213.60|
+|(12, 4095)|0.32|7.33|432.39|
+
