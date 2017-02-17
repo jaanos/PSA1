@@ -9,7 +9,7 @@ Na koncu izberemo za prvo vozlišče v drevesu cikelj pri katerem bo skupna tež
 
 ## Časovna/prostorska zahtevnost
 
-- T = O(n*2^k)
+- T = O(n^2*k*2^k)
 
 - Podatke si shranjujemo v slovar memo, ki je velikosti c*n*2^k. P = O(n*2^k)
 
