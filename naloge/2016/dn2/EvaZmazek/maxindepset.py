@@ -22,6 +22,12 @@ def maxCycleTreeIndependentSet(T, w):
 
     @lru_cache(maxsize=None)
     def vzorciZaPot(k):
+        """
+        opis funkcije:
+        časovna zahtevnost: k = 0, 1, 2, 3: T(k) = O(1)
+        sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) = ... = O(2^k)
+        prostorska zahtevnost: P(k) = O(k)
+        """
         if vsi_vzorci_za_pot[k] is not None:
             return vsi_vzorci_za_pot[k]
         if k == 0:
@@ -34,13 +40,15 @@ def maxCycleTreeIndependentSet(T, w):
             return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 0, 1]], [0, 1, 2, 4, 5]
         vzorci = []
         stevilo = []
-        for i in vzorciZaPot(k - 2)[0]:
+        prviVzorci = vzorciZaPot(k-1)
+        drugiVzorci = vzorciZaPot(k-2)
+        for i in drugiVzorci[0]:
             vzorci += [[1, 0] + i]
-        for j in vzorciZaPot(k - 1)[0]:
+        for j in prviVzorci[0]:
             vzorci += [[0] + j]
-        for i in vzorciZaPot(k - 2)[1]:
+        for i in drugiVzorci[1]:
             stevilo += [2 ** (k - 1) + i]
-        for j in vzorciZaPot(k - 1)[1]:
+        for j in prviVzorci[1]:
             stevilo += [j]
         vsi_vzorci_za_pot[k] = vzorci, stevilo
         return vzorci, stevilo
@@ -53,8 +61,8 @@ def maxCycleTreeIndependentSet(T, w):
     def vzorciZaCikel(k):
         """
         Opis funkcije:
-        časovna zahtevnost: eksponentna v k
-        Prostorska zahtevnost:
+        časovna zahtevnost: T(k) = O(n^(k-2)) + O(n^(k-3)) = O(n^(k-3)*(n+1)) = O(n^(k-3)*n)
+        Prostorska zahtevnost: P(k) = O(k)
         """
         if k == 0:
             return [], []
@@ -66,24 +74,25 @@ def maxCycleTreeIndependentSet(T, w):
             return [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0]], [0, 1, 2, 4]
         vzorci = []
         stevilo = []
-        for i in vsi_vzorci_za_pot[k - 3][0]:
+        prviVzorci = vsi_vzorci_za_pot[k-2]
+        drugiVzorci = vsi_vzorci_za_pot[k-3]
+        for i in drugiVzorci[0]:
             vzorci += [[1, 0] + i + [0]]
             vzorci += [[0] + i + [0, 1]]
-        for j in vsi_vzorci_za_pot[k - 2][0]:
+        for j in prviVzorci[0]:
             vzorci += [[0] + j + [0]]
-        for i in vsi_vzorci_za_pot[k - 3][1]:
+        for i in drugiVzorci[1]:
             stevilo += [2 ** (k - 1) + i * 2, i * 4 + 1]
-        for j in vsi_vzorci_za_pot[k - 2][1]:
+        for j in prviVzorci[1]:
             stevilo += [j * 2]
         return vzorci, stevilo
 
-    vzorciZaCikel_sez = vzorciZaCikel(k)
-    vsi_vzorci_za_cikel = vzorciZaCikel_sez[0]
+    vzorciZaCikel_sez = vzorciZaCikel(k) #dodaten prostor 2 * k * število vzorcev za cikel dolžine k
+    vsi_vzorci_za_cikel = vzorciZaCikel_sez[0] #dodaten prostor k * število vzorcev za cike dolžine k
 
     def vsotaVzorca(indexVzorca, u):
         """
         Opis funkcije:
-        dolzina vzorca = k (zapisanjega v obliki vzorca, ta je v obliki stevilke)
         Časovna zahtevnost:
         Prostorska zahtevnost:
         """
