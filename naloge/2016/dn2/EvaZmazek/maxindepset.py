@@ -62,7 +62,7 @@ def maxCycleTreeIndependentSet(T, w):
         """
         Opis funkcije:
         časovna zahtevnost: T(k) = O(n^(k-2)) + O(n^(k-3)) = O(n^(k-3)*(n+1)) = O(n^(k-3)*n)
-        Prostorska zahtevnost: P(k) = O(k)
+        Prostorska zahtevnost: P(k) = 2 * k * število vzorcev = 2 * k * (1 + sqrt(5))/2
         """
         if k == 0:
             return [], []
@@ -92,9 +92,10 @@ def maxCycleTreeIndependentSet(T, w):
 
     def vsotaVzorca(indexVzorca, u):
         """
-        Opis funkcije:
-        Časovna zahtevnost:
-        Prostorska zahtevnost:
+        Opis funkcije: izračuna vsoto, ki jo dobimo, če seštejemo uteži na vozliščih, ki ležijo n vozlišču u v drevesu
+        in v ciklu na točkah, ki ga prestavlja vzorec cikla z indeksom indexVzorca.
+        Časovna zahtevnost: V tej funkciji se sprehodimo skozi vzorec dolžine k, zato je časovna zahtevnost enaka O(k).
+        Prostorska zahtevnost: Shranjujemo si le vrednost vsota, zato je prostorska zahtevnost enaka O(1).
         """
         vsota = 0
         vzorcek = vsi_vzorci_za_cikel[indexVzorca]
@@ -105,10 +106,13 @@ def maxCycleTreeIndependentSet(T, w):
 
     def slovarZdruzljivih(vzorci):
         """
-        za množico vzorcev ustvari slovar združljivih vzorcev (vzorci so podani s tevili, ki jih vzorci
-        predstavljajo, če na njih gledamo kot na dvojiški zapis števila).
-        Časovna zahtevnost:
-        Prostorska zahtevnost:
+        za množico vzorcev ustvari slovar združljivih vzorcev (vzorci so podani s števili, ki jih vzorci
+        predstavljajo, če na njih gledamo kot na dvojiški zapis števila). Za vsak vzorec nam poda indekse vzorcev,
+        ki so združljivi z našim vzorcem.
+        Časovna zahtevnost: v prvi zanki V(k)-krat izvedemo zanko, katere časovna zahtevnost je enaka O(V(k)).
+         Skupna časovna zahtevnost je torej enaka O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2)).
+        Prostorska zahtevnost: V slovarju za vsak vzorec shranimo indekse vzorcev, ki so z njim združljivi, torej
+        je prostorska zahtevnost navzgor omejena z O(V(k)^(2)).
         """
         slovar = dict()
         for vzorec in vzorci:
@@ -124,6 +128,7 @@ def maxCycleTreeIndependentSet(T, w):
 
     vzorci = vzorciZaCikel_sez[1]
     vrednostiVozliscSedem = [[None]*len(vzorci) for i in range(n)]
+    print(vrednostiVozliscSedem)
 
     zdruzljivi = slovarZdruzljivih(vzorciZaCikel_sez[1])
 
@@ -144,7 +149,7 @@ def maxCycleTreeIndependentSet(T, w):
                             maximum = vrednostiVozliscSedem[sin][indexMoznega][0]
                             sezna = vrednostiVozliscSedem[sin][indexMoznega][1]
                 vrednost, seznamcek = vrednostiVozliscSedem[u][indexVzorca]
-                vrednost += maximum
+                vrednost += maximum # vrednosti doseženi z vzorcem na vozlišču u dodamo največjo možno  doseženo vrednost z vzorci na sinu sin
                 seznamcek += sezna
                 vrednostiVozliscSedem[u][indexVzorca] = (vrednost, sorted(seznamcek))
         return True

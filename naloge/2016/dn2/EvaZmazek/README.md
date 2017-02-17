@@ -5,6 +5,28 @@
 ## Opis algoritma:
 
 Funkcija maxCycleTreeIndependentSet(T, w) najprej preveri, če se vse dimenzije ujemajo in vrne napako, če se ne.
+V naslednjem koraku si pripravimo seznam vseh vzorcev za cikel dolžine k vsi_vzorci_za_cikel. Pripravimo si tudi
+slovar, ki nam za vsak vzorec poda indekse vzorcev, ki so z njim združjivi. Da sta vzorca združjiva pomeni, da sta
+lahko vzorca sosednjih vozlišč v drevesu, torej da je množica vozlišč v dveh sosednjih vozliščih grafa z
+združljivima cikloma neodvisna množica. pripravimo si tudi matriko, v kateri (i,j)-ti element predstavljal double
+oblike (maksimalna vrednost, ki jo lahko doseže i-ti element drevesa, če na njem uporabimo j-ti vzorec, seznam doublov,
+ki povedo na katerem vozlišču smo uporabili kateri vzorec). Z DFSjem poskrbimo, da se vrednosti polnijo v
+pravilnem vrstnem redu in sicer od listov navzgor, dogled ne pridemo do korena. Na koncu pogledamo katera je največja
+možna vrednost dosežena v korenu ter iz seznama parov vozlišč drevesa in vzorcev ciklov, uporabljenih na teh vozliščih
+razberemo katere točke so vsebovane v največji neodvisni množici kartezičnega produkta drevesa in cikla.
+
+V naslednjih računih bomo večkrat rabili izračun števila vzorcev.
+
+### število vzorcev cikla dolžine k
+če na začetek postavimo 0, imamo za naslednjih k-1 mest V(k-1) možnost, če na začetek postavimo 1, moramo na drugo mesto
+postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnosti.
+Dobimo torej rekurzivno formulo
+V(k) = V(k-1) + V(k-2)
+z začetnima vrednostma
+V(1) = 2 in V(2) = 3,
+katere rešitev je:
+V(k) = ((1 + sqrt(5))/2)^k
+
 Algoritem za večjo preglednost vsebuje več pomožnih fukcij in sicer:
 
 ### vzorciZaPot(k)
@@ -15,9 +37,11 @@ dve sosednji vrednosti nista hkrati enaki 1. Drugi seznam vrne iste vzorce kot p
 ki ga predstavlja vzorec, če si ga predstavljamo kot število v binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaPot(k)
 *k = 0, 1, 2, 3: T(k) = O(1)*
-*sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) = ... = O(2^k)*
+*sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) =
+        = ... =
+        = O((V(k))^k)
 #### Prostorska zahtevnost funkcije vzorciZaPot(k)
-*O(k)*
+O((V(k))^k)
 
 ### vzorciZaCikel(k)
 
@@ -27,31 +51,39 @@ oblike [0, 1, 0, 0, 0], kjer dve sosednji vrednosti ter prva in zadnja vrednost 
 iste vzorce kot prvi seznam, vendar v obliki števila, ki ga predstavlja vzorec, če si ga predstavljamo kot število v
 binarni obliki.
 #### Časovna zahtevnost funkcije vzorciZaCikel(k)
-TODO
+T(k) = T(klic funkcije vzorciZaPot(k-2)) + T(klic funkcije vzorciZaPot(k-3))
+        + 2 * O(V(k-2)) + 2* O(V(k-3))=
+        = O(n^(k-2)) + O(n^(k-3)) + 2 * O(((1 + sqrt(5))/2)^(k-3)*((1+sqrt(5))/2)+1)
+T(k) = O(n^(k-2)) + O(n^(k-3)) = O(n^(k-3)*(n+1)) = O(n^(k-3)*n)
 #### Prostorska zahtevnost funkcije vzorciZaCikel(k)
-TODO
+P(k) = 2 * k * V(k) = 2 * k * ((1 + sqrt(5))/2)^k
 
 ### vsotaVzorca(indexVzorca, u)
 
 #### Opis funkcije vsotaVzorca(indexVzorca, u)
-TODO
+izračuna vsoto, ki jo dobimo, če seštejemo uteži na vozliščih, ki ležijo n vozlišču u v drevesu in v ciklu na točkah,
+ki ga prestavlja vzorec cikla z indeksom indexVzorca.
 
 #### Časovna zahtevnost funkcije vsotaVzorca(indexVzorca, u)
-TODO
+V tej funkciji se sprehodimo skozi vzorec dolžine k, zato je časovna zahtevnost enaka O(k).
 
 #### Prostorska zahtevnost funkcije vsotaVzorca(indexVzorca, u)
-TODO
+Shranjujemo si le vrednost vsota, zato je prostorska zahtevnost enaka O(1).
 
 ### slovarZdruzljivih(vzorci)
 
 #### Opis funkcije slovarZdruzljivih(vzorci)
-TODO
+za množico vzorcev ustvari slovar združljivih vzorcev (vzorci so podani s števili, ki jih vzorci predstavljajo,
+če na njih gledamo kot na dvojiški zapis števila). Za vsak vzorec nam poda indekse vzorcev, ki so združljivi z
+našim vzorcem.
 
 #### Časovna zahtevnost funkcije slovarZdruzljivih(vzorci)
-TODO
+v prvi zanki V(k)-krat izvedemo zanko, katere časovna zahtevnost je enaka O(V(k)). Skupna časovna zahtevnost je
+torej enaka O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2)).
 
 #### Prostorska zahtevnost funkcije slovarZdruzljivih(vzorci)
-TODO
+V slovarju za vsak vzorec shranimo indekse vzorcev, ki so z njim združljivi, torej je prostorska zahtevnost
+navzgor omejena z O(V(k)^(2)) = O(((1+sqrt(5))/2)^(2)).
 
 ### nothing(u)
 
@@ -81,13 +113,16 @@ O(m) + O(n) klicev funkcij previsit in postvisit
 #### Prostorska zahtevnost funkcije DFS(G, roots = None, previsit = nothing, postvisit = nothing)
 TODO
 
-
-## število vzorcev poti dolžine k
-vp(k) = vp(k-1) + vp(k-2) <= O(2^(k))
 ## število vzorcev cikla dolžine k
-V(k) <= O(2^(k))
-**V(k) = k + \bin{k}{2} + \bin{k}{3} + \bin{k}{4} + \bin{k}{5} + \bin{k}{6} + ... + \bin{k}{k//2} =
-=-1 + 2^n - (2^(-1 + n) n Γ(1/2 + n/2) 2F1(1, 1 - n/2, (4 + n)/2, -1))/(sqrt(π) Γ(2 + n/2))**
+če na začetek postavimo 0, imamo za naslednjih k-1 mest V(k-1) možnost, če na začetek postavimo 1, moramo na drugo mesto
+postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnosti.
+Dobimo torej rekurzivno formulo
+V(k) = V(k-1) + V(k-2)
+z začetnima vrednostma
+V(1) = 2 in V(2) = 3,
+katere rešitev je:
+V(k) = ((1 + sqrt(5))/2)^k
+
 
 Sem napišite poročilo o vaši domači nalogi. Za oblikovanje uporabite [Markdown](https://guides.github.com/features/mastering-markdown/).
 
