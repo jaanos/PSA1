@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from functools import lru_cache
 def maxCycleTreeIndependentSet(T, w):
     """
     Najtežja neodvisna množica
@@ -20,6 +20,7 @@ def maxCycleTreeIndependentSet(T, w):
     if n == 0:
         return (0, [])
 
+    @lru_cache(maxsize = None)
     def vzorciZaPot(k):
         if k == 0:
             return [], []
@@ -37,7 +38,7 @@ def maxCycleTreeIndependentSet(T, w):
             vzorci += [[1, 0] + i]
         for j in drugiVzorci[0]:
             vzorci += [[0] + j]
-        for i in pviVzorci[1]:
+        for i in prviVzorci[1]:
             stevilo += [2 ** (k - 1) + i]
         for j in drugiVzorci[1]:
             stevilo += [j]
@@ -72,8 +73,6 @@ def maxCycleTreeIndependentSet(T, w):
             stevilo += [j * 2]
         return vzorci, stevilo
 
-    vzorci = vzorciZaCikel(k)
-
     def vsotaVzorca(indexVzorca, u):
         """
         Opis funkcije:
@@ -107,8 +106,10 @@ def maxCycleTreeIndependentSet(T, w):
         """
         return True
 
+    vzorci = vzorciZaCikel(k)
     vrednostiVozliscSedem = [[None]*len(vzorciZaCikel(k)[1]) for i in range(n)]
 
+    zdruzljivi = slovarZdruzljivih(vzorciZaCikel(k)[1])
     def postvisitSedem(u,v):
         l = len(vzorci[1])
         for indexVzorca in range(l):
@@ -121,7 +122,7 @@ def maxCycleTreeIndependentSet(T, w):
                 maximum = 0
                 sezna = []
                 for indexMoznega in range(l):
-                    if vzorci[1][indexMoznega] in slovarZdruzljivih(vzorci[1])[vzorec]:
+                    if vzorci[1][indexMoznega] in zdruzljivi[vzorec]:
                         if vrednostiVozliscSedem[sin][indexMoznega][0] > maximum:
                             maximum = vrednostiVozliscSedem[sin][indexMoznega][0]
                             sezna = vrednostiVozliscSedem[sin][indexMoznega][1]
@@ -187,4 +188,4 @@ def maxCycleTreeIndependentSet(T, w):
 
     return (vrednost, uporabljeneTocke)
 
-print(maxCycleTreeIndependentSet([[1], [0]], [[1, 20], [7, 10]]))
+print(maxCycleTreeIndependentSet([[1, 2, 3], [0], [0], [0]], [[1, 20, 30, 40], [7, 10, 20, 60]]))
