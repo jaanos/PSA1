@@ -40,7 +40,7 @@ ki ga predstavlja vzorec, če si ga predstavljamo kot število v binarni obliki.
 
 `sicer : T(k) = T(k-2) + T(k-1) + O(1) = 2*T(k-2) + T(k-3) + O(1) = 3*T(k-3) + 2*T(k-2) +O(1) = ... = O((V(k)))`
 #### Prostorska zahtevnost funkcije vzorciZaPot(k)
-O((V(k)))
+`O((V(k)))`
 
 ### vzorciZaCikel(k)
 
