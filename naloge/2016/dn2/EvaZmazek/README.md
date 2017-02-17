@@ -135,13 +135,13 @@ P(k,n) = P(ustvarimo si seznam ciklov) + P(urstvarimo si slovar združljivih cik
 
 ## Primerjava časov na drevesu z n vozlišči in cikli s k vozlišči
 
-k\n | 10 | 20 | 50 | 70 | 100 | 150
-----|----|----|----|----|-----|-----
-  2  | 0.001s | 0.002s | 0.002s | 0.003s |
-  5  | 0.002s | 0.004s | 0.009s | 0.010s |
-  10  |0.019s | 0.038s | 0.148s | 0.285 s |
-  15  |1.375s | 2.206s | 7.449s | 10.202s |
-  17 | 6.592s | 11.804s | - | - | - | -
+k\n | 10 | 20 | 50 | 100
+----|----|----|----|-----
+  2  | 0.001s | 0.002s | 0.002s | 0.003s
+  5  | 0.002s | 0.004s | 0.009s | 0.010s
+  10  |0.019s | 0.038s | 0.148s | 0.285 s
+  15  |1.375s | 2.206s | 7.449s | 10.202s
+  17 | 6.592s | 11.804s | - | - 
 
  Vidimo, da vrednosti po stolpcih naraščajo veliko hitreje kot po vrsticah (posledica eksponentne časovne zahtevnosti
  v k in polinomske časovne zahtevnosti v n).
