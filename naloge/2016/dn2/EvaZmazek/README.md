@@ -8,7 +8,7 @@ Funkcija maxCycleTreeIndependentSet(T, w) najprej preveri, če se vse dimenzije 
 V naslednjem koraku si pripravimo seznam vseh vzorcev za cikel dolžine k vsi_vzorci_za_cikel. Pripravimo si tudi
 slovar, ki nam za vsak vzorec poda indekse vzorcev, ki so z njim združjivi. Da sta vzorca združjiva pomeni, da sta
 lahko vzorca sosednjih vozlišč v drevesu, torej da je množica vozlišč v dveh sosednjih vozliščih grafa z
-združljivima cikloma neodvisna množica. pripravimo si tudi matriko, v kateri (i,j)-ti element predstavljal double
+združljivima cikloma neodvisna množica. Pripravimo si tudi matriko, v kateri (i,j)-ti element predstavlja double
 oblike (maksimalna vrednost, ki jo lahko doseže i-ti element drevesa, če na njem uporabimo j-ti vzorec, seznam doublov,
 ki povedo na katerem vozlišču smo uporabili kateri vzorec). Z DFSjem poskrbimo, da se vrednosti polnijo v
 pravilnem vrstnem redu in sicer od listov navzgor, dogled ne pridemo do korena. Na koncu pogledamo katera je največja
@@ -18,14 +18,14 @@ razberemo katere točke so vsebovane v največji neodvisni množici kartezičneg
 V naslednjih računih bomo večkrat rabili izračun števila vzorcev.
 
 ### število vzorcev cikla dolžine k
-če na začetek postavimo 0, imamo za naslednjih k-1 mest V(k-1) možnost, če na začetek postavimo 1, moramo na drugo mesto
-postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnosti.
+Če na začetek vzorca postavimo 0, imamo za naslednjih k-1 mest V(k-1) možnost, če na začetek postavimo 1, moramo
+na drugo mesto postaviti 0 in imamo tako za preostali del vzorca V(k-2) možnosti.
 Dobimo torej rekurzivno formulo
-V(k) = V(k-1) + V(k-2)
+``V(k) = V(k-1) + V(k-2)``
 z začetnima vrednostma
-V(1) = 2 in V(2) = 3,
+`V(1) = 2 in V(2) = 3,``
 katere rešitev je:
-V(k) = ((1 + sqrt(5))/2)^k
+`V(k) = ((1 + sqrt(5))/2)^k`
 
 Algoritem za večjo preglednost vsebuje več pomožnih fukcij in sicer:
 
