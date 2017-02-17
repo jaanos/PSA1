@@ -1,5 +1,4 @@
 # Poročilo
-
 *Žiga Zupančič*
 
 ## Opis algoritma
@@ -21,3 +20,35 @@ njihovih potomcev.
 Nato za koren pogledamo pri kateri neodvisni podmnožici cikla smo dobili največjo vrednost, in to je naš rezultat. 
 Sedaj le še preberemo katera vozlišča smo pri tem uporabili, tako da od vrha navzdol pogledamo katere neodvisne 
 podmnožice smo uporabili za vsakega sina in to sproti dodajamo v seznam uporabljenih vozlišč.
+
+
+## Analiza časovne in prostorske zahtevnosti
+
+Funkcija `getSubsets`: Zanka napravi `2^k` korakov in v vsakem koraku `O(k)` operacij, torej je skupna časovna 
+zahtevnost enaka `O(k*2^k)`. V seznam spravimo le ustrezne podmnožice, ki jih je `((1+sqrt(5))/2)^k`, saj če označimo z 
+`x_k` število neodvisnih množic za cikel dolžine `k`, dobimo rekurzivno formulo: `x_k = x_(k-1) + x_(k-2)` (saj imamo v 
+primeru da je na prvem mestu enica, na drugem mestu `0` in tako `x_(k-2)` množic, v primeru da je na prvem mestu `0` pa 
+x_(k-1) množic) z začetnima vrednostma: `x_2 = 3` in `x_3 = 4`. Rešitev je zgornja formula. Skupna prostorska 
+zahtevnost je torej `O(X^k)`, kjer je `X = (1+sqrt(5))/2`.
+
+Funkcija `getCompatibileSubsets`: Vsaka zanka napravi `X^k` korakov, torej je časovna zahtevnost enaka `O(X^(2k))`. 
+Za vsako neodvisno podmnožico si shranimo katere neodvisne podmnožice so kompatibilne z njo, torej če ocenimo navzgor 
+dobimo, da je prostorska zahtevnost enaka `O(X^(2k))`. 
+
+Funkcija `getCycleWeight`: Časovna zahtevnost je enaka `O(k)`, saj gremo čez vsak bit v binarnem zapisu števila `subset`
+in v primeru da je enak `1` utež na tem mestu prištejemo končni teži.
+Prostorska zahtevnost je tako `O(k)`, saj si število spremenimo v binarni zapis.
+
+Funkcija `postivist`: zunanja zanka opravi `X^k` korakov, na vsakem koraku pa izračuna težo trenutne neodvisne 
+podmnožice, kar porabi `O(k)` časa ter za vsakega od sinov poišče najtežjo neodvisno podmnožico, ki je kompatibilna 
+s trenutno, v `O(X^k)` časa. Skupaj torej porabi `O(X^(2k)*stevilo_sinov(u))` časa. Prostorska zahtevnost je enaka 
+`O(stevilo_sinov(u) * X^k)` saj si za vsakega sina zapomnimo katere podmnožice smo uporabili. Vse skupaj shranjujemo v 
+že ustvarjen seznam slovarjev, kjer vsak slovar porabi `O(X^k * stevilo_sinov(u))` prostora.
+
+Z DFS-jem gremo nato čez vsa vozlišča v času `O(n)` korakov, na vaskem koraku pa porabimo toliko kot porabi funkcija 
+`postvisit` za posamezno vozlišče. Na koncu moramo še najti neodvisno množico korena, pri kateri dobimo največjo 
+vrednost. Pri tem porabimo `Ò(X^k)` časa in `O(1)` prostora. Za rekonstrukcijo uporabljenih neodvisnih množic po 
+drevesu ter zapis vseh uporabljenih vozlišč pa porabimo `O(n * k)` časa ter `O(n*k)` prostora za zapis vseh 
+uporabljenih vozlišč.
+
+## Primerjava dejanskih časov izvajanja
