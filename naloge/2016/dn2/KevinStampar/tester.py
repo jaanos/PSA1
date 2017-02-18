@@ -1,6 +1,6 @@
 import random
 import time
-from KevinStampar import maxCycleTreeIndependentSet
+from maxindepset import maxCycleTreeIndependentSet
 
 def randomTree(k,binary=False):
     seznam=[]
