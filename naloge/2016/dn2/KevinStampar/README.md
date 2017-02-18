@@ -70,6 +70,7 @@ Dimenzija drevesa|Dimenzija cikla|Porabljeni čas
 Kot pričakovano časovna zahtevnost narašča eksponentno v odvisnosti dimenzije C_k.
 
 Dimenzija drevesa|Dimenzija cikla|Porabljeni cas
+
 10------------------|14---------------|1.2240831957326928
 
 35------------------|14---------------|3.4122922463057286
