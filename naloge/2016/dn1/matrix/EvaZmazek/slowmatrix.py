@@ -19,7 +19,6 @@ class SlowMatrix(AbstractMatrix):
     def multiply(self, left, right):
         """
         V trenutno matriko zapiše produkt podanih matrik.
-
         Množenje izvede z izračunom skalarnih produktov
         vrstic prve in stolpcev druge matrike.
         """
@@ -54,6 +53,3 @@ class SlowMatrix(AbstractMatrix):
         # sklep:
         # - časovna zahtevnost: T(n,k,m) = O(n*k*m)
         # - prostorska zahtevnost: P(n,k,m) = O(1)
-
-
-

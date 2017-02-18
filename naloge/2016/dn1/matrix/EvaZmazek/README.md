@@ -333,11 +333,7 @@ S to oznako dobimo sedaj, da je prostorska zahtevnost metode FastMatrix enaka:
 ```
 P(M) = O(1) + 7*P(M//2)
 ```
-torej je:
-
-```
-P(M) = log_{2}(min(n,k,m))
-```
+torej konstantno veliko prostora.
 
 (natančnejša izpeljava v komentarjih v kodi)
 
@@ -418,13 +414,3 @@ Velikost kvadratnih matrik A in B |  SlowMatrix  |  FastMatrix |   CheapMatrix
     400x400 * 400x400 | 596.140s | 790.870s | 660.042s
     450x450 * 450x450 | 944.968s | 1109.650s | 741.824s
     500x500 * 500x500 | 1392.869s | 1140.776s | 1346.555s
-
-Opazimo lahko, da metoda SlowMatrix pri manjših matrikah deluje bistveno hitreje kot FastMatrix in CheapMatrix,
-pri vrednosti 500 pa sta tako FastMatrix, kot tudi CheapMatrix prosukt kvadratnih matrik velikosti 500x500 izračunala
-hitreje.
-
-
-
-
-
-

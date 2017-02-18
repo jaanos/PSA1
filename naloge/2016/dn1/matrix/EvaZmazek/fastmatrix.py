@@ -19,7 +19,6 @@ class FastMatrix(SlowMatrix):
     def multiply(self, left, right):
         """
         V trenutno matriko zapiše produkt podanih matrik.
-
         Množenje izvede s Strassenovim algoritmom.
         """
         assert left.ncol() == right.nrow(), \
@@ -127,5 +126,3 @@ class FastMatrix(SlowMatrix):
         # Sklep:
         # Časovna zahtevnost: T(n,k,m) = O(1) + 7*T(n/2, k/2, m/2) + O(max(m,n)*k) + O(n*k) + O(k*m) + O(m*n)
         # Prostorska zahtevnost: P(n,k,m) = O(1) * O(k*(m+n)) + O(n*m) + 7*P(n/2,k/2,m/2) + O(1)
-
-

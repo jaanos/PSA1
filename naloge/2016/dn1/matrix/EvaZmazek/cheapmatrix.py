@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 from .slowmatrix import SlowMatrix
 
@@ -19,7 +20,6 @@ class CheapMatrix(SlowMatrix):
     def multiply(self, left, right, work = None):
         """
         V trenutno matriko zapiše produkt podanih matrik.
-
         Kot neobvezen argument lahko podamo še delovno matriko.
         """
         assert left.ncol() == right.nrow(), \
